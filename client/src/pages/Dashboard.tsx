@@ -32,12 +32,12 @@ import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 // import { MainNav } from "./components/MainNav";
 import { Overview } from "../components/Overview";
-import { RecentSales } from "../components/RecentSales";
 import AccountSwitcher from "../components/AccountSwitcher";
 import { UserNav } from "../components/UserNav";
 import React from "react";
 import { Sidebar } from "../components/Sidebar";
-import { Ov2 } from "../components/Ov2";
+// import { Ov2 } from "../components/Ov2";
+import RecentTransaction from "../components/RecentTransaction";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -228,7 +228,7 @@ export default function Dashboard() {
                       </CardDescription>
                     </CardHeader>
                     <CardContent>
-                      <RecentSales />
+                      <RecentTransaction />
                     </CardContent>
                   </Card>
                 </div>
