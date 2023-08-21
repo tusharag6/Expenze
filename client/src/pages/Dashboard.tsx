@@ -40,13 +40,17 @@ import { Sidebar } from "../components/Sidebar";
 import { Ov2 } from "../components/Ov2";
 
 export default function Dashboard() {
-  const [showNewAccountDialog, setShowNewAccountDialog] = React.useState(false);
+  const [showAddTransactionDialog, setShowAddTransactionDialog] =
+    React.useState(false);
   const [open, setOpen] = React.useState(false);
 
   // Detect window width and set a flag for small screens
   // const isSmallScreen = window.innerWidth <= 768;
   return (
-    <Dialog open={showNewAccountDialog} onOpenChange={setShowNewAccountDialog}>
+    <Dialog
+      open={showAddTransactionDialog}
+      onOpenChange={setShowAddTransactionDialog}
+    >
       <div className="grid lg:grid-cols-6">
         {/* Sidebar */}
         <Sidebar className="hidden lg:block" />
@@ -236,49 +240,64 @@ export default function Dashboard() {
         {/* Add transaction form */}
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Add Account</DialogTitle>
+            <DialogTitle>Add Transaction</DialogTitle>
             <DialogDescription>
-              Add a new account to track the transactions.
+              Add a new transaction with the following details.
             </DialogDescription>
           </DialogHeader>
           <div>
             <div className="space-y-4 py-2 pb-4">
               <div className="space-y-2">
-                <Label htmlFor="name">Account name</Label>
-                <Input id="name" placeholder="Acme Inc." />
+                <Label htmlFor="name">Amount</Label>
+                <Input id="amount" type="number" placeholder="Enter amount" />
               </div>
+
               <div className="space-y-2">
-                <Label htmlFor="plan">Subscription plan</Label>
+                <Label htmlFor="type">Transaction Type</Label>
                 <Select>
                   <SelectTrigger>
-                    <SelectValue placeholder="Select a plan" />
+                    <SelectValue placeholder="Select a type" />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="free">
-                      <span className="font-medium">Free</span> -{" "}
-                      <span className="text-muted-foreground">
+                    <SelectItem value="income">
+                      <span className="font-medium">Income</span>
+                      {/* <span className="text-muted-foreground">
                         Trial for two weeks
-                      </span>
+                      </span> */}
                     </SelectItem>
-                    <SelectItem value="pro">
-                      <span className="font-medium">Pro</span> -{" "}
-                      <span className="text-muted-foreground">
+                    <SelectItem value="expense">
+                      <span className="font-medium">Expense</span>
+                      {/* <span className="text-muted-foreground">
                         $9/month per user
-                      </span>
+                      </span> */}
                     </SelectItem>
                   </SelectContent>
                 </Select>
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="category">Budget Category</Label>
+                <Input id="category" type="text" placeholder="Enter category" />
+              </div>
+
+              <div className="space-y-2">
+                <Label htmlFor="memo">Memo / Description</Label>
+                <Input
+                  id="memo"
+                  type="text"
+                  placeholder="Enter memo or description"
+                />
               </div>
             </div>
           </div>
           <DialogFooter>
             <Button
               variant="outline"
-              onClick={() => setShowNewAccountDialog(false)}
+              onClick={() => setShowAddTransactionDialog(false)}
             >
               Cancel
             </Button>
-            <Button type="submit">Continue</Button>
+            <Button type="submit">Add Transaction</Button>
           </DialogFooter>
         </DialogContent>
       </div>
