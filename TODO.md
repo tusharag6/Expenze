@@ -10,9 +10,9 @@
 
 Will have two dashboard, one for all accounts combined and one for each individual account
 
-- [ ] Design and create a dashboard interface.
-- [ ] Display the user's current balance prominently.
-- [ ] Show recent transactions with basic details.
+- [x] Design and create a dashboard interface.
+- [x] Display the user's current balance prominently.
+- [x] Show recent transactions with basic details.
 - [ ] Implement graphs or charts to depict budget and spending breakdown.
 - [ ] Calculate and display the total balance, total budget, and spending and deposit summaries.
 
