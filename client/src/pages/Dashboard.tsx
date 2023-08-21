@@ -37,6 +37,7 @@ import AccountSwitcher from "../components/AccountSwitcher";
 import { UserNav } from "../components/UserNav";
 import React from "react";
 import { Sidebar } from "../components/Sidebar";
+import { Ov2 } from "../components/Ov2";
 
 export default function Dashboard() {
   const [showNewAccountDialog, setShowNewAccountDialog] = React.useState(false);
@@ -47,8 +48,11 @@ export default function Dashboard() {
   return (
     <Dialog open={showNewAccountDialog} onOpenChange={setShowNewAccountDialog}>
       <div className="grid lg:grid-cols-6">
+        {/* Sidebar */}
         <Sidebar className="hidden lg:block" />
+
         <div className="md:flex-col md:flex col-span-3 lg:col-span-5 lg:border-l">
+          {/* Navbar */}
           <div className="border-b">
             <div className="flex h-16 items-center px-7 md:px-14">
               <h1 className="text-3xl font-bold tracking-tight ">Expenze</h1>
@@ -60,8 +64,10 @@ export default function Dashboard() {
             </div>
           </div>
 
+          {/* Dashboard Content */}
           <div className="flex-1 space-y-4 pt-6 px-7 md:px-14">
             <Tabs defaultValue="overview" className="space-y-6">
+              {/* Tabs and add transaction button */}
               <div className="flex items-center justify-between max-[450px]:flex-col max-[450px]:items-start">
                 <TabsList>
                   <TabsTrigger value="overview">Overview</TabsTrigger>
@@ -80,7 +86,10 @@ export default function Dashboard() {
                   </DialogTrigger>
                 </div>
               </div>
+
+              {/* Overview Content */}
               <TabsContent value="overview" className="md:space-y-4">
+                {/* Crads */}
                 <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
                   <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
@@ -185,7 +194,9 @@ export default function Dashboard() {
                     </CardContent>
                   </Card>
                 </div>
-                <div className="grid gap-4 grid-cols-2 lg:grid-cols-7 pt-4">
+
+                <div className="grid gap-4 grid-cols-2 pt-4">
+                  {/* Chart */}
                   <Card className="col-span-4">
                     <CardHeader>
                       <CardTitle>Overview</CardTitle>
@@ -194,7 +205,18 @@ export default function Dashboard() {
                       <Overview />
                     </CardContent>
                   </Card>
-                  <Card className="col-span-4 lg:col-span-3 md:col-span-4">
+
+                  {/* <Card className="col-span-4">
+                    <CardHeader>
+                      <CardTitle>Overview</CardTitle>
+                    </CardHeader>
+                    <CardContent className="pl-2">
+                      <Ov2 />
+                    </CardContent>
+                  </Card> */}
+
+                  {/* Recent Transaction */}
+                  <Card className="col-span-4 mb-6 lg:col-span-3 md:col-span-4">
                     <CardHeader>
                       <CardTitle>Recent Transactions</CardTitle>
                       <CardDescription>
@@ -210,6 +232,8 @@ export default function Dashboard() {
             </Tabs>
           </div>
         </div>
+
+        {/* Add transaction form */}
         <DialogContent>
           <DialogHeader>
             <DialogTitle>Add Account</DialogTitle>
