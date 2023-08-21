@@ -18,8 +18,8 @@ Will have two dashboard, one for all accounts combined and one for each individu
 
 ### Adding Transactions
 
-- [ ] Develop interfaces for adding income transactions.
-- [ ] Create forms for users to input transaction details (amount, transaction type, budget category, memo / description).
+- [x] Develop interfaces for adding income transactions.
+- [x] Create forms for users to input transaction details (amount, transaction type, budget category, memo / description).
 - [ ] Implement the ability to categorize and tag transactions.
 
 ### Budget Creation and Management
