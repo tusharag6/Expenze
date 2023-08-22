@@ -5,7 +5,8 @@ import "./index.css";
 import Dashboard from "./pages/Dashboard";
 import ErrorPage from "./pages/ErrorPage";
 import App from "./App";
-import RecentTransaction from "./components/RecentTransaction";
+
+import Activity from "./pages/Activity";
 
 // Defining routes
 const router = createBrowserRouter([
@@ -20,7 +21,7 @@ const router = createBrowserRouter([
       },
       {
         path: "/activity",
-        element: <RecentTransaction />,
+        element: <Activity />,
       },
     ],
   },
