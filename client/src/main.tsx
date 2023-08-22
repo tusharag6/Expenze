@@ -7,7 +7,8 @@ import ErrorPage from "./pages/ErrorPage";
 import App from "./App";
 
 import Activity from "./pages/Activity";
-
+import RegisterPage from "./pages/RegisterPage";
+import LoginPage from "./pages/LoginPage";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -24,6 +25,16 @@ const router = createBrowserRouter([
         element: <Activity />,
       },
     ],
+  },
+  {
+    path: "/register",
+    element: <RegisterPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/login",
+    element: <LoginPage />,
+    errorElement: <ErrorPage />,
   },
 ]);
 
