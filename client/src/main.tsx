@@ -7,6 +7,7 @@ import ErrorPage from "./pages/ErrorPage";
 import App from "./App";
 import RecentTransaction from "./components/RecentTransaction";
 
+// Defining routes
 const router = createBrowserRouter([
   {
     path: "/",

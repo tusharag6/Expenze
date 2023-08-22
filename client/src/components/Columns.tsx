@@ -10,6 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 
+// Define the structure of a Payment object
 export type Payment = {
   id: string;
   name: string;
@@ -19,6 +20,7 @@ export type Payment = {
   amount: number;
 };
 
+// Define the column configuration for the table
 export const columns: ColumnDef<Payment>[] = [
   {
     accessorKey: "name",

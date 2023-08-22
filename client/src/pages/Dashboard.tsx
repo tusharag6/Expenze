@@ -1,4 +1,6 @@
-import { Button } from "../../components/ui/button";
+import { useState } from "react";
+
+// Import UI components
 import {
   Card,
   CardContent,
@@ -28,21 +30,20 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
+import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
+
 // import { MainNav } from "./components/MainNav";
 import { Overview } from "../components/Overview";
-import React from "react";
 // import { Ov2 } from "../components/Ov2";
 import RecentTransaction from "../components/RecentTransaction";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
-    React.useState(false);
-  const [open, setOpen] = React.useState(false);
+    useState(false);
+  const [open, setOpen] = useState(false);
 
-  // Detect window width and set a flag for small screens
-  // const isSmallScreen = window.innerWidth <= 768;
   return (
     <Dialog
       open={showAddTransactionDialog}
@@ -214,6 +215,7 @@ export default function Dashboard() {
           </TabsContent>
         </Tabs>
       </div>
+
       {/* Add transaction form */}
       <DialogContent>
         <DialogHeader>

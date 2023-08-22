@@ -21,6 +21,7 @@ function App() {
             </div>
           </div>
         </div>
+        {/* Renders the nested route components */}
         <Outlet />
       </div>
     </div>

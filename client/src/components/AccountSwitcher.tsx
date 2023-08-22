@@ -1,6 +1,4 @@
-"use client";
-
-import * as React from "react";
+import { useState } from "react";
 import {
   CaretSortIcon,
   CheckIcon,
@@ -61,16 +59,13 @@ const groups = [
 
 type Account = (typeof groups)[number]["accounts"][number];
 
-type PopoverTriggerProps = React.ComponentPropsWithoutRef<
-  typeof PopoverTrigger
->;
-
-interface AccountSwitcherProps extends PopoverTriggerProps {}
+interface AccountSwitcherProps
+  extends React.ComponentPropsWithoutRef<typeof PopoverTrigger> {}
 
 export default function AccountSwitcher({ className }: AccountSwitcherProps) {
-  const [open, setOpen] = React.useState(false);
-  const [showNewAccountDialog, setShowNewAccountDialog] = React.useState(false);
-  const [selectedAccount, setSelectedAccount] = React.useState<Account>(
+  const [open, setOpen] = useState(false);
+  const [showNewAccountDialog, setShowNewAccountDialog] = useState(false);
+  const [selectedAccount, setSelectedAccount] = useState<Account>(
     groups[0].accounts[0]
   );
 
