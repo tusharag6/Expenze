@@ -1,60 +1,100 @@
-"use client";
+import React from "react";
 
+import { cn } from "../../lib/utils";
 import { Icons } from "./Icons";
 import { Button } from "../../components/ui/button";
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "../../components/ui/card";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 
-export function RegisterForm() {
+interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
+
+export function RegisterForm({ className, ...props }: UserAuthFormProps) {
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  async function onSubmit(event: React.SyntheticEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 3000);
+  }
+
   return (
-    <Card>
-      <CardHeader className="space-y-1">
-        <CardTitle className="text-2xl">Create an account</CardTitle>
-        <CardDescription>
-          Enter your email below to create your account
-        </CardDescription>
-      </CardHeader>
-      <CardContent className="grid gap-4">
-        <div className="grid grid-cols-2 gap-6">
-          <Button variant="outline">
-            <Icons.google className="mr-2 h-4 w-4" />
-            Demo Login
-          </Button>
-          <Button variant="outline">
-            <Icons.google className="mr-2 h-4 w-4" />
-            Google
-          </Button>
-        </div>
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">
-              Or continue with
-            </span>
-          </div>
-        </div>
+    <div className={cn("grid gap-6", className)} {...props}>
+      <form onSubmit={onSubmit}>
         <div className="grid gap-2">
-          <Label htmlFor="email">Email</Label>
-          <Input id="email" type="email" placeholder="m@example.com" />
+          <div className="grid gap-1">
+            <Label className="pb-1" htmlFor="username">
+              Name
+            </Label>
+            <Input
+              id="username"
+              placeholder="John Doe"
+              type="text"
+              autoCapitalize="none"
+              autoComplete="name"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="grid gap-1 pt-3">
+            <Label className="pb-1" htmlFor="email">
+              Email
+            </Label>
+            <Input
+              id="email"
+              placeholder="name@example.com"
+              type="email"
+              autoCapitalize="none"
+              autoComplete="email"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+          </div>
+
+          <div className="grid gap-1 pt-3 pb-2">
+            <Label className="pb-1" htmlFor="password">
+              Password
+            </Label>
+            <Input
+              id="password"
+              placeholder="At least 8 digit password"
+              type="password"
+              autoCapitalize="none"
+              autoComplete="password"
+              autoCorrect="off"
+              disabled={isLoading}
+            />
+          </div>
+
+          <Button disabled={isLoading}>
+            {isLoading && (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            )}
+            Create account
+          </Button>
         </div>
-        <div className="grid gap-2">
-          <Label htmlFor="password">Password</Label>
-          <Input id="password" type="password" />
+      </form>
+      <div className="relative">
+        <div className="absolute inset-0 flex items-center">
+          <span className="w-full border-t" />
         </div>
-      </CardContent>
-      <CardFooter>
-        <Button className="w-full">Create account</Button>
-      </CardFooter>
-    </Card>
+        <div className="relative flex justify-center text-xs uppercase">
+          <span className="bg-background px-2 text-muted-foreground">
+            Or continue with
+          </span>
+        </div>
+      </div>
+      <Button variant="outline" type="button" disabled={isLoading}>
+        {isLoading ? (
+          <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+        ) : (
+          <Icons.google className="mr-2 h-4 w-4" />
+        )}{" "}
+        Demo Login
+      </Button>
+    </div>
   );
 }
