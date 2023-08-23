@@ -1,31 +1,48 @@
-import express, { Express, Request, Response } from "express";
-import { PrismaClient } from "@prisma/client";
+import express, { Request, Response } from "express";
+import { PrismaClient, User } from "@prisma/client";
 import dotenv from "dotenv";
 dotenv.config();
-const app: Express = express();
-const port = process.env.PORT || 8080;
 
+const app = express();
 const prisma = new PrismaClient();
 
-async function main() {
-  const user = await prisma.user.create({
-    data: { name: "kyle", email: "kyle@gmail.com" },
-  });
-  console.log(user);
-}
+app.use(express.json());
 
-main()
-  .catch((e) => {
-    console.error(e.message);
-  })
-  .finally(async () => {
-    await prisma.$disconnect();
-  });
-
-app.get("/", (req: Request, res: Response) => {
-  res.send("Express server is running ...");
+// Create a new user
+app.post("/users", async (req: Request, res: Response) => {
+  try {
+    const { name, email, password } = req.body;
+    const newUser = await prisma.user.create({
+      data: {
+        name,
+        email,
+        password,
+      },
+    });
+    res.json(newUser);
+  } catch (error) {
+    res.status(500).json({ error: "Error creating user." });
+  }
 });
 
-app.listen(port, () => {
-  console.log(`Server is running at PORT ${port}`);
+// Get a user by ID
+app.get("/users/:id", async (req: Request, res: Response) => {
+  try {
+    const userId = Number(req.params.id);
+    const user = await prisma.user.findUnique({
+      where: { id: userId },
+    });
+    if (user) {
+      res.json(user);
+    } else {
+      res.status(404).json({ error: "User not found." });
+    }
+  } catch (error) {
+    res.status(500).json({ error: "Error fetching user." });
+  }
+});
+
+const PORT = process.env.PORT || 8080;
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

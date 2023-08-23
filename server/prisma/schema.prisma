@@ -1,17 +1,52 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
+// schema.prisma
 
+// Define the Prisma client generator to generate client code
 generator client {
   provider = "prisma-client-js"
 }
 
+// Define the database connection details
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
+// Define the User model
 model User {
-  id    Int     @id @default(autoincrement())
-  email String  @unique
-  name  String?
+  id       Int       @id @default(autoincrement())
+  name     String
+  email    String    @unique
+  password String
+  verified Boolean   @default(false)
+  accounts Account[] // Establish a one-to-many relationship with Account
+}
+
+// Define the Account model
+model Account {
+  id              Int           @id @default(autoincrement())
+  account_name    String
+  account_number  String
+  initial_balance Float
+  user_id         Int
+  user            User          @relation(fields: [user_id], references: [id]) // Define the relationship with User
+  transactions    Transaction[] // Establish a one-to-many relationship with Transaction
+}
+
+// Define the TransactionCategory model
+model TransactionCategory {
+  id           Int           @id @default(autoincrement())
+  name         String
+  transactions Transaction[] // Establish a one-to-many relationship with Transaction
+}
+
+// Define the Transaction model
+model Transaction {
+  id          Int                 @id @default(autoincrement())
+  amount      Float
+  date        DateTime
+  description String?
+  account_id  Int
+  account     Account             @relation(fields: [account_id], references: [id]) // Define the relationship with Account
+  category_id Int
+  category    TransactionCategory @relation(fields: [category_id], references: [id]) // Define the relationship with TransactionCategory
 }
