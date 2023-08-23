@@ -15,9 +15,36 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
     event.preventDefault();
     setIsLoading(true);
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    const form = event.target as HTMLFormElement;
+    const data = {
+      username: form.username.value,
+      email: form.email.value,
+      password: form.password.value,
+    };
+
+    // console.log(data);
+
+    try {
+      const response = await fetch("http://localhost:8080/api/register", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("Registration successful!");
+      } else {
+        const errorData = await response.json();
+        console.log(errorData);
+        alert(`Error: ${errorData.message}`);
+      }
+    } catch (error) {
+      alert("An error occurred during registration.");
+    }
+
+    setIsLoading(false);
   }
 
   return (
@@ -69,7 +96,7 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
             />
           </div>
 
-          <Button disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}

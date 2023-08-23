@@ -14,10 +14,35 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
+    const form = event.target as HTMLFormElement;
+    const data = {
+      email: form.email.value,
+      password: form.password.value,
+    };
 
-    setTimeout(() => {
-      setIsLoading(false);
-    }, 3000);
+    try {
+      const response = await fetch("http://localhost:8080/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const userData = await response.json();
+        console.log(userData);
+
+        alert(`Logged in as ${userData.username} (${userData.email})`);
+      } else {
+        const errorData = await response.json();
+        alert(`Login failed: ${errorData.message}`);
+      }
+    } catch (error) {
+      alert("An error occurred during login.");
+    }
+
+    setIsLoading(false);
   }
 
   return (
@@ -54,7 +79,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             />
           </div>
 
-          <Button disabled={isLoading}>
+          <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
