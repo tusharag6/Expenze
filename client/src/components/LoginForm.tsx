@@ -5,11 +5,16 @@ import { Icons } from "./Icons";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
+import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const { login } = useAuth();
+  const navigate = useNavigate();
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -30,10 +35,11 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
       });
 
       if (response.ok) {
-        const userData = await response.json();
-        console.log(userData);
-
-        alert(`Logged in as ${userData.username} (${userData.email})`);
+        const data = await response.json();
+        console.log(data.token);
+        login(data.token);
+        alert("Logged in");
+        navigate("/");
       } else {
         const errorData = await response.json();
         alert(`Login failed: ${errorData.message}`);

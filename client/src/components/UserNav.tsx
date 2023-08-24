@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import {
   Avatar,
   AvatarFallback,
@@ -14,8 +15,44 @@ import {
   DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
+import { useAuth } from "../context/AuthContext";
+import { Navigate } from "react-router-dom";
 
 export function UserNav() {
+  const { token, logout } = useAuth();
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/user", {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setUserName(data.user.username);
+          setUserEmail(data.user.email);
+        } else {
+          const errorData = await response.json();
+          alert(`Error: ${errorData.message}`);
+        }
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUserData();
+  }, [token]);
+
+  const handleLogout = () => {
+    logout();
+    return <Navigate to="/login" />;
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,9 +66,11 @@ export function UserNav() {
       <DropdownMenuContent className="w-56" align="end" forceMount>
         <DropdownMenuLabel className="font-normal">
           <div className="flex flex-col space-y-1">
-            <p className="text-sm font-medium leading-none">shadcn</p>
+            <p className="text-sm font-medium leading-none capitalize">
+              {userName}
+            </p>
             <p className="text-xs leading-none text-muted-foreground">
-              m@example.com
+              {userEmail}
             </p>
           </div>
         </DropdownMenuLabel>
@@ -52,7 +91,7 @@ export function UserNav() {
           <DropdownMenuItem>New Team</DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
-        <DropdownMenuItem>
+        <DropdownMenuItem onClick={handleLogout}>
           Log out
           <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
         </DropdownMenuItem>

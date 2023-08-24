@@ -9,11 +9,14 @@ import App from "./App";
 import Activity from "./pages/Activity";
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
+import { AuthProvider } from "./context/AuthContext";
+import Auth from "./components/Auth";
+import PreventLoggedIn from "./components/PreventLogIn";
 // Defining routes
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <App />,
+    element: <Auth element={<App />} />,
     errorElement: <ErrorPage />,
     children: [
       {
@@ -28,18 +31,20 @@ const router = createBrowserRouter([
   },
   {
     path: "/register",
-    element: <RegisterPage />,
+    element: <PreventLoggedIn element={<RegisterPage />} />,
     errorElement: <ErrorPage />,
   },
   {
     path: "/login",
-    element: <LoginPage />,
+    element: <PreventLoggedIn element={<LoginPage />} />,
     errorElement: <ErrorPage />,
   },
 ]);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <AuthProvider>
+      <RouterProvider router={router} />
+    </AuthProvider>
   </React.StrictMode>
 );
