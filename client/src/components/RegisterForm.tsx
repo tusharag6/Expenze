@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { cn } from "../../lib/utils";
 import { Icons } from "./Icons";
@@ -10,12 +10,45 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function RegisterForm({ className, ...props }: UserAuthFormProps) {
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [formErrors, setFormErrors] = useState<any>({});
+
+  const nameRegex = /^[A-Za-z]+$/;
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passRegex =
+    /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
     const form = event.target as HTMLFormElement;
+    // Client-side validation
+    const errors: any = {};
+    if (!form.username.value) {
+      errors.username = "Name is required.";
+    } else if (form.username.value.length < 3) {
+      errors.username = "Name must be at least 3 characters long.";
+    } else if (!nameRegex.test(form.username.value)) {
+      errors.username = "Name should contain only alphabets";
+    }
+    if (!form.email.value) {
+      errors.email = "Email is required.";
+    } else if (!emailRegex.test(form.email.value)) {
+      errors.email = "Invalid email format.";
+    }
+    if (!form.password.value) {
+      errors.password = "Password is required.";
+    } else if (form.password.value.length < 8) {
+      errors.password = "Password must be at least 8 characters long.";
+    } else if (!passRegex.test(form.password.value)) {
+      errors.password =
+        "Password should include at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      setIsLoading(false);
+      return;
+    }
     const data = {
       username: form.username.value,
       email: form.email.value,
@@ -38,10 +71,14 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
       } else {
         const errorData = await response.json();
         console.log(errorData);
-        alert(`Error: ${errorData.message}`);
+        setFormErrors({ server: errorData.message });
+        setIsLoading(false);
+        // alert(`Error: ${errorData.message}`);
       }
     } catch (error) {
-      alert("An error occurred during registration.");
+      setFormErrors({ server: "An error occurred during login." });
+
+      // alert("An error occurred during registration.");
     }
 
     setIsLoading(false);
@@ -50,6 +87,10 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
+        {/* Display validation errors */}
+        {formErrors.server && (
+          <p className="text-red-500 text-sm">{formErrors.server}</p>
+        )}
         <div className="grid gap-2">
           <div className="grid gap-1">
             <Label className="pb-1" htmlFor="username">
@@ -64,6 +105,9 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
+            {formErrors.username && (
+              <p className="text-red-500 text-sm">{formErrors.username}</p>
+            )}
           </div>
 
           <div className="grid gap-1 pt-3">
@@ -79,6 +123,9 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
+            {formErrors.email && (
+              <p className="text-red-500 text-sm">{formErrors.email}</p>
+            )}
           </div>
 
           <div className="grid gap-1 pt-3 pb-2">
@@ -94,6 +141,9 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
+            {formErrors.password && (
+              <p className="text-red-500 text-sm">{formErrors.password}</p>
+            )}
           </div>
 
           <Button type="submit" disabled={isLoading}>

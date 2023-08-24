@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 
 import { cn } from "../../lib/utils";
 import { Icons } from "./Icons";
@@ -11,7 +11,12 @@ import { useNavigate } from "react-router-dom";
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [formErrors, setFormErrors] = useState<any>({});
+
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const passRegex =
+    /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
   const { login } = useAuth();
   const navigate = useNavigate();
@@ -20,6 +25,29 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     event.preventDefault();
     setIsLoading(true);
     const form = event.target as HTMLFormElement;
+
+    // Client-side validation
+    const errors: any = {};
+    if (!form.email.value) {
+      errors.email = "Email is required.";
+    } else if (!emailRegex.test(form.email.value)) {
+      errors.email = "Invalid email format.";
+    }
+    if (!form.password.value) {
+      errors.password = "Password is required.";
+    } else if (form.password.value.length < 8) {
+      errors.password = "Password must be at least 8 characters long.";
+    } else if (!passRegex.test(form.password.value)) {
+      errors.password =
+        "Password should include at least one uppercase letter, one lowercase letter, one number, and one special character.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setFormErrors(errors);
+      setIsLoading(false);
+      return;
+    }
+
     const data = {
       email: form.email.value,
       password: form.password.value,
@@ -42,10 +70,13 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         navigate("/");
       } else {
         const errorData = await response.json();
-        alert(`Login failed: ${errorData.message}`);
+        setFormErrors({ server: errorData.message });
+        setIsLoading(false);
+        // alert(`Login failed: ${errorData.message}`);
       }
     } catch (error) {
-      alert("An error occurred during login.");
+      setFormErrors({ server: "An error occurred during login." });
+      // alert("An error occurred during login.");
     }
 
     setIsLoading(false);
@@ -54,6 +85,11 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
+        {/* Display validation errors */}
+        {formErrors.server && (
+          <p className="text-red-500 text-sm">{formErrors.server}</p>
+        )}
+
         <div className="grid gap-2">
           <div className="grid gap-1 pt-3">
             <Label className="pb-1" htmlFor="email">
@@ -68,6 +104,9 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
+            {formErrors.email && (
+              <p className="text-red-500 text-sm">{formErrors.email}</p>
+            )}
           </div>
 
           <div className="grid gap-1 pt-3 pb-2">
@@ -83,6 +122,9 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
               autoCorrect="off"
               disabled={isLoading}
             />
+            {formErrors.password && (
+              <p className="text-red-500 text-sm">{formErrors.password}</p>
+            )}
           </div>
 
           <Button type="submit" disabled={isLoading}>
