@@ -12,6 +12,7 @@ import LoginPage from "./pages/LoginPage";
 import { AuthProvider } from "./context/AuthContext";
 import Auth from "./components/Auth";
 import PreventLoggedIn from "./components/PreventLogIn";
+import VerifyPage from "./pages/VerifyPage";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -37,6 +38,11 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <PreventLoggedIn element={<LoginPage />} />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/verify/:token",
+    element: <VerifyPage />,
     errorElement: <ErrorPage />,
   },
 ]);

@@ -64,10 +64,15 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
 
       if (response.ok) {
         const data = await response.json();
-        console.log(data.token);
-        login(data.token);
-        alert("Logged in");
-        navigate("/");
+        // console.log(data.token);
+        // console.log(data.user);
+        if (!data.user.verified) {
+          alert("Please verify your email before logging in.");
+        } else {
+          login(data.token);
+          alert("Logged in");
+          navigate("/");
+        }
       } else {
         const errorData = await response.json();
         setFormErrors({ server: errorData.message });

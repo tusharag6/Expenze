@@ -67,7 +67,31 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
       });
 
       if (response.ok) {
+        const responseData = await response.json();
         alert("Registration successful!");
+
+        // Send verification email
+        const verificationResponse = await fetch(
+          "http://localhost:8080/send-verification",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              email: data.email,
+              verificationToken: responseData.verificationToken,
+            }),
+          }
+        );
+
+        if (verificationResponse.ok) {
+          alert("Verification email sent successfully!");
+        } else {
+          const errorData = await verificationResponse.json();
+          console.log(errorData);
+          alert(`Error sending verification email: ${errorData.error}`);
+        }
       } else {
         const errorData = await response.json();
         console.log(errorData);
