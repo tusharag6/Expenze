@@ -2,8 +2,8 @@
 
 ### User Registration and Login
 
-- [ ] Implement user registration functionality.
-- [ ] Integrate secure authentication methods (email/password, social media logins).
+- [x] Implement user registration functionality.
+- [x] Integrate secure authentication methods (email/password, social media logins).
 - [ ] Set up password recovery mechanisms.
 
 ### Dashboard
