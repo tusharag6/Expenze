@@ -13,6 +13,8 @@ import { AuthProvider } from "./context/AuthContext";
 import Auth from "./components/Auth";
 import PreventLoggedIn from "./components/PreventLogIn";
 import VerifyPage from "./pages/VerifyPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ChangePasswordPage from "./pages/ChangePasswordPage";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -36,13 +38,24 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
+    index: true,
     path: "/login",
     element: <PreventLoggedIn element={<LoginPage />} />,
     errorElement: <ErrorPage />,
   },
   {
+    path: "/forgot-password",
+    element: <ForgotPasswordPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
     path: "/verify/:token",
     element: <VerifyPage />,
+    errorElement: <ErrorPage />,
+  },
+  {
+    path: "/forgot-password/:token",
+    element: <ChangePasswordPage />,
     errorElement: <ErrorPage />,
   },
 ]);

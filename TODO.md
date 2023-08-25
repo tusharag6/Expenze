@@ -4,7 +4,7 @@
 
 - [x] Implement user registration functionality.
 - [x] Integrate secure authentication methods (email/password, social media logins).
-- [ ] Set up password recovery mechanisms.
+- [x] Set up password recovery mechanisms.
 
 ### Dashboard
 

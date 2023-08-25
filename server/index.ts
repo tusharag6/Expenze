@@ -7,6 +7,7 @@ import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import { sendVerificationEmail } from "./utils/verification";
+import { sendForgotPasswordEmail } from "./utils/password";
 dotenv.config();
 
 const app = express();
@@ -135,6 +136,62 @@ app.get("/verify/:token", async (req, res) => {
     console.error("Error occurred during verification:", error);
     res.sendStatus(500);
   }
+});
+
+app.post("/forgot-password", async (req, res) => {
+  const { email } = req.body;
+
+  // Check if user with the provided email exists
+  const user = await prisma.user.findUnique({ where: { email } });
+  if (!user) {
+    return res.status(404).json({ error: "User not found" });
+  }
+
+  // Generate reset token
+  const resetToken = crypto.randomBytes(32).toString("hex");
+  const resetTokenExpiry = Date.now() + 3600000; // Token valid for 1 hour
+
+  // Store token in database
+  await prisma.passwordResetToken.create({
+    data: {
+      token: resetToken,
+      userId: user.id,
+      expiresAt: new Date(resetTokenExpiry),
+    },
+  });
+
+  try {
+    await sendForgotPasswordEmail(email, resetToken);
+    res.json({ message: "Email sent successfully" });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: "Failed to send email" });
+  }
+});
+
+// Endpoint to handle password reset
+app.post("/reset-password", async (req, res) => {
+  const { token, password } = req.body;
+  const hashedPassword = await bcrypt.hash(password, 10);
+  // Find token in the database
+  const resetToken = await prisma.passwordResetToken.findFirst({
+    where: { token, expiresAt: { gte: new Date() } },
+  });
+
+  if (!resetToken) {
+    return res.status(400).json({ error: "Invalid or expired token" });
+  }
+
+  // Update user's password
+  await prisma.user.update({
+    where: { id: resetToken.userId },
+    data: { password: hashedPassword },
+  });
+
+  // Delete the used token
+  await prisma.passwordResetToken.delete({ where: { id: resetToken.id } });
+
+  res.json({ message: "Password reset successful" });
 });
 
 const PORT = process.env.PORT || 8080;

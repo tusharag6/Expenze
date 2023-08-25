@@ -13,13 +13,22 @@ datasource db {
 
 // Define the User model
 model User {
-  id                Int       @id @default(autoincrement())
-  username          String
-  email             String    @unique
-  password          String
-  verified          Boolean   @default(false)
-  verificationToken String?
-  accounts          Account[] // Establish a one-to-many relationship with Account
+  id                 Int                  @id @default(autoincrement())
+  username           String
+  email              String               @unique
+  password           String
+  verified           Boolean              @default(false)
+  verificationToken  String?
+  accounts           Account[] // Establish a one-to-many relationship with Account
+  PasswordResetToken PasswordResetToken[]
+}
+
+model PasswordResetToken {
+  id        Int      @id @default(autoincrement())
+  token     String   @unique
+  expiresAt DateTime
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id])
 }
 
 // Define the Account model
