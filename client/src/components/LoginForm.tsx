@@ -7,10 +7,15 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { useAuth } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
+  const [visible, setVisible] = useState(false);
+  let inputType = visible ? "text" : "password";
+  console.log(inputType);
+
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<any>({});
 
@@ -114,19 +119,27 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
-          <div className="grid gap-1 pt-3 pb-2">
+          <div className="grid gap-1 pt-3 pb-2 relative">
             <Label className="pb-1" htmlFor="password">
               Password
             </Label>
-            <Input
-              id="password"
-              placeholder="At least 8 digit password"
-              type="password"
-              autoCapitalize="none"
-              autoComplete="password"
-              autoCorrect="off"
-              disabled={isLoading}
-            />
+            <div className="flex items-center">
+              <Input
+                id="password"
+                placeholder="At least 8 digit password"
+                type={inputType}
+                autoCapitalize="none"
+                autoComplete="password"
+                autoCorrect="off"
+                disabled={isLoading}
+              />
+              <span
+                className="cursor-pointer absolute right-3"
+                onClick={() => setVisible(!visible)}
+              >
+                {visible ? <FaRegEye /> : <FaRegEyeSlash />}
+              </span>
+            </div>
             {formErrors.password && (
               <p className="text-red-500 text-sm">{formErrors.password}</p>
             )}
