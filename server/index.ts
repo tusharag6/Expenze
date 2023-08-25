@@ -147,9 +147,16 @@ app.post("/forgot-password", async (req, res) => {
     return res.status(404).json({ error: "User not found" });
   }
 
+  // Delete any previous reset tokens for the user
+  await prisma.passwordResetToken.deleteMany({
+    where: {
+      userId: user.id,
+    },
+  });
+
   // Generate reset token
   const resetToken = crypto.randomBytes(32).toString("hex");
-  const resetTokenExpiry = Date.now() + 3600000; // Token valid for 1 hour
+  const resetTokenExpiry = Date.now() + 900000; // Token valid for 1 hour
 
   // Store token in database
   await prisma.passwordResetToken.create({
@@ -192,6 +199,20 @@ app.post("/reset-password", async (req, res) => {
   await prisma.passwordResetToken.delete({ where: { id: resetToken.id } });
 
   res.json({ message: "Password reset successful" });
+});
+
+app.post("/check-token", async (req, res) => {
+  const { token } = req.body;
+
+  const resetToken = await prisma.passwordResetToken.findFirst({
+    where: { token, expiresAt: { gte: new Date() } },
+  });
+
+  if (resetToken) {
+    res.sendStatus(200); // Token is valid
+  } else {
+    res.sendStatus(400); // Invalid token
+  }
 });
 
 const PORT = process.env.PORT || 8080;

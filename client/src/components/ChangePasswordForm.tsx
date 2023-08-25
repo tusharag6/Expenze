@@ -1,11 +1,11 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import { cn } from "../../lib/utils";
 import { Icons } from "./Icons";
 import { Button } from "../../components/ui/button";
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
@@ -18,10 +18,42 @@ export default function ChangePasswordForm({
 
   // Extract the token from URL parameters
   const { token } = useParams();
-  console.log(token);
+  const [isValidToken, setIsValidToken] = useState<boolean>(true);
 
+  // console.log(token);
+  const navigate = useNavigate();
   const passRegex =
     /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
+  useEffect(() => {
+    async function checkTokenValidity() {
+      try {
+        const response = await fetch("http://localhost:8080/check-token", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ token }),
+        });
+
+        if (!response.ok) {
+          setIsValidToken(false);
+        }
+      } catch (error) {
+        setIsValidToken(false);
+      }
+    }
+
+    if (token) {
+      checkTokenValidity();
+    }
+  }, [token]);
+
+  useEffect(() => {
+    // Redirect or display error if the token is not valid
+    if (!isValidToken) {
+      navigate("/login");
+    }
+  }, [isValidToken]);
 
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -71,6 +103,11 @@ export default function ChangePasswordForm({
 
       if (response.ok) {
         alert("Password Changed, Please Login");
+        navigate("/login");
+      } else if (response.status === 400) {
+        alert("Token Expired");
+
+        navigate("/forgot-password");
       } else {
         const errorData = await response.json();
         console.log(errorData);
