@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -9,94 +10,99 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
+import { useSelectedAccount } from "../context/AccountContext";
 
-const data = [
-  {
-    name: "Jan",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Feb",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Mar",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Apr",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "May",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jun",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Jul",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Aug",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Sep",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Oct",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Nov",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-  {
-    name: "Dec",
-    income: Math.floor(Math.random() * 5000) + 1000,
-    expense: Math.floor(Math.random() * 5000) + 1000,
-  },
-];
+interface Transaction {
+  id: number;
+  date: string;
+  amount: number;
+  type: "Income" | "Expense";
+  budgetCategory: string | null;
+  description: string | null;
+  account_id: number;
+}
 
 export function Overview() {
-  return (
-    <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={data} barSize={20}>
-        <XAxis
-          dataKey="name"
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-        />
-        <YAxis
-          stroke="#888888"
-          fontSize={12}
-          tickLine={false}
-          axisLine={false}
-          tickFormatter={(value) => `$${value}`}
-        />
-        <Tooltip />
-        <Legend verticalAlign="top" align="right" height={50} />
+  const [transactionData, setTransactionData] = useState<Transaction[]>([]);
+  const { selectedAccountData } = useSelectedAccount();
+  let accountId = selectedAccountData?.id;
+  useEffect(() => {
+    const fetchTransactionData = async () => {
+      try {
+        const response = await fetch(
+          `http://localhost:8080/accounts/${accountId}/transactions`
+        );
+        const data = await response.json();
+        setTransactionData(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchTransactionData();
+  }, [selectedAccountData]);
 
-        <Bar dataKey="income" fill="#adfa1d" radius={[4, 4, 0, 0]} />
-        <Bar dataKey="expense" fill="#8884d8" radius={[4, 4, 0, 0]} />
-      </BarChart>
-    </ResponsiveContainer>
+  const incomeData = transactionData.filter(
+    (transaction) => transaction.type === "Income"
+  );
+
+  const expenseData = transactionData.filter(
+    (transaction) => transaction.type === "Expense"
+  );
+  const isHorizontal = incomeData.length < 8 && expenseData.length < 8;
+
+  return (
+    <div className={`flex ${isHorizontal ? "flex-row" : "flex-col"}`}>
+      {/* <h2>Income</h2> */}
+      <ResponsiveContainer width={isHorizontal ? "50%" : "100%"} height={350}>
+        <BarChart data={incomeData} barSize={40}>
+          <XAxis
+            dataKey="date"
+            stroke="#888888"
+            tickFormatter={(value) =>
+              new Date(value).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "short",
+              })
+            }
+          />
+          <YAxis stroke="#888888" tickFormatter={(value) => `$${value}`} />
+          <Tooltip />
+          <Legend verticalAlign="top" align="right" height={50} />
+          {/* <CartesianGrid strokeDasharray="3 3" /> */}
+          <Bar
+            dataKey="amount"
+            name="Income"
+            fill="#adfa1d"
+            radius={[4, 4, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+
+      {/* <h2>Expense</h2> */}
+      <ResponsiveContainer width={isHorizontal ? "50%" : "100%"} height={350}>
+        <BarChart data={expenseData} barSize={40}>
+          <XAxis
+            dataKey="date"
+            stroke="#888888"
+            tickFormatter={(value) =>
+              new Date(value).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "short",
+              })
+            }
+          />
+          <YAxis stroke="#888888" tickFormatter={(value) => `$${value}`} />
+          <Tooltip />
+          <Legend verticalAlign="top" align="right" height={50} />
+          {/* <CartesianGrid strokeDasharray="3 3" /> */}
+          <Bar
+            dataKey="amount"
+            name="Expense"
+            fill="#8884d8"
+            radius={[4, 4, 0, 0]}
+          />
+        </BarChart>
+      </ResponsiveContainer>
+    </div>
   );
 }

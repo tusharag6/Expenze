@@ -8,10 +8,14 @@ import bodyParser from "body-parser";
 import jwt from "jsonwebtoken";
 import { sendVerificationEmail } from "./utils/verification";
 import { sendForgotPasswordEmail } from "./utils/password";
+
 dotenv.config();
 
 const app = express();
 app.use(cors()); // Enable Cross-Origin Resource Sharing
+
+app.use(bodyParser.urlencoded({ extended: false }));
+
 app.use(bodyParser.json());
 
 const prisma = new PrismaClient();
@@ -216,11 +220,16 @@ app.post("/check-token", async (req, res) => {
 });
 
 app.post("/accounts", async (req, res) => {
+  console.log("Request Came");
+
   try {
+    console.log(req.body);
+
     const { accountName, accountNumber, initialBalance } = req.body;
+    console.log(accountName, accountNumber, initialBalance);
 
     const token = req.headers.authorization?.split(" ")[1];
-    // console.log(token);
+    console.log(token);
 
     if (!token) {
       return res.status(401).json({ msg: "Authorization token not found." });
@@ -231,10 +240,10 @@ app.post("/accounts", async (req, res) => {
     const decodedToken = jwt.verify(token, secretKey as jwt.Secret) as {
       userId: number;
     };
-    // console.log(decodedToken);
+    console.log(decodedToken);
 
     const userId = decodedToken.userId;
-    // console.log(userId);
+    console.log(userId);
 
     // Add new transaction in the database
     const newAccount = await prisma.account.create({

@@ -35,15 +35,9 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../components/ui/dialog";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
 import { useAuth } from "../context/AuthContext";
 import { useSelectedAccount } from "../context/AccountContext";
+import { Icons } from "./Icons";
 
 interface Account {
   account_name: String;
@@ -60,6 +54,11 @@ export default function AccountSwitcher() {
   const [selectedAccount, setSelectedAccount] = useState<Number>();
   const { selectedAccountData, setSelectedAccountData } = useSelectedAccount();
   const { token } = useAuth();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  const [accountName, setAccountName] = useState("");
+  const [accountNumber, setAccountNumber] = useState("");
+  const [initialBalance, setInitialBalance] = useState(0);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -84,7 +83,43 @@ export default function AccountSwitcher() {
       }
     };
     fetchData();
-  }, []);
+  }, [accountData]);
+
+  async function handleAddAccount(event: React.SyntheticEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const data = {
+      accountName,
+      accountNumber,
+      initialBalance,
+    };
+    console.log(data);
+
+    try {
+      // Make an API request to add the new transaction
+      const response = await fetch("http://localhost:8080/accounts", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("Account added");
+      } else {
+        const errorData = await response.json();
+        alert("Error");
+        console.log(errorData);
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsLoading(false);
+  }
 
   return (
     <Dialog open={showNewAccountDialog} onOpenChange={setShowNewAccountDialog}>
@@ -176,30 +211,32 @@ export default function AccountSwitcher() {
         <div>
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
-              <Label htmlFor="name">Account name</Label>
-              <Input id="name" placeholder="Acme Inc." />
+              <Label htmlFor="name">Account Name</Label>
+              <Input
+                id="accountName"
+                placeholder="HDFC Bank"
+                value={accountName}
+                onChange={(e) => setAccountName(e.target.value)}
+              />
             </div>
             <div className="space-y-2">
-              <Label htmlFor="plan">Subscription plan</Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue placeholder="Select a plan" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="free">
-                    <span className="font-medium">Free</span> -{" "}
-                    <span className="text-muted-foreground">
-                      Trial for two weeks
-                    </span>
-                  </SelectItem>
-                  <SelectItem value="pro">
-                    <span className="font-medium">Pro</span> -{" "}
-                    <span className="text-muted-foreground">
-                      $9/month per user
-                    </span>
-                  </SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="name">Account Number</Label>
+              <Input
+                id="accountNumber"
+                placeholder="1234567890"
+                value={accountNumber}
+                onChange={(e) => setAccountNumber(e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
+              <Label htmlFor="name">Initial Balance</Label>
+              <Input
+                id="initialBalance"
+                placeholder="15000"
+                type="number"
+                // value={initialBalance}
+                onChange={(e) => setInitialBalance(Number(e.target.value))}
+              />
             </div>
           </div>
         </div>
@@ -210,7 +247,14 @@ export default function AccountSwitcher() {
           >
             Cancel
           </Button>
-          <Button type="submit">Continue</Button>
+          <Button type="submit" onClick={handleAddAccount}>
+            {isLoading ? (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              " "
+            )}
+            Add Account
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>
