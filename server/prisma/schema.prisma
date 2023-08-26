@@ -42,21 +42,14 @@ model Account {
   transactions    Transaction[] // Establish a one-to-many relationship with Transaction
 }
 
-// Define the TransactionCategory model
-model TransactionCategory {
-  id           Int           @id @default(autoincrement())
-  name         String
-  transactions Transaction[] // Establish a one-to-many relationship with Transaction
-}
-
 // Define the Transaction model
 model Transaction {
-  id          Int                 @id @default(autoincrement())
-  amount      Float
-  date        DateTime
-  description String?
-  account_id  Int
-  account     Account             @relation(fields: [account_id], references: [id]) // Define the relationship with Account
-  category_id Int
-  category    TransactionCategory @relation(fields: [category_id], references: [id]) // Define the relationship with TransactionCategory
+  id             Int      @id @default(autoincrement())
+  date           DateTime @db.Timestamptz()
+  amount         Float
+  type           String
+  budgetCategory String?
+  description    String?
+  account_id     Int
+  account        Account  @relation(fields: [account_id], references: [id]) // Define the relationship with Account
 }

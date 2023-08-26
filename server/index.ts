@@ -215,6 +215,126 @@ app.post("/check-token", async (req, res) => {
   }
 });
 
+app.post("/accounts", async (req, res) => {
+  try {
+    const { accountName, accountNumber, initialBalance } = req.body;
+
+    const token = req.headers.authorization;
+    console.log(token);
+
+    if (!token) {
+      return res.status(401).json({ msg: "Authorization token not found." });
+    }
+    const secretKey = process.env.JWT_SECRET;
+    console.log(secretKey);
+
+    const decodedToken = jwt.verify(token, secretKey as jwt.Secret) as {
+      userId: number;
+    };
+    console.log(decodedToken);
+
+    const userId = decodedToken.userId;
+    console.log(userId);
+
+    // Add new transaction in the database
+    const newAccount = await prisma.account.create({
+      data: {
+        account_name: accountName,
+        account_number: accountNumber,
+        initial_balance: initialBalance,
+        user_id: userId,
+      },
+    });
+    console.log(newAccount);
+
+    res.status(201).json(newAccount); // Return the newly created account
+  } catch (error) {
+    res.status(500).json({ msg: "Error creating account.", error });
+  }
+});
+
+// Add Transaction
+app.post("/accounts/:accountId/transactions", async (req, res) => {
+  try {
+    const { amount, type, budgetCategory, description } = req.body;
+    const accountId = parseInt(req.params.accountId);
+
+    // Validate account existence
+    const account = await prisma.account.findUnique({
+      where: { id: accountId },
+    });
+
+    if (!account) {
+      return res.status(404).json({ msg: "Account not found." });
+    }
+
+    // Add new transaction in the database
+    const newTransaction = await prisma.transaction.create({
+      data: {
+        amount,
+        type,
+        budgetCategory,
+        description,
+        date: new Date(),
+        account_id: accountId,
+      },
+    });
+    console.log(newTransaction);
+
+    res.status(201).json(newTransaction); // Return the newly created user
+  } catch (error) {
+    res.status(500).json({ msg: "Error creating transaction.", error });
+  }
+});
+
+// Get transactions for an account
+app.get("/accounts/:accountId/transactions", async (req, res) => {
+  try {
+    const accountId = parseInt(req.params.accountId);
+
+    // Fetch transactions for the account
+    const transactions = await prisma.transaction.findMany({
+      where: { account_id: accountId },
+    });
+
+    res.status(200).json(transactions);
+  } catch (error) {
+    res.status(500).json({ msg: "Error fetching transactions.", error });
+  }
+});
+
+app.get("/accounts/:accountId/summary", async (req, res) => {
+  try {
+    const accountId = parseInt(req.params.accountId);
+
+    const transactions = await prisma.transaction.findMany({
+      where: { account_id: accountId },
+    });
+
+    let totalExpense = 0;
+    let totalIncome = 0;
+    const numTransactions = transactions.length;
+
+    for (const transaction of transactions) {
+      if (transaction.type === "Expense") {
+        totalExpense += transaction.amount;
+      } else if (transaction.type === "Income") {
+        totalIncome += transaction.amount;
+      }
+    }
+
+    const summary = {
+      totalExpense,
+      totalIncome,
+      numTransactions,
+    };
+
+    res.status(200).json(summary);
+  } catch (error) {
+    res.status(500).json({ msg: "Error fetching summary data.", error });
+  }
+});
+
 const PORT = process.env.PORT || 8080;
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
