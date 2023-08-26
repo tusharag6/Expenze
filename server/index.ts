@@ -340,25 +340,39 @@ app.get("/accounts/:accountId/summary", async (req, res) => {
       where: { account_id: accountId },
     });
 
+    const account = await prisma.account.findUnique({
+      where: { id: accountId },
+    });
+
+    let totalBalance = 0;
     let totalExpense = 0;
     let totalIncome = 0;
     const numTransactions = transactions.length;
 
-    for (const transaction of transactions) {
-      if (transaction.type === "Expense") {
-        totalExpense += transaction.amount;
-      } else if (transaction.type === "Income") {
-        totalIncome += transaction.amount;
+    if (account) {
+      totalBalance = account.initial_balance;
+
+      for (const transaction of transactions) {
+        if (transaction.type === "Expense") {
+          totalExpense += transaction.amount;
+          totalBalance -= transaction.amount;
+        } else if (transaction.type === "Income") {
+          totalIncome += transaction.amount;
+          totalBalance += transaction.amount;
+        }
       }
+
+      const summary = {
+        totalExpense,
+        totalIncome,
+        totalBalance,
+        numTransactions,
+      };
+
+      res.status(200).json(summary);
+    } else {
+      res.status(404).json({ msg: "Account not found." });
     }
-
-    const summary = {
-      totalExpense,
-      totalIncome,
-      numTransactions,
-    };
-
-    res.status(200).json(summary);
   } catch (error) {
     res.status(500).json({ msg: "Error fetching summary data.", error });
   }
