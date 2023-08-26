@@ -73,6 +73,7 @@ export default function AccountSwitcher() {
         if (response.ok) {
           const data = await response.json();
           setAccountData(data);
+
           // console.log(data);
         } else {
           const errorData = await response.json();
@@ -120,6 +121,10 @@ export default function AccountSwitcher() {
                       setOpen(false);
                       setSelectedAccount(account.id);
                       setSelectedAccountData(account);
+                      localStorage.setItem(
+                        "accountData",
+                        JSON.stringify(account)
+                      );
                     }}
                     className="text-sm"
                   >

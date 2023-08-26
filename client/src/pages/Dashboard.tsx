@@ -38,11 +38,66 @@ import { Input } from "../../components/ui/input";
 import { Overview } from "../components/Overview";
 // import { Ov2 } from "../components/Ov2";
 import RecentTransaction from "../components/RecentTransaction";
+import { Icons } from "../components/Icons";
+import React from "react";
+import { useSelectedAccount } from "../context/AccountContext";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
     useState(false);
   const [open, setOpen] = useState(false);
+  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  // Initialize state variables for form inputs
+  const [amount, setAmount] = useState("");
+  const [type, setType] = useState("");
+  const [budgetCategory, setBudgetCategory] = useState("");
+  const [description, setDescription] = useState("");
+
+  const { selectedAccountData } = useSelectedAccount();
+
+  async function handleNewTransaction(event: React.SyntheticEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const data = {
+      amount: parseFloat(amount),
+      type,
+      budgetCategory,
+      description,
+    };
+
+    console.log(data);
+    let accountId = selectedAccountData?.id;
+
+    try {
+      // Make an API request to add the new transaction
+      const response = await fetch(
+        `http://localhost:8080/accounts/${accountId}/transactions`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            // Add any other necessary headers, like authorization
+          },
+          body: JSON.stringify(data),
+        }
+      );
+
+      if (response.ok) {
+        alert("Transaction added");
+        // Transaction added successfully
+        // Handle success behavior here
+      } else {
+        alert("Error");
+        // Handle error behavior here
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsLoading(false);
+  }
 
   return (
     <Dialog
@@ -228,23 +283,29 @@ export default function Dashboard() {
           <div className="space-y-4 py-2 pb-4">
             <div className="space-y-2">
               <Label htmlFor="name">Amount</Label>
-              <Input id="amount" type="number" placeholder="Enter amount" />
+              <Input
+                id="amount"
+                type="number"
+                placeholder="Enter amount"
+                value={amount}
+                onChange={(e) => setAmount(e.target.value)}
+              />
             </div>
 
             <div className="space-y-2">
               <Label htmlFor="type">Transaction Type</Label>
-              <Select>
+              <Select onValueChange={(e) => setType(e)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select a type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="income">
+                  <SelectItem value="Income">
                     <span className="font-medium">Income</span>
                     {/* <span className="text-muted-foreground">
                         Trial for two weeks
                       </span> */}
                   </SelectItem>
-                  <SelectItem value="expense">
+                  <SelectItem value="Expense">
                     <span className="font-medium">Expense</span>
                     {/* <span className="text-muted-foreground">
                         $9/month per user
@@ -256,15 +317,23 @@ export default function Dashboard() {
 
             <div className="space-y-2">
               <Label htmlFor="category">Budget Category</Label>
-              <Input id="category" type="text" placeholder="Enter category" />
+              <Input
+                id="category"
+                type="text"
+                placeholder="Enter category"
+                value={budgetCategory}
+                onChange={(e) => setBudgetCategory(e.target.value)}
+              />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="memo">Memo / Description</Label>
+              <Label htmlFor="description">Memo / Description</Label>
               <Input
                 id="memo"
                 type="text"
                 placeholder="Enter memo or description"
+                value={description}
+                onChange={(e) => setDescription(e.target.value)}
               />
             </div>
           </div>
@@ -276,7 +345,18 @@ export default function Dashboard() {
           >
             Cancel
           </Button>
-          <Button type="submit">Add Transaction</Button>
+          <Button
+            type="submit"
+            onClick={handleNewTransaction}
+            disabled={isLoading}
+          >
+            {isLoading ? (
+              <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+            ) : (
+              " "
+            )}
+            Add Transaction
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

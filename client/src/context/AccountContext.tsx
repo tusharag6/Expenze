@@ -28,8 +28,13 @@ interface AccountProviderProps {
 }
 
 export function AccountProvider({ children }: AccountProviderProps) {
+  const storedAccountData = localStorage.getItem("accountData");
+  const parsedAccountData = storedAccountData
+    ? JSON.parse(storedAccountData)
+    : null;
+
   const [selectedAccountData, setSelectedAccountData] =
-    useState<Account | null>(null);
+    useState<Account | null>(parsedAccountData);
 
   return (
     <AccountContext.Provider
