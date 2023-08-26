@@ -1,17 +1,22 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import {
   CaretSortIcon,
   CheckIcon,
   PlusCircledIcon,
 } from "@radix-ui/react-icons";
-
-import { cn } from "../../lib/utils";
 import {
   Avatar,
   AvatarFallback,
   AvatarImage,
 } from "../../components/ui/avatar";
 import { Button } from "../../components/ui/button";
+import { Input } from "../../components/ui/input";
+import { Label } from "../../components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "../../components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -30,13 +35,6 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "../../components/ui/dialog";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "../../components/ui/popover";
 import {
   Select,
   SelectContent,
@@ -44,30 +42,48 @@ import {
   SelectTrigger,
   SelectValue,
 } from "../../components/ui/select";
+import { useAuth } from "../context/AuthContext";
+import { useSelectedAccount } from "../context/AccountContext";
 
-const groups = [
-  {
-    label: "Personal Account",
-    accounts: [
-      {
-        label: "HDFC Bank",
-        value: "personal",
-      },
-    ],
-  },
-];
+interface Account {
+  account_name: String;
+  account_number: String;
+  id: Number;
+  initial_balance: Number;
+  user_id: Number;
+}
 
-type Account = (typeof groups)[number]["accounts"][number];
-
-interface AccountSwitcherProps
-  extends React.ComponentPropsWithoutRef<typeof PopoverTrigger> {}
-
-export default function AccountSwitcher({ className }: AccountSwitcherProps) {
+export default function AccountSwitcher() {
   const [open, setOpen] = useState(false);
   const [showNewAccountDialog, setShowNewAccountDialog] = useState(false);
-  const [selectedAccount, setSelectedAccount] = useState<Account>(
-    groups[0].accounts[0]
-  );
+  const [accountData, setAccountData] = useState<Account[]>([]);
+  const [selectedAccount, setSelectedAccount] = useState<Number>();
+  const { selectedAccountData, setSelectedAccountData } = useSelectedAccount();
+  const { token } = useAuth();
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const response = await fetch("http://localhost:8080/accounts", {
+          method: "GET",
+          headers: {
+            authorization: `${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setAccountData(data);
+          // console.log(data);
+        } else {
+          const errorData = await response.json();
+          console.log(errorData);
+        }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+    fetchData();
+  }, []);
 
   return (
     <Dialog open={showNewAccountDialog} onOpenChange={setShowNewAccountDialog}>
@@ -78,16 +94,16 @@ export default function AccountSwitcher({ className }: AccountSwitcherProps) {
             role="combobox"
             aria-expanded={open}
             aria-label="Select a account"
-            className={cn("w-[200px] justify-between", className)}
+            className="w-[200px] justify-between"
           >
             <Avatar className="mr-2 h-5 w-5">
               <AvatarImage
-                src={`https://avatar.vercel.sh/${selectedAccount.value}.png`}
-                alt={selectedAccount.label}
+              // src={`https://avatar.vercel.sh/${selectedAccount.value}.png`}
+              // alt={selectedAccount.label}
               />
               <AvatarFallback>SC</AvatarFallback>
             </Avatar>
-            {selectedAccount.label}
+            {selectedAccountData?.account_name || "Select an account"}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
         </PopoverTrigger>
@@ -96,40 +112,36 @@ export default function AccountSwitcher({ className }: AccountSwitcherProps) {
             <CommandList>
               <CommandInput placeholder="Search account..." />
               <CommandEmpty>No account found.</CommandEmpty>
-              {groups.map((group) => (
-                <CommandGroup key={group.label} heading={group.label}>
-                  {group.accounts.map((account) => (
-                    <CommandItem
-                      key={account.value}
-                      onSelect={() => {
-                        setSelectedAccount(account);
-                        setOpen(false);
-                      }}
-                      className="text-sm"
-                    >
-                      <Avatar className="mr-2 h-5 w-5">
-                        <AvatarImage
-                          src={`https://avatar.vercel.sh/${account.value}.png`}
-                          alt={account.label}
-                          className="grayscale"
-                        />
-                        <AvatarFallback>SC</AvatarFallback>
-                      </Avatar>
-                      {account.label}
-                      <CheckIcon
-                        className={cn(
-                          "ml-auto h-4 w-4",
-                          selectedAccount.value === account.value
-                            ? "opacity-100"
-                            : "opacity-0"
-                        )}
+              <CommandGroup>
+                {accountData.map((account) => (
+                  <CommandItem
+                    key={String(account.id)}
+                    onSelect={() => {
+                      setOpen(false);
+                      setSelectedAccount(account.id);
+                      setSelectedAccountData(account);
+                    }}
+                    className="text-sm"
+                  >
+                    <Avatar className="mr-2 h-5 w-5">
+                      <AvatarImage
+                        // src={`https://avatar.vercel.sh/${account.value}.png`}
+                        // alt={account.label}
+                        className="grayscale"
                       />
-                    </CommandItem>
-                  ))}
-                </CommandGroup>
-              ))}
+                      <AvatarFallback>SC</AvatarFallback>
+                    </Avatar>
+                    {account.account_name}
+                    {selectedAccount === account.id && (
+                      <CheckIcon className="ml-auto h-4 w-4" />
+                    )}
+                  </CommandItem>
+                ))}
+              </CommandGroup>
             </CommandList>
+
             <CommandSeparator />
+
             <CommandList>
               <CommandGroup>
                 <DialogTrigger asChild>
@@ -148,6 +160,7 @@ export default function AccountSwitcher({ className }: AccountSwitcherProps) {
           </Command>
         </PopoverContent>
       </Popover>
+
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Add Account</DialogTitle>

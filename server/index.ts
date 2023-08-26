@@ -219,22 +219,22 @@ app.post("/accounts", async (req, res) => {
   try {
     const { accountName, accountNumber, initialBalance } = req.body;
 
-    const token = req.headers.authorization;
-    console.log(token);
+    const token = req.headers.authorization?.split(" ")[1];
+    // console.log(token);
 
     if (!token) {
       return res.status(401).json({ msg: "Authorization token not found." });
     }
     const secretKey = process.env.JWT_SECRET;
-    console.log(secretKey);
+    // console.log(secretKey);
 
     const decodedToken = jwt.verify(token, secretKey as jwt.Secret) as {
       userId: number;
     };
-    console.log(decodedToken);
+    // console.log(decodedToken);
 
     const userId = decodedToken.userId;
-    console.log(userId);
+    // console.log(userId);
 
     // Add new transaction in the database
     const newAccount = await prisma.account.create({
@@ -250,6 +250,35 @@ app.post("/accounts", async (req, res) => {
     res.status(201).json(newAccount); // Return the newly created account
   } catch (error) {
     res.status(500).json({ msg: "Error creating account.", error });
+  }
+});
+
+app.get("/accounts", async (req, res) => {
+  try {
+    const token = req.headers.authorization;
+    // console.log(token);
+
+    if (!token) {
+      return res.status(401).json({ msg: "Authorization token not found." });
+    }
+    const secretKey = process.env.JWT_SECRET;
+    // console.log(secretKey);
+
+    const decodedToken = jwt.verify(token, secretKey as jwt.Secret) as {
+      userId: number;
+    };
+    // console.log(decodedToken);
+
+    const userId = decodedToken.userId;
+    // console.log(userId);
+
+    const accountsData = await prisma.account.findMany({
+      where: { user_id: userId },
+    });
+
+    res.status(200).json(accountsData);
+  } catch (error) {
+    res.status(500).json({ msg: "Error fetching accounts data.", error });
   }
 });
 

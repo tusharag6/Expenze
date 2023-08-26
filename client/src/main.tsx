@@ -15,6 +15,7 @@ import PreventLoggedIn from "./components/PreventLogIn";
 import VerifyPage from "./pages/VerifyPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
+import { AccountProvider } from "./context/AccountContext";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -63,7 +64,9 @@ const router = createBrowserRouter([
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AuthProvider>
-      <RouterProvider router={router} />
+      <AccountProvider>
+        <RouterProvider router={router} />
+      </AccountProvider>
     </AuthProvider>
   </React.StrictMode>
 );
