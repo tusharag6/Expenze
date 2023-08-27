@@ -341,6 +341,39 @@ app.get("/accounts/:accountId/transactions", async (req, res) => {
   }
 });
 
+// Get transactions for an account
+app.patch(
+  "/accounts/:accountId/transactions/:transactionId",
+  async (req, res) => {
+    const { amount, type, budgetCategory, description } = req.body;
+    // console.log(amount, type, budgetCategory, description);
+
+    const updatedFields: any = {};
+    if (amount !== undefined && amount !== null) updatedFields.amount = amount;
+    if (type !== undefined) updatedFields.type = type;
+    if (budgetCategory !== undefined)
+      updatedFields.budgetCategory = budgetCategory;
+    if (description !== undefined) updatedFields.description = description;
+    // console.log(updatedFields);
+
+    try {
+      const accountId = parseInt(req.params.accountId);
+      const transactionId = parseInt(req.params.transactionId);
+
+      const updatedTransaction = await prisma.transaction.update({
+        where: { id: transactionId },
+        data: updatedFields,
+      });
+
+      res.status(200).json(updatedTransaction);
+    } catch (error) {
+      return res
+        .status(500)
+        .json({ error: "An error occurred while updating the transaction" });
+    }
+  }
+);
+
 app.get("/accounts/:accountId/summary", async (req, res) => {
   try {
     const accountId = parseInt(req.params.accountId);
