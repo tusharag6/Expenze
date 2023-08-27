@@ -5,33 +5,31 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../../components/ui/dropdown-menu";
 
-// Define the structure of a Payment object
-export type Payment = {
-  id: string;
-  name: string;
-  dateTime: string;
-  category: string;
-  type: string;
+interface Transaction {
+  id: number;
+  date: string;
   amount: number;
-};
+  type: "Income" | "Expense";
+  budgetCategory: string | null;
+  description: string | null;
+  account_id: number;
+}
 
 // Define the column configuration for the table
-export const columns: ColumnDef<Payment>[] = [
+export const columns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "name",
-    header: "Name",
+    accessorKey: "description",
+    header: "Memo",
   },
   {
-    accessorKey: "dateTime",
+    accessorKey: "date",
     header: "Date and Time",
   },
   {
-    accessorKey: "category",
+    accessorKey: "budgetCategory",
     header: "Category",
   },
   {
@@ -54,7 +52,7 @@ export const columns: ColumnDef<Payment>[] = [
   {
     id: "actions",
     cell: ({ row }) => {
-      const payment = row.original;
+      const transaction = row.original;
 
       return (
         <DropdownMenu>
@@ -65,15 +63,15 @@ export const columns: ColumnDef<Payment>[] = [
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Actions</DropdownMenuLabel>
             <DropdownMenuItem
-              onClick={() => navigator.clipboard.writeText(payment.id)}
+              onClick={() =>
+                navigator.clipboard.writeText(String(transaction.id))
+              }
             >
               Copy payment ID
             </DropdownMenuItem>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem>View customer</DropdownMenuItem>
-            <DropdownMenuItem>View payment details</DropdownMenuItem>
+            <DropdownMenuItem>Edit transaction details</DropdownMenuItem>
+            <DropdownMenuItem>View transaction details</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       );

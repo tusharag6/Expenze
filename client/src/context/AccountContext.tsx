@@ -11,6 +11,7 @@ interface Account {
 interface AccountContextType {
   selectedAccountData: Account | null;
   setSelectedAccountData: (account: Account | null) => void;
+  clearSelectedAccountData: () => void;
 }
 
 const AccountContext = createContext<AccountContextType | undefined>(undefined);
@@ -36,9 +37,18 @@ export function AccountProvider({ children }: AccountProviderProps) {
   const [selectedAccountData, setSelectedAccountData] =
     useState<Account | null>(parsedAccountData);
 
+  const clearSelectedAccountData = () => {
+    setSelectedAccountData(null);
+    localStorage.removeItem("accountData");
+  };
+
   return (
     <AccountContext.Provider
-      value={{ selectedAccountData, setSelectedAccountData }}
+      value={{
+        selectedAccountData,
+        setSelectedAccountData,
+        clearSelectedAccountData,
+      }}
     >
       {children}
     </AccountContext.Provider>

@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState } from "react";
+import { useSelectedAccount } from "./AccountContext";
 
 type AuthContextType = {
   token: string | null;
@@ -15,6 +16,7 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const storedToken = localStorage.getItem("token");
   const [token, setToken] = useState<string | null>(storedToken);
+  const { clearSelectedAccountData } = useSelectedAccount();
 
   const login = (newToken: string) => {
     localStorage.setItem("token", newToken);
@@ -24,6 +26,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const logout = () => {
     localStorage.removeItem("token");
     setToken(null);
+    clearSelectedAccountData();
   };
 
   return (

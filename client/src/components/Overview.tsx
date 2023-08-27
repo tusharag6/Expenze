@@ -11,6 +11,7 @@ import {
   YAxis,
 } from "recharts";
 import { useSelectedAccount } from "../context/AccountContext";
+import { useAuth } from "../context/AuthContext";
 
 interface Transaction {
   id: number;
@@ -23,23 +24,26 @@ interface Transaction {
 }
 
 export function Overview() {
+  const { token } = useAuth();
   const [transactionData, setTransactionData] = useState<Transaction[]>([]);
   const { selectedAccountData } = useSelectedAccount();
   let accountId = selectedAccountData?.id;
   useEffect(() => {
-    const fetchTransactionData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/accounts/${accountId}/transactions`
-        );
-        const data = await response.json();
-        setTransactionData(data);
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchTransactionData();
-  }, [selectedAccountData]);
+    if (selectedAccountData) {
+      const fetchTransactionData = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/accounts/${accountId}/transactions`
+          );
+          const data = await response.json();
+          setTransactionData(data);
+        } catch (error) {
+          console.log(error);
+        }
+      };
+      fetchTransactionData();
+    }
+  }, [selectedAccountData, token]);
 
   const incomeData = transactionData.filter(
     (transaction) => transaction.type === "Income"

@@ -72,7 +72,6 @@ export default function AccountSwitcher() {
         if (response.ok) {
           const data = await response.json();
           setAccountData(data);
-
           // console.log(data);
         } else {
           const errorData = await response.json();
@@ -83,7 +82,11 @@ export default function AccountSwitcher() {
       }
     };
     fetchData();
-  }, [accountData]);
+  }, []);
+  // console.log(accountData);
+  // console.log(selectedAccountData);
+
+  localStorage.setItem("accountData", JSON.stringify(accountData[0]));
 
   async function handleAddAccount(event: React.SyntheticEvent) {
     event.preventDefault();

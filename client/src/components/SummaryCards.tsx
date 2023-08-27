@@ -16,31 +16,32 @@ const SummaryCards = () => {
     numTransactions: 0,
   });
   useEffect(() => {
-    let accountId = selectedAccountData?.id;
-    const fetchData = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:8080/accounts/${accountId}/summary`,
-          {
-            method: "GET",
-            headers: {
-              "Content-Type": "application/json",
-            },
+    if (selectedAccountData) {
+      const accountId = selectedAccountData.id;
+      const fetchData = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:8080/accounts/${accountId}/summary`,
+            {
+              method: "GET",
+              headers: {
+                "Content-Type": "application/json",
+              },
+            }
+          );
+          if (response.ok) {
+            const data = await response.json();
+            setSummaryData(data);
+          } else {
+            const errorData = await response.json();
+            console.log(errorData);
           }
-        );
-        if (response.ok) {
-          const data = await response.json();
-          // console.log(data);
-          setSummaryData(data);
-        } else {
-          const errorData = await response.json();
-          console.log(errorData);
+        } catch (error) {
+          console.log(error);
         }
-      } catch (error) {
-        console.log(error);
-      }
-    };
-    fetchData();
+      };
+      fetchData();
+    }
   }, [selectedAccountData]);
 
   return (
