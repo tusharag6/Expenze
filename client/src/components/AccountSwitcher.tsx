@@ -77,6 +77,7 @@ export default function AccountSwitcher() {
           // console.log(data);
           if (data.length > 0 && !storedAccountData) {
             localStorage.setItem("accountData", JSON.stringify(data[0]));
+            setSelectedAccountData(data[0]);
           }
         } else {
           const errorData = await response.json();
@@ -88,8 +89,6 @@ export default function AccountSwitcher() {
     };
     fetchData();
   }, []);
-
-  // Load selected account data from local storage when component mounts
 
   // console.log("account data", accountData);
   console.log("selected account", selectedAccountData);
