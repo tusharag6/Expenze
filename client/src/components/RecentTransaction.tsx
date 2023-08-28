@@ -1,24 +1,17 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import { format, parseISO } from "date-fns";
 import { columns } from "./Columns";
 import { DataTable } from "./DataTable";
 import { useSelectedAccount } from "../context/AccountContext";
-
-interface Transaction {
-  id: number;
-  date: string;
-  amount: number;
-  type: "Income" | "Expense";
-  budgetCategory: string | null;
-  description: string | null;
-  account_id: number;
-}
+import { useTransaction } from "../context/TransactionContext";
 
 export default function RecentTransaction() {
-  const [transactionData, setTransactionData] = useState<Transaction[]>([]);
+  const { transactionData, updateTransactionData } = useTransaction();
   const { selectedAccountData } = useSelectedAccount();
   let accountId = selectedAccountData?.id;
   useEffect(() => {
+    // console.log("Effect triggered");
+
     if (selectedAccountData) {
       const fetchTransactionData = async () => {
         try {
@@ -26,14 +19,19 @@ export default function RecentTransaction() {
             `http://localhost:8080/accounts/${accountId}/transactions`
           );
           const data = await response.json();
-          setTransactionData(data);
+          if (JSON.stringify(data) !== JSON.stringify(transactionData)) {
+            updateTransactionData(data);
+          }
+          // console.log("inside useEffect", transactionData);
         } catch (error) {
           console.log(error);
         }
       };
       fetchTransactionData();
     }
-  }, [selectedAccountData, transactionData]);
+  }, [selectedAccountData]);
+  // console.log("outside useEffect", transactionData);
+
   let formattedTransactions = transactionData;
   if (transactionData) {
     formattedTransactions = transactionData

@@ -39,6 +39,7 @@ import {
   SelectValue,
 } from "../../components/ui/select";
 import { Icons } from "./Icons";
+import { useTransaction } from "../context/TransactionContext";
 
 // Define the column configuration for the table
 export const columns: ColumnDef<Transaction>[] = [
@@ -107,6 +108,7 @@ export const columns: ColumnDef<Transaction>[] = [
       const [type, setType] = useState("");
       const [budgetCategory, setBudgetCategory] = useState("");
       const [description, setDescription] = useState("");
+      const { updateTransactionData } = useTransaction();
 
       const { selectedAccountData } = useSelectedAccount();
       const transaction = row.original;
@@ -145,6 +147,17 @@ export const columns: ColumnDef<Transaction>[] = [
             alert("Transaction Edited");
             // Transaction added successfully
             // Handle success behavior here
+
+            try {
+              const response = await fetch(
+                `http://localhost:8080/accounts/${accountId}/transactions`
+              );
+              const data = await response.json();
+              updateTransactionData(data);
+              // console.log("columns", transactionData);
+            } catch (error) {
+              console.log(error);
+            }
           } else {
             const error = await response.json();
             console.log(error);

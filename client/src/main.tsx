@@ -16,6 +16,7 @@ import VerifyPage from "./pages/VerifyPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import { AccountProvider } from "./context/AccountContext";
+import { TransactionProvider } from "./context/TransactionContext";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -65,7 +66,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
     <AccountProvider>
       <AuthProvider>
-        <RouterProvider router={router} />
+        <TransactionProvider>
+          <RouterProvider router={router} />
+        </TransactionProvider>
       </AuthProvider>
     </AccountProvider>
   </React.StrictMode>

@@ -1,11 +1,12 @@
-import { useState, useEffect } from "react";
-import { Transaction, columns } from "../components/Columns";
+import { useEffect } from "react";
+import { columns } from "../components/Columns";
 import { DataTable } from "../components/DataTable";
 import { useSelectedAccount } from "../context/AccountContext";
 import { format, parseISO } from "date-fns";
+import { useTransaction } from "../context/TransactionContext";
 
 const Activity = () => {
-  const [transactionData, setTransactionData] = useState<Transaction[]>([]);
+  const { transactionData, updateTransactionData } = useTransaction();
   const { selectedAccountData } = useSelectedAccount();
   let accountId = selectedAccountData?.id;
   useEffect(() => {
@@ -16,14 +17,14 @@ const Activity = () => {
             `http://localhost:8080/accounts/${accountId}/transactions`
           );
           const data = await response.json();
-          setTransactionData(data);
+          updateTransactionData(data);
         } catch (error) {
           console.log(error);
         }
       };
       fetchTransactionData();
     }
-  }, [selectedAccountData, transactionData]);
+  }, [selectedAccountData]);
   let formattedTransactions = transactionData;
   if (transactionData) {
     formattedTransactions = transactionData
