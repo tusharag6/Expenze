@@ -1,9 +1,11 @@
 import { useEffect } from "react";
 import { format, parseISO } from "date-fns";
-import { columns } from "./Columns";
-import { DataTable } from "./DataTable";
+import { columns } from "./ColumnsRecent";
+import { DataTable } from "./DataTableRecent";
 import { useSelectedAccount } from "../context/AccountContext";
 import { useTransaction } from "../context/TransactionContext";
+import { Avatar, AvatarImage } from "../../components/ui/avatar";
+import { AvatarFallback } from "@radix-ui/react-avatar";
 
 export default function RecentTransaction() {
   const { transactionData, updateTransactionData } = useTransaction();
@@ -39,16 +41,32 @@ export default function RecentTransaction() {
         ...transaction,
         date: format(parseISO(transaction.date), "dd MMM hh:mm a"),
         description: transaction.description
-          ? transaction.description.slice(0, 15) +
-            (transaction.description.length > 15 ? "..." : "")
+          ? transaction.description.slice(0, 30) +
+            (transaction.description.length > 30 ? "..." : "")
           : "",
       }))
       .reverse()
-      .slice(0, 5);
+      .slice(0, 6);
   }
   return (
-    <div className="container">
-      <DataTable columns={columns} data={formattedTransactions} />
+    <div className="space-y-8">
+      {formattedTransactions.map((transaction) => (
+        <div className="flex items-center" key={transaction.id}>
+          {" "}
+          {/* Don't forget to provide a unique key */}
+          <Avatar className="h-9 w-9">
+            <AvatarImage src="/avatars/01.png" alt="Avatar" />
+            <AvatarFallback>SC</AvatarFallback>
+          </Avatar>
+          <div className="ml-4 space-y-1">
+            <p className="text-sm font-medium leading-none">
+              {transaction.description}
+            </p>
+            <p className="text-sm text-muted-foreground">{transaction.type}</p>
+          </div>
+          <div className="ml-auto font-medium">${transaction.amount}</div>
+        </div>
+      ))}
     </div>
   );
 }

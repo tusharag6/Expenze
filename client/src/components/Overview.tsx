@@ -45,68 +45,41 @@ export function Overview() {
     }
   }, [selectedAccountData, token]);
 
-  const incomeData = transactionData.filter(
-    (transaction) => transaction.type === "Income"
-  );
-
   const expenseData = transactionData.filter(
     (transaction) => transaction.type === "Expense"
   );
-  const isHorizontal = incomeData.length < 8 && expenseData.length < 8;
 
   return (
-    <div className={`flex ${isHorizontal ? "flex-row" : "flex-col"}`}>
-      {/* <h2>Income</h2> */}
-      <ResponsiveContainer width={isHorizontal ? "50%" : "100%"} height={350}>
-        <BarChart data={incomeData} barSize={40}>
-          <XAxis
-            dataKey="date"
-            stroke="#888888"
-            tickFormatter={(value) =>
-              new Date(value).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "short",
-              })
-            }
-          />
-          <YAxis stroke="#888888" tickFormatter={(value) => `$${value}`} />
-          <Tooltip />
-          <Legend verticalAlign="top" align="right" height={50} />
-          {/* <CartesianGrid strokeDasharray="3 3" /> */}
-          <Bar
-            dataKey="amount"
-            name="Income"
-            fill="#adfa1d"
-            radius={[4, 4, 0, 0]}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-
-      {/* <h2>Expense</h2> */}
-      <ResponsiveContainer width={isHorizontal ? "50%" : "100%"} height={350}>
-        <BarChart data={expenseData} barSize={40}>
-          <XAxis
-            dataKey="date"
-            stroke="#888888"
-            tickFormatter={(value) =>
-              new Date(value).toLocaleDateString("en-US", {
-                day: "numeric",
-                month: "short",
-              })
-            }
-          />
-          <YAxis stroke="#888888" tickFormatter={(value) => `$${value}`} />
-          <Tooltip />
-          <Legend verticalAlign="top" align="right" height={50} />
-          {/* <CartesianGrid strokeDasharray="3 3" /> */}
-          <Bar
-            dataKey="amount"
-            name="Expense"
-            fill="#8884d8"
-            radius={[4, 4, 0, 0]}
-          />
-        </BarChart>
-      </ResponsiveContainer>
-    </div>
+    <ResponsiveContainer width="100%" height={350}>
+      <BarChart data={expenseData}>
+        <XAxis
+          dataKey="date"
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value) =>
+            new Date(value).toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+            })
+          }
+        />
+        <YAxis
+          stroke="#888888"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value) => `$${value}`}
+        />
+        <Tooltip />
+        <Bar
+          dataKey="amount"
+          name="Income"
+          fill="#adfa1d"
+          radius={[4, 4, 0, 0]}
+        />
+      </BarChart>
+    </ResponsiveContainer>
   );
 }

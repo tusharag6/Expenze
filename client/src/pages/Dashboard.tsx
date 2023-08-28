@@ -133,7 +133,7 @@ export default function Dashboard() {
           <TabsContent value="overview" className="md:space-y-4">
             {/* Cards */}
             <SummaryCards />
-            <div className="grid gap-4 grid-cols-2 pt-4">
+            <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
               {/* Chart */}
               <Card className="col-span-4">
                 <CardHeader>
@@ -144,24 +144,15 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
 
-              {/* <Card className="col-span-4">
-                    <CardHeader>
-                      <CardTitle>Overview</CardTitle>
-                    </CardHeader>
-                    <CardContent className="pl-2">
-                      <Ov2 />
-                    </CardContent>
-                  </Card> */}
-
               {/* Recent Transaction */}
-              <Card className="col-span-4 mb-6 lg:col-span-3 md:col-span-4">
+              <Card className="col-span-4 lg:col-span-3">
                 <CardHeader>
                   <CardTitle>Recent Transactions</CardTitle>
                   <CardDescription>
                     {/* You made 265 sales this month. */}
                   </CardDescription>
                 </CardHeader>
-                <CardContent>
+                <CardContent className="">
                   <RecentTransaction />
                 </CardContent>
               </Card>
