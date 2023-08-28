@@ -23,7 +23,7 @@ const Activity = () => {
       };
       fetchTransactionData();
     }
-  }, [selectedAccountData]);
+  }, [selectedAccountData, transactionData]);
   let formattedTransactions = transactionData;
   if (transactionData) {
     formattedTransactions = transactionData

@@ -33,7 +33,7 @@ export default function RecentTransaction() {
       };
       fetchTransactionData();
     }
-  }, [selectedAccountData]);
+  }, [selectedAccountData, transactionData]);
   let formattedTransactions = transactionData;
   if (transactionData) {
     formattedTransactions = transactionData
