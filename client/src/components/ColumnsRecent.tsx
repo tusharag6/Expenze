@@ -1,12 +1,6 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal, ArrowUpDown } from "lucide-react";
+import { ArrowUpDown } from "lucide-react";
 import { Button } from "../../components/ui/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
 
 export interface Transaction {
   id: number;
@@ -17,29 +11,6 @@ export interface Transaction {
   description: string | null;
   account_id: number;
 }
-
-import { useState } from "react";
-import { useSelectedAccount } from "../context/AccountContext";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "../../components/ui/dialog";
-import { DialogTrigger } from "@radix-ui/react-dialog";
-import { Label } from "../../components/ui/label";
-import { Input } from "../../components/ui/input";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../components/ui/select";
-import { Icons } from "./Icons";
-import { useTransaction } from "../context/TransactionContext";
 
 // Define the column configuration for the table
 export const columns: ColumnDef<Transaction>[] = [

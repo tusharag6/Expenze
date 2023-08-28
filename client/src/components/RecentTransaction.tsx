@@ -1,7 +1,5 @@
 import { useEffect } from "react";
 import { format, parseISO } from "date-fns";
-import { columns } from "./ColumnsRecent";
-import { DataTable } from "./DataTableRecent";
 import { useSelectedAccount } from "../context/AccountContext";
 import { useTransaction } from "../context/TransactionContext";
 import { Avatar, AvatarImage } from "../../components/ui/avatar";

@@ -4,7 +4,6 @@ import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
-  Legend,
   ResponsiveContainer,
   Tooltip,
   XAxis,
