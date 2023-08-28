@@ -341,7 +341,7 @@ app.get("/accounts/:accountId/transactions", async (req, res) => {
   }
 });
 
-// Get transactions for an account
+// Edut transaction for an account
 app.patch(
   "/accounts/:accountId/transactions/:transactionId",
   async (req, res) => {
@@ -350,10 +350,11 @@ app.patch(
 
     const updatedFields: any = {};
     if (amount !== undefined && amount !== null) updatedFields.amount = amount;
-    if (type !== undefined) updatedFields.type = type;
-    if (budgetCategory !== undefined)
+    if (type !== undefined && type !== "") updatedFields.type = type;
+    if (budgetCategory !== undefined && budgetCategory !== "")
       updatedFields.budgetCategory = budgetCategory;
-    if (description !== undefined) updatedFields.description = description;
+    if (description !== undefined && description !== "")
+      updatedFields.description = description;
     // console.log(updatedFields);
 
     try {

@@ -37,7 +37,6 @@ export default function RecentTransaction() {
   let formattedTransactions = transactionData;
   if (transactionData) {
     formattedTransactions = transactionData
-      .slice(0, 5)
       .map((transaction) => ({
         ...transaction,
         date: format(parseISO(transaction.date), "dd MMM hh:mm a"),
@@ -46,7 +45,8 @@ export default function RecentTransaction() {
             (transaction.description.length > 15 ? "..." : "")
           : "",
       }))
-      .reverse();
+      .reverse()
+      .slice(0, 5);
   }
   return (
     <div className="container">

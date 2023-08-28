@@ -71,8 +71,13 @@ export default function AccountSwitcher() {
         });
         if (response.ok) {
           const data = await response.json();
+          const storedAccountData = localStorage.getItem("accountData");
+
           setAccountData(data);
           // console.log(data);
+          if (data.length > 0 && !storedAccountData) {
+            localStorage.setItem("accountData", JSON.stringify(data[0]));
+          }
         } else {
           const errorData = await response.json();
           console.log(errorData);
@@ -83,10 +88,13 @@ export default function AccountSwitcher() {
     };
     fetchData();
   }, []);
-  // console.log(accountData);
-  // console.log(selectedAccountData);
 
-  localStorage.setItem("accountData", JSON.stringify(accountData[0]));
+  // Load selected account data from local storage when component mounts
+
+  // console.log("account data", accountData);
+  console.log("selected account", selectedAccountData);
+
+  // localStorage.setItem("accountData", JSON.stringify(accountData[0]));
 
   async function handleAddAccount(event: React.SyntheticEvent) {
     event.preventDefault();
@@ -159,6 +167,8 @@ export default function AccountSwitcher() {
                       setOpen(false);
                       setSelectedAccount(account.id);
                       setSelectedAccountData(account);
+                      console.log("inside onselect", account);
+
                       localStorage.setItem(
                         "accountData",
                         JSON.stringify(account)
