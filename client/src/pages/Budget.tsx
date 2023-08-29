@@ -11,8 +11,8 @@ import {
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Separator } from "../../components/ui/separator";
-import { BudegtEmptyPlaceholder } from "../components/BudgetEmptyPlaceholder";
 import { useState } from "react";
+import EmptyPlaceholder from "../components/EmptyPlaceholder";
 
 const Budget = () => {
   const [budgets, setBudgets] = useState([
@@ -75,7 +75,10 @@ const Budget = () => {
         </div>
       ) : (
         // Show the empty placeholder component if no budgets are available
-        <BudegtEmptyPlaceholder />
+        <EmptyPlaceholder
+          title="No Budget Created"
+          description="You haven't created any budgets yet. Start by adding a new budget."
+        />
       )}
     </div>
   );

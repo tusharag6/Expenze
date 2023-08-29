@@ -42,6 +42,7 @@ import { Icons } from "../components/Icons";
 import React from "react";
 import { useSelectedAccount } from "../context/AccountContext";
 import SummaryCards from "../components/SummaryCards";
+import EmptyPlaceholder from "../components/EmptyPlaceholder";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -106,56 +107,63 @@ export default function Dashboard() {
       onOpenChange={setShowAddTransactionDialog}
     >
       <div className="flex-1 space-y-4 pt-6 px-7 md:px-14">
-        <Tabs defaultValue="overview" className="space-y-6">
-          {/* Tabs and add transaction button */}
-          <div className="flex items-center justify-between max-[450px]:flex-col max-[450px]:items-start">
-            <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="analytics">Analytics</TabsTrigger>
-            </TabsList>
-            <div className="flex items-center space-x-2 max-[450px]:mt-4">
-              <DialogTrigger asChild>
-                <Button
-                  onSelect={() => {
-                    setOpen(false);
-                  }}
-                >
-                  Add Transaction
-                </Button>
-              </DialogTrigger>
+        {!selectedAccountData ? (
+          <EmptyPlaceholder
+            title="No Account Added"
+            description="Please add an account to view its details."
+          />
+        ) : (
+          <Tabs defaultValue="overview" className="space-y-6">
+            {/* Tabs and add transaction button */}
+            <div className="flex items-center justify-between max-[450px]:flex-col max-[450px]:items-start">
+              <TabsList>
+                <TabsTrigger value="overview">Overview</TabsTrigger>
+                <TabsTrigger value="analytics">Analytics</TabsTrigger>
+              </TabsList>
+              <div className="flex items-center space-x-2 max-[450px]:mt-4">
+                <DialogTrigger asChild>
+                  <Button
+                    onSelect={() => {
+                      setOpen(false);
+                    }}
+                  >
+                    Add Transaction
+                  </Button>
+                </DialogTrigger>
+              </div>
             </div>
-          </div>
 
-          {/* Overview Content */}
-          <TabsContent value="overview" className="md:space-y-4">
-            {/* Cards */}
-            <SummaryCards />
-            <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
-              {/* Chart */}
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Overview</CardTitle>
-                </CardHeader>
-                <CardContent className="pl-2">
-                  <Overview />
-                </CardContent>
-              </Card>
+            {/* Overview Content */}
+            <TabsContent value="overview" className="md:space-y-4">
+              {/* Cards */}
+              <SummaryCards />
+              <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
+                {/* Chart */}
+                <Card className="col-span-4">
+                  <CardHeader>
+                    <CardTitle>Overview</CardTitle>
+                  </CardHeader>
+                  <CardContent className="pl-2">
+                    <Overview />
+                  </CardContent>
+                </Card>
 
-              {/* Recent Transaction */}
-              <Card className="col-span-4 lg:col-span-3">
-                <CardHeader>
-                  <CardTitle>Recent Transactions</CardTitle>
-                  <CardDescription>
-                    {/* You made 265 sales this month. */}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="">
-                  <RecentTransaction />
-                </CardContent>
-              </Card>
-            </div>
-          </TabsContent>
-        </Tabs>
+                {/* Recent Transaction */}
+                <Card className="col-span-4 lg:col-span-3">
+                  <CardHeader>
+                    <CardTitle>Recent Transactions</CardTitle>
+                    <CardDescription>
+                      {/* You made 265 sales this month. */}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="">
+                    <RecentTransaction />
+                  </CardContent>
+                </Card>
+              </div>
+            </TabsContent>
+          </Tabs>
+        )}
       </div>
 
       {/* Add transaction form */}
