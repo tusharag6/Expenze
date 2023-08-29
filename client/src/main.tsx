@@ -17,6 +17,7 @@ import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ChangePasswordPage from "./pages/ChangePasswordPage";
 import { AccountProvider } from "./context/AccountContext";
 import { TransactionProvider } from "./context/TransactionContext";
+import Budget from "./pages/Budget";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -31,6 +32,10 @@ const router = createBrowserRouter([
       {
         path: "/activity",
         element: <Activity />,
+      },
+      {
+        path: "/budget",
+        element: <Budget />,
       },
     ],
   },

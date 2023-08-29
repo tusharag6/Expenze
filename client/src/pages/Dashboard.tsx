@@ -42,7 +42,6 @@ import { Icons } from "../components/Icons";
 import React from "react";
 import { useSelectedAccount } from "../context/AccountContext";
 import SummaryCards from "../components/SummaryCards";
-import Activity from "./Activity";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -112,9 +111,7 @@ export default function Dashboard() {
           <div className="flex items-center justify-between max-[450px]:flex-col max-[450px]:items-start">
             <TabsList>
               <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="activity">Activity</TabsTrigger>
               <TabsTrigger value="analytics">Analytics</TabsTrigger>
-              <TabsTrigger value="notifications">Budget</TabsTrigger>
             </TabsList>
             <div className="flex items-center space-x-2 max-[450px]:mt-4">
               <DialogTrigger asChild>
@@ -157,10 +154,6 @@ export default function Dashboard() {
                 </CardContent>
               </Card>
             </div>
-          </TabsContent>
-
-          <TabsContent value="activity">
-            <Activity />
           </TabsContent>
         </Tabs>
       </div>
