@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // Import UI components
 import {
@@ -43,6 +43,7 @@ import React from "react";
 import { useSelectedAccount } from "../context/AccountContext";
 import SummaryCards from "../components/SummaryCards";
 import EmptyPlaceholder from "../components/EmptyPlaceholder";
+import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -100,6 +101,39 @@ export default function Dashboard() {
 
     setIsLoading(false);
   }
+  const { token } = useAuth();
+  const [customCategories, setCustomCategories] = useState<string[]>([]);
+
+  async function fetchCustomCategories() {
+    try {
+      const response = await fetch("http://localhost:8080/budget", {
+        method: "GET",
+        headers: {
+          authorization: `Bearer ${token}`,
+        },
+      });
+      const data = await response.json();
+      const categoryNames = data.map(
+        (category: { budgetCategory: any }) => category.budgetCategory
+      );
+
+      // console.log(data);
+      return categoryNames;
+
+      return data;
+    } catch (error) {
+      console.error("Error fetching custom categories:", error);
+      return [];
+    }
+  }
+
+  useEffect(() => {
+    async function fetchData() {
+      const fetchedCustomCategories = await fetchCustomCategories();
+      setCustomCategories(fetchedCustomCategories);
+    }
+    fetchData();
+  }, []);
 
   return (
     <Dialog
@@ -211,14 +245,21 @@ export default function Dashboard() {
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="category">Budget Category</Label>
-              <Input
-                id="category"
-                type="text"
-                placeholder="Enter category"
-                value={budgetCategory}
-                onChange={(e) => setBudgetCategory(e.target.value)}
-              />
+              <Label htmlFor="type">Budget Category</Label>
+              {customCategories && Array.isArray(customCategories) && (
+                <Select onValueChange={(e) => setBudgetCategory(e)}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select a category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {customCategories.map((category) => (
+                      <SelectItem key={category} value={category}>
+                        <span>{category}</span>
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              )}
             </div>
 
             <div className="space-y-2">

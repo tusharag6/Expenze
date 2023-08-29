@@ -21,6 +21,7 @@ model User {
   verificationToken  String?
   accounts           Account[] // Establish a one-to-many relationship with Account
   PasswordResetToken PasswordResetToken[]
+  BudgetCategory     BudgetCategory[]
 }
 
 model PasswordResetToken {
@@ -44,12 +45,23 @@ model Account {
 
 // Define the Transaction model
 model Transaction {
-  id             Int      @id @default(autoincrement())
-  date           DateTime @db.Timestamptz()
+  id               Int             @id @default(autoincrement())
+  date             DateTime        @db.Timestamptz()
+  amount           Float
+  type             String
+  budgetCategory   String?
+  description      String?
+  account_id       Int
+  account          Account         @relation(fields: [account_id], references: [id]) // Define the relationship with Account
+  BudgetCategory   BudgetCategory? @relation(fields: [budgetCategoryId], references: [id])
+  budgetCategoryId Int?
+}
+
+model BudgetCategory {
+  id             Int           @id @default(autoincrement())
+  budgetCategory String
   amount         Float
-  type           String
-  budgetCategory String?
-  description    String?
-  account_id     Int
-  account        Account  @relation(fields: [account_id], references: [id]) // Define the relationship with Account
+  user_id        Int // Reference the User
+  user           User          @relation(fields: [user_id], references: [id])
+  transactions   Transaction[] // Establish a relationship with Transaction
 }
