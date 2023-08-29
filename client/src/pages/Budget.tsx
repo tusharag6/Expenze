@@ -11,14 +11,67 @@ import {
 import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Separator } from "../../components/ui/separator";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmptyPlaceholder from "../components/EmptyPlaceholder";
+import { Icons } from "../components/Icons";
+import { useAuth } from "../context/AuthContext";
 
 const Budget = () => {
   const [budgets, setBudgets] = useState([
-    { name: "Monthly Expenses", amount: 1000 },
-    { name: "Entertainment", amount: 200 }, // Add more budgets here
+    { budgetCategory: "Monthly Expenses", amount: 1000 },
+    { budgetCategory: "Entertainment", amount: 200 }, // Add more budgets here
   ]);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [amount, setAmount] = useState(0);
+  const [budgetCategory, setBudgetCategory] = useState("");
+  const { token } = useAuth();
+
+  async function handleCreateBudget(event: React.SyntheticEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const data = {
+      budgetCategory,
+      amount,
+    };
+    try {
+      const response = await fetch(`http://localhost:8080/budget`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        alert("Budget added");
+      } else {
+        alert("Error");
+      }
+    } catch (error) {
+      console.error(error);
+    }
+
+    setIsLoading(false);
+  }
+  useEffect(() => {
+    async function fetchBudget() {
+      try {
+        const response = await fetch("http://localhost:8080/budget", {
+          method: "GET",
+          headers: {
+            authorization: `Bearer ${token}`,
+          },
+        });
+        const data = await response.json();
+        setBudgets(data);
+      } catch (error) {
+        console.error("Error fetching custom categories:", error);
+      }
+    }
+    fetchBudget();
+  }, []);
   return (
     <div className="h-full flex-col border-none p-8 data-[state=active]:flex">
       <div className="flex items-center justify-between">
@@ -46,15 +99,35 @@ const Budget = () => {
             <div className="grid gap-4 py-4">
               <div className="grid gap-2">
                 <Label htmlFor="budgetName">Budget Name</Label>
-                <Input id="budgetName" placeholder="Monthly Expenses" />
+                <Input
+                  id="budgetName"
+                  placeholder="Monthly Expenses"
+                  onChange={(e) => setBudgetCategory(e.target.value)}
+                />
               </div>
               <div className="grid gap-2">
                 <Label htmlFor="budgetAmount">Budget Amount</Label>
-                <Input id="budgetAmount" type="number" placeholder="1000" />
+                <Input
+                  id="budgetAmount"
+                  type="number"
+                  placeholder="1000"
+                  onChange={(e) => setAmount(Number(e.target.value))}
+                />
               </div>
             </div>
             <DialogFooter>
-              <Button>Create Budget</Button>
+              <Button
+                type="submit"
+                onClick={handleCreateBudget}
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+                ) : (
+                  " "
+                )}
+                Create Budget
+              </Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -66,7 +139,7 @@ const Budget = () => {
           {/* Map through the budgets and render each one */}
           {budgets.map((budget, index) => (
             <div key={index}>
-              <h3>{budget.name}</h3>
+              <h3>{budget.budgetCategory}</h3>
               <p>Budget Amount: ${budget.amount}</p>
               {/* Additional budget details could be added here */}
               <Separator className="my-2" />
