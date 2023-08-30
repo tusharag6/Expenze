@@ -4,8 +4,8 @@ import {
   CardHeader,
   CardTitle,
   CardContent,
-} from "../../components/ui/card";
-import { useSelectedAccount } from "../context/AccountContext";
+} from "../../../../components/ui/card";
+import { useSelectedAccount } from "../../../context/AccountContext";
 
 const SummaryCards = () => {
   const { selectedAccountData } = useSelectedAccount();

@@ -1,7 +1,7 @@
 import { Outlet } from "react-router-dom";
-import AccountSwitcher from "./components/AccountSwitcher";
-import { Sidebar } from "./components/Sidebar";
-import { UserNav } from "./components/UserNav";
+import AccountSwitcher from "./features/account/components/AccountSwitcher";
+import { Sidebar } from "./layout/Sidebar";
+import { UserNav } from "./features/profile/components/UserNav";
 
 function App() {
   return (

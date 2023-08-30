@@ -9,8 +9,8 @@ import {
   XAxis,
   YAxis,
 } from "recharts";
-import { useSelectedAccount } from "../context/AccountContext";
-import { useAuth } from "../context/AuthContext";
+import { useSelectedAccount } from "../../../context/AccountContext";
+import { useAuth } from "../../../context/AuthContext";
 
 interface Transaction {
   id: number;

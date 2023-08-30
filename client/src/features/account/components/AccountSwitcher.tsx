@@ -8,15 +8,15 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../components/ui/avatar";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+} from "../../../../components/ui/avatar";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
 import {
   Popover,
   PopoverContent,
   PopoverTrigger,
-} from "../../components/ui/popover";
+} from "../../../../components/ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -25,7 +25,7 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "../../components/ui/command";
+} from "../../../../components/ui/command";
 import {
   Dialog,
   DialogContent,
@@ -34,10 +34,10 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "../../components/ui/dialog";
-import { useAuth } from "../context/AuthContext";
-import { useSelectedAccount } from "../context/AccountContext";
-import { Icons } from "./Icons";
+} from "../../../../components/ui/dialog";
+import { useAuth } from "../../../context/AuthContext";
+import { useSelectedAccount } from "../../../context/AccountContext";
+import { Icons } from "../../../components/Icons";
 
 interface Account {
   account_name: String;

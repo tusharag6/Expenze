@@ -1,8 +1,8 @@
 import { useEffect } from "react";
 import { format, parseISO } from "date-fns";
-import { useSelectedAccount } from "../context/AccountContext";
-import { useTransaction } from "../context/TransactionContext";
-import { Avatar, AvatarImage } from "../../components/ui/avatar";
+import { useSelectedAccount } from "../../../context/AccountContext";
+import { useTransaction } from "../../../context/TransactionContext";
+import { Avatar, AvatarImage } from "../../../../components/ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 
 export default function RecentTransaction() {

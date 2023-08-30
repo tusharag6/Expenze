@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { buttonVariants } from "../../components/ui/button";
-import { LoginForm } from "../components/LoginForm";
+import { LoginForm } from "../features/authentication/components/LoginForm";
 import backgroundImage from "../assets/plant.jpg";
 
 export default function AuthenticationPage() {

@@ -3,8 +3,8 @@ import {
   Avatar,
   AvatarFallback,
   AvatarImage,
-} from "../../components/ui/avatar";
-import { Button } from "../../components/ui/button";
+} from "../../../../components/ui/avatar";
+import { Button } from "../../../../components/ui/button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -14,8 +14,8 @@ import {
   DropdownMenuSeparator,
   DropdownMenuShortcut,
   DropdownMenuTrigger,
-} from "../../components/ui/dropdown-menu";
-import { useAuth } from "../context/AuthContext";
+} from "../../../../components/ui/dropdown-menu";
+import { useAuth } from "../../../context/AuthContext";
 import { Navigate } from "react-router-dom";
 
 export function UserNav() {

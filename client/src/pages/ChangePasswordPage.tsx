@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { buttonVariants } from "../../components/ui/button";
 import backgroundImage from "../assets/plant.jpg";
-import ChangePasswordForm from "../components/ChangePasswordForm";
+import ChangePasswordForm from "../features/authentication/components/ChangePasswordForm";
 export default function ChangePasswordPage() {
   return (
     <>

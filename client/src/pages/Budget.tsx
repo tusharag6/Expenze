@@ -12,7 +12,7 @@ import { Input } from "../../components/ui/input";
 import { Label } from "../../components/ui/label";
 import { Separator } from "../../components/ui/separator";
 import { useEffect, useState } from "react";
-import EmptyPlaceholder from "../components/EmptyPlaceholder";
+import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { Icons } from "../components/Icons";
 import { useAuth } from "../context/AuthContext";
 

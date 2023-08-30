@@ -35,14 +35,14 @@ import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 
 // import { MainNav } from "./components/MainNav";
-import { Overview } from "../components/Overview";
+import { Overview } from "../features/analytics/components/Overview";
 // import { Ov2 } from "../components/Ov2";
-import RecentTransaction from "../components/RecentTransaction";
+import RecentTransaction from "../features/analytics/components/RecentTransaction";
 import { Icons } from "../components/Icons";
 import React from "react";
 import { useSelectedAccount } from "../context/AccountContext";
-import SummaryCards from "../components/SummaryCards";
-import EmptyPlaceholder from "../components/EmptyPlaceholder";
+import SummaryCards from "../features/analytics/components/SummaryCards";
+import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { useAuth } from "../context/AuthContext";
 
 export default function Dashboard() {

@@ -1,40 +1,38 @@
 import React, { useState } from "react";
 
-import { cn } from "../../lib/utils";
-import { Icons } from "./Icons";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+import { cn } from "../../../../lib/utils";
+import { Icons } from "../../../components/Icons";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
+import { useAuth } from "../../../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
-export function RegisterForm({ className, ...props }: UserAuthFormProps) {
+export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const [visible, setVisible] = useState(false);
   let inputType = visible ? "text" : "password";
   console.log(inputType);
-  const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [formErrors, setFormErrors] = useState<any>({});
 
-  const nameRegex = /^[A-Za-z]+$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passRegex =
     /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
+  const { login } = useAuth();
+  const navigate = useNavigate();
+
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-
     const form = event.target as HTMLFormElement;
+
     // Client-side validation
     const errors: any = {};
-    if (!form.username.value) {
-      errors.username = "Name is required.";
-    } else if (form.username.value.length < 3) {
-      errors.username = "Name must be at least 3 characters long.";
-    } else if (!nameRegex.test(form.username.value)) {
-      errors.username = "Name should contain only alphabets";
-    }
     if (!form.email.value) {
       errors.email = "Email is required.";
     } else if (!emailRegex.test(form.email.value)) {
@@ -48,21 +46,20 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
       errors.password =
         "Password should include at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
+
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       setIsLoading(false);
       return;
     }
+
     const data = {
-      username: form.username.value,
       email: form.email.value,
       password: form.password.value,
     };
 
-    // console.log(data);
-
     try {
-      const response = await fetch("http://localhost:8080/api/register", {
+      const response = await fetch("http://localhost:8080/api/login", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -71,42 +68,25 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
       });
 
       if (response.ok) {
-        const responseData = await response.json();
-        alert("Registration successful!");
-
-        // Send verification email
-        const verificationResponse = await fetch(
-          "http://localhost:8080/send-verification",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: data.email,
-              verificationToken: responseData.verificationToken,
-            }),
-          }
-        );
-
-        if (verificationResponse.ok) {
-          alert("Verification email sent successfully!");
+        const data = await response.json();
+        // console.log(data.token);
+        // console.log(data.user);
+        if (!data.user.verified) {
+          alert("Please verify your email before logging in.");
         } else {
-          const errorData = await verificationResponse.json();
-          console.log(errorData);
-          alert(`Error sending verification email: ${errorData.error}`);
+          login(data.token);
+          alert("Logged in");
+          navigate("/");
         }
       } else {
         const errorData = await response.json();
-        console.log(errorData);
         setFormErrors({ server: errorData.message });
         setIsLoading(false);
-        // alert(`Error: ${errorData.message}`);
+        // alert(`Login failed: ${errorData.message}`);
       }
     } catch (error) {
       setFormErrors({ server: "An error occurred during login." });
-
-      // alert("An error occurred during registration.");
+      // alert("An error occurred during login.");
     }
 
     setIsLoading(false);
@@ -119,25 +99,8 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
         {formErrors.server && (
           <p className="text-red-500 text-sm">{formErrors.server}</p>
         )}
-        <div className="grid gap-2">
-          <div className="grid gap-1">
-            <Label className="pb-1" htmlFor="username">
-              Name
-            </Label>
-            <Input
-              id="username"
-              placeholder="John Doe"
-              type="text"
-              autoCapitalize="none"
-              autoComplete="name"
-              autoCorrect="off"
-              disabled={isLoading}
-            />
-            {formErrors.username && (
-              <p className="text-red-500 text-sm">{formErrors.username}</p>
-            )}
-          </div>
 
+        <div className="grid gap-2">
           <div className="grid gap-1 pt-3">
             <Label className="pb-1" htmlFor="email">
               Email
@@ -186,7 +149,7 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
             )}
-            Create account
+            Login
           </Button>
         </div>
       </form>

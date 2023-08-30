@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { buttonVariants } from "../../components/ui/button";
 import backgroundImage from "../assets/plant.jpg";
-import { ForgotPasswordForm } from "../components/ForgotPasswordForm";
+import { ForgotPasswordForm } from "../features/authentication/components/ForgotPasswordForm";
 
 export default function ForgotPasswordPage() {
   return (

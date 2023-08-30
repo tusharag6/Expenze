@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from "react";
 
-import { cn } from "../../lib/utils";
-import { Icons } from "./Icons";
-import { Button } from "../../components/ui/button";
-import { Input } from "../../components/ui/input";
-import { Label } from "../../components/ui/label";
+import { cn } from "../../../../lib/utils";
+import { Icons } from "../../../components/Icons";
+import { Button } from "../../../../components/ui/button";
+import { Input } from "../../../../components/ui/input";
+import { Label } from "../../../../components/ui/label";
 import { useNavigate, useParams } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 
