@@ -33,7 +33,7 @@ export async function login(data: authTypes.loginData) {
 export async function register(data: authTypes.registerData) {
   try {
     // Making a POST request to the registration endpoint
-    const response = await fetch("http://localhost:8080/api/auth/login", {
+    const response = await fetch("http://localhost:8080/api/auth/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -48,7 +48,7 @@ export async function register(data: authTypes.registerData) {
 
       // Send verification email
       const verificationResponse = await fetch(
-        "http://localhost:8080/send-verification",
+        "http://localhost:8080/api/auth/send-verification",
         {
           method: "POST",
           headers: {
