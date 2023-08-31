@@ -8,6 +8,7 @@ import { Label } from "../../../../components/ui/label";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
 import { authService } from "..";
+import { useAuth } from "../../../context/AuthContext";
 
 // Defining the props interface for the LoginForm component
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
@@ -16,6 +17,7 @@ interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const [visible, setVisible] = useState(false);
   let inputType = visible ? "text" : "password";
+  const { login } = useAuth();
 
   // State for loading indicator
   const [isLoading, setIsLoading] = useState<boolean>(false);
@@ -63,15 +65,17 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     }
 
     const data = {
-      email: form.email.value.trim(),
+      email: form.email.value,
       password: form.password.value,
     };
 
     try {
       // Calling the login function from the authentication service
-      await authService.login(data);
+      const responseData = await authService.login(data);
+      login(responseData.token);
       navigate("/"); // Navigate to the home page after successful login
     } catch (error) {
+      console.log(error);
       setFormErrors({ server: error });
     } finally {
       setIsLoading(false);

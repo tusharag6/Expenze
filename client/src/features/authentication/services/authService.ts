@@ -1,10 +1,7 @@
-import { useAuth } from "../../../context/AuthContext";
 import { authTypes } from "../../../types";
 
 // Function for user login
 export async function login(data: authTypes.loginData) {
-  const { login } = useAuth(); // Accessing the login function from the AuthContext
-
   try {
     // Making a POST request to the login endpoint
     const response = await fetch("http://localhost:8080/api/auth/login", {
@@ -21,7 +18,6 @@ export async function login(data: authTypes.loginData) {
       if (!responseData.user.verified) {
         alert("Please verify your email before logging in.");
       } else {
-        login(responseData.token); // Calling the login function from AuthContext to set user token
         alert("Logged in");
       }
       return responseData;
