@@ -1,45 +1,57 @@
+// Importing necessary React components and modules
 import React, { useState } from "react";
-
 import { cn } from "../../../../lib/utils";
 import { Icons } from "../../../components/Icons";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { authService } from "..";
 
+// Defining the props interface for the RegisterForm component
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+// Defining the RegisterForm component
 export function RegisterForm({ className, ...props }: UserAuthFormProps) {
+  // State to toggle password visibility
   const [visible, setVisible] = useState(false);
   let inputType = visible ? "text" : "password";
-  console.log(inputType);
+
+  // State for loading indicator
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+
+  // State for form validation errors
   const [formErrors, setFormErrors] = useState<any>({});
 
-  const nameRegex = /^[A-Za-z]+$/;
+  // Regular expressions for validation
+  const nameRegex = /^[A-Za-z\s]+$/;
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passRegex =
     /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
+  // Function to handle form submission
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
     const form = event.target as HTMLFormElement;
+    const errors: any = {}; // Object to store validation errors
+
     // Client-side validation
-    const errors: any = {};
     if (!form.username.value) {
       errors.username = "Name is required.";
     } else if (form.username.value.length < 3) {
       errors.username = "Name must be at least 3 characters long.";
     } else if (!nameRegex.test(form.username.value)) {
-      errors.username = "Name should contain only alphabets";
+      errors.username = "Name should contain only alphabets.";
     }
+
     if (!form.email.value) {
       errors.email = "Email is required.";
     } else if (!emailRegex.test(form.email.value)) {
       errors.email = "Invalid email format.";
     }
+
     if (!form.password.value) {
       errors.password = "Password is required.";
     } else if (form.password.value.length < 8) {
@@ -48,68 +60,29 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
       errors.password =
         "Password should include at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
+
+    // If there are validation errors, set them and stop loading
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       setIsLoading(false);
       return;
     }
+
+    // Data object to hold form input values
     const data = {
-      username: form.username.value,
-      email: form.email.value,
+      username: form.username.value.trim(),
+      email: form.email.value.trim(),
       password: form.password.value,
     };
 
-    // console.log(data);
-
     try {
-      const response = await fetch("http://localhost:8080/api/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        alert("Registration successful!");
-
-        // Send verification email
-        const verificationResponse = await fetch(
-          "http://localhost:8080/send-verification",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({
-              email: data.email,
-              verificationToken: responseData.verificationToken,
-            }),
-          }
-        );
-
-        if (verificationResponse.ok) {
-          alert("Verification email sent successfully!");
-        } else {
-          const errorData = await verificationResponse.json();
-          console.log(errorData);
-          alert(`Error sending verification email: ${errorData.error}`);
-        }
-      } else {
-        const errorData = await response.json();
-        console.log(errorData);
-        setFormErrors({ server: errorData.message });
-        setIsLoading(false);
-        // alert(`Error: ${errorData.message}`);
-      }
+      // Calling the login function from the auth service
+      await authService.login(data);
     } catch (error) {
-      setFormErrors({ server: "An error occurred during login." });
-
-      // alert("An error occurred during registration.");
+      setFormErrors({ server: error });
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   }
 
   return (
@@ -119,7 +92,9 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
         {formErrors.server && (
           <p className="text-red-500 text-sm">{formErrors.server}</p>
         )}
+
         <div className="grid gap-2">
+          {/* Username input */}
           <div className="grid gap-1">
             <Label className="pb-1" htmlFor="username">
               Name
@@ -138,6 +113,7 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
+          {/* Email input */}
           <div className="grid gap-1 pt-3">
             <Label className="pb-1" htmlFor="email">
               Email
@@ -156,6 +132,7 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
+          {/* Password input */}
           <div className="grid gap-1 pt-3 pb-2 relative">
             <Label className="pb-1" htmlFor="password">
               Password
@@ -182,6 +159,7 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
+          {/* Submit button */}
           <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -190,6 +168,8 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
           </Button>
         </div>
       </form>
+
+      {/* Other authentication methods */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />

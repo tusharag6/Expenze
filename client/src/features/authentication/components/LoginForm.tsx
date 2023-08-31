@@ -1,43 +1,51 @@
+// Importing necessary React components and modules
 import React, { useState } from "react";
-
 import { cn } from "../../../../lib/utils";
 import { Icons } from "../../../components/Icons";
 import { Button } from "../../../../components/ui/button";
 import { Input } from "../../../../components/ui/input";
 import { Label } from "../../../../components/ui/label";
-import { useAuth } from "../../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa6";
+import { authService } from "..";
 
+// Defining the props interface for the LoginForm component
 interface UserAuthFormProps extends React.HTMLAttributes<HTMLDivElement> {}
 
+// Defining the LoginForm component
 export function LoginForm({ className, ...props }: UserAuthFormProps) {
   const [visible, setVisible] = useState(false);
   let inputType = visible ? "text" : "password";
-  console.log(inputType);
 
+  // State for loading indicator
   const [isLoading, setIsLoading] = useState<boolean>(false);
+
+  // State for form validation errors
   const [formErrors, setFormErrors] = useState<any>({});
 
+  // Regular expressions for validation
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   const passRegex =
     /(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]/;
 
-  const { login } = useAuth();
+  // Navigation function
   const navigate = useNavigate();
 
+  // Function to handle form submission
   async function onSubmit(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-    const form = event.target as HTMLFormElement;
 
-    // Client-side validation
-    const errors: any = {};
+    const form = event.target as HTMLFormElement;
+    const errors: any = {}; // Object to store validation errors
+
+    // Client-side validation for email and password
     if (!form.email.value) {
       errors.email = "Email is required.";
     } else if (!emailRegex.test(form.email.value)) {
       errors.email = "Invalid email format.";
     }
+
     if (!form.password.value) {
       errors.password = "Password is required.";
     } else if (form.password.value.length < 8) {
@@ -47,6 +55,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         "Password should include at least one uppercase letter, one lowercase letter, one number, and one special character.";
     }
 
+    // If there are validation errors, set them and stop loading
     if (Object.keys(errors).length > 0) {
       setFormErrors(errors);
       setIsLoading(false);
@@ -54,53 +63,29 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     }
 
     const data = {
-      email: form.email.value,
+      email: form.email.value.trim(),
       password: form.password.value,
     };
 
     try {
-      const response = await fetch("http://localhost:8080/api/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        const data = await response.json();
-        // console.log(data.token);
-        // console.log(data.user);
-        if (!data.user.verified) {
-          alert("Please verify your email before logging in.");
-        } else {
-          login(data.token);
-          alert("Logged in");
-          navigate("/");
-        }
-      } else {
-        const errorData = await response.json();
-        setFormErrors({ server: errorData.message });
-        setIsLoading(false);
-        // alert(`Login failed: ${errorData.message}`);
-      }
+      // Calling the login function from the authentication service
+      await authService.login(data);
+      navigate("/"); // Navigate to the home page after successful login
     } catch (error) {
-      setFormErrors({ server: "An error occurred during login." });
-      // alert("An error occurred during login.");
+      setFormErrors({ server: error });
+    } finally {
+      setIsLoading(false);
     }
-
-    setIsLoading(false);
   }
-
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
-        {/* Display validation errors */}
         {formErrors.server && (
           <p className="text-red-500 text-sm">{formErrors.server}</p>
         )}
 
         <div className="grid gap-2">
+          {/* Email imput */}
           <div className="grid gap-1 pt-3">
             <Label className="pb-1" htmlFor="email">
               Email
@@ -119,6 +104,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
+          {/* Password input */}
           <div className="grid gap-1 pt-3 pb-2 relative">
             <Label className="pb-1" htmlFor="password">
               Password
@@ -145,6 +131,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
             )}
           </div>
 
+          {/* submit button */}
           <Button type="submit" disabled={isLoading}>
             {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
@@ -153,6 +140,8 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
           </Button>
         </div>
       </form>
+
+      {/* Other authentication method */}
       <div className="relative">
         <div className="absolute inset-0 flex items-center">
           <span className="w-full border-t" />
