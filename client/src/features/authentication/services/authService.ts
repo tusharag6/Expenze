@@ -44,6 +44,10 @@ export async function register(data: authTypes.registerData) {
 
     const responseData = await response.json();
 
+    if (response.status === 400) {
+      alert(responseData.error);
+      return;
+    }
     if (response.ok) {
       alert("Registration successful!");
 
@@ -74,8 +78,6 @@ export async function register(data: authTypes.registerData) {
       throw new Error(responseData.message);
     }
   } catch (error) {
-    console.log(error);
-
     throw new Error("An error occurred during registration.");
   }
 }

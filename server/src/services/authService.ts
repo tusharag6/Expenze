@@ -6,25 +6,42 @@ import jwt from "jsonwebtoken";
 const prisma = new PrismaClient();
 const JWT_SECRET = process.env.JWT_SECRET || "default";
 
+export async function isEmailAlreadyTaken(email: string): Promise<boolean> {
+  const user = await prisma.user.findUnique({
+    where: {
+      email,
+    },
+  });
+  return !!user; // If user exists, return true; otherwise, return false.
+}
+
 export const registerUser = async (
   username: string,
   email: string,
   password: string
 ) => {
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    let verificationToken = crypto.randomBytes(32).toString("hex");
+    // Check if the email is already in use
+    const emailTaken = await isEmailAlreadyTaken(email);
 
-    // Create a new user in the database with hashed password
-    const newUser = await prisma.user.create({
-      data: {
-        email,
-        password: hashedPassword,
-        username,
-        verificationToken,
-      },
-    });
-    return newUser;
+    if (emailTaken) {
+      // Email is already in use, throw an error or handle it as needed
+      throw new Error("Email is already registered.");
+    } else {
+      const hashedPassword = await bcrypt.hash(password, 10);
+      let verificationToken = crypto.randomBytes(32).toString("hex");
+
+      // Create a new user in the database with hashed password
+      const newUser = await prisma.user.create({
+        data: {
+          email,
+          password: hashedPassword,
+          username,
+          verificationToken,
+        },
+      });
+      return newUser;
+    }
   } catch (error) {
     throw new Error("Error creating user.");
   }

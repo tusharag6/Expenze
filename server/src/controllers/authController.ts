@@ -4,6 +4,12 @@ import { authService } from "../services";
 export const register = async (req: Request, res: Response) => {
   try {
     const { username, email, password } = req.body;
+
+    const emailTaken = await authService.isEmailAlreadyTaken(email);
+    if (emailTaken) {
+      return res.status(400).json({ error: "Email already in use" });
+    }
+
     const newUser = await authService.registerUser(username, email, password);
     res.status(201).json(newUser);
   } catch (error) {
