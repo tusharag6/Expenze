@@ -38,6 +38,7 @@ import {
 import { useAuth } from "../../../context/AuthContext";
 import { useSelectedAccount } from "../../../context/AccountContext";
 import { Icons } from "../../../components/Icons";
+import { accountService } from "..";
 
 interface Account {
   account_name: String;
@@ -63,69 +64,40 @@ export default function AccountSwitcher() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch("http://localhost:8080/accounts", {
-          method: "GET",
-          headers: {
-            authorization: `${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          const storedAccountData = localStorage.getItem("accountData");
+        const accounts = await accountService.fetchAccounts(token);
 
-          setAccountData(data);
-          // console.log(data);
-          if (data.length > 0 && !storedAccountData) {
-            localStorage.setItem("accountData", JSON.stringify(data[0]));
-            setSelectedAccountData(data[0]);
+        setAccountData(accounts);
+
+        if (accounts.length > 0) {
+          const storedAccountData = localStorage.getItem("accountData");
+          if (!storedAccountData) {
+            localStorage.setItem("accountData", JSON.stringify(accounts[0]));
+            setSelectedAccountData(accounts[0]);
           }
-        } else {
-          const errorData = await response.json();
-          console.log(errorData);
         }
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
     };
     fetchData();
-  }, []);
-
-  // console.log("account data", accountData);
-  console.log("selected account", selectedAccountData);
-
-  // localStorage.setItem("accountData", JSON.stringify(accountData[0]));
+  }, [token]);
 
   async function handleAddAccount(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
 
     const data = {
-      accountName,
-      accountNumber,
-      initialBalance,
+      account_name: accountName,
+      account_number: accountNumber,
+      initial_balance: initialBalance,
     };
-    console.log(data);
 
     try {
-      // Make an API request to add the new transaction
-      const response = await fetch("http://localhost:8080/accounts", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
-
-      if (response.ok) {
-        alert("Account added");
-      } else {
-        const errorData = await response.json();
-        alert("Error");
-        console.log(errorData);
-      }
+      await accountService.addAccount(token, data);
+      alert("Account added successfully");
     } catch (error) {
       console.error(error);
+      alert("Error adding account");
     }
 
     setIsLoading(false);

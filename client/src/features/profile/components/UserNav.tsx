@@ -17,6 +17,7 @@ import {
 } from "../../../../components/ui/dropdown-menu";
 import { useAuth } from "../../../context/AuthContext";
 import { Navigate } from "react-router-dom";
+import { profileService } from "..";
 
 export function UserNav() {
   const { token, logout } = useAuth();
@@ -24,28 +25,17 @@ export function UserNav() {
   const [userEmail, setUserEmail] = useState("");
 
   useEffect(() => {
-    const fetchUserData = async () => {
+    const fetchUser = async () => {
       try {
-        const response = await fetch("http://localhost:8080/user", {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
-        if (response.ok) {
-          const data = await response.json();
-          setUserName(data.user.username);
-          setUserEmail(data.user.email);
-        } else {
-          const errorData = await response.json();
-          alert(`Error: ${errorData.message}`);
-        }
+        const user = await profileService.fetchUserData(token);
+        setUserName(user.username);
+        setUserEmail(user.email);
       } catch (error) {
         console.error(error);
       }
     };
 
-    fetchUserData();
+    fetchUser();
   }, [token]);
 
   const handleLogout = () => {
