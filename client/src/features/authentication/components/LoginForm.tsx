@@ -72,8 +72,11 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     try {
       // Calling the login function from the authentication service
       const responseData = await authService.login(data);
-      login(responseData.token);
-      navigate("/"); // Navigate to the home page after successful login
+
+      if (responseData !== undefined) {
+        login(responseData.token);
+        navigate("/"); // Navigate to the home page after successful login
+      }
     } catch (error) {
       console.log(error);
       setFormErrors({ server: error });

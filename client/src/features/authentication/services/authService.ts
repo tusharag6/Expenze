@@ -17,6 +17,7 @@ export async function login(data: authTypes.loginData) {
     if (response.ok) {
       if (!responseData.user.verified) {
         alert("Please verify your email before logging in.");
+        return;
       } else {
         alert("Logged in");
       }
@@ -73,6 +74,8 @@ export async function register(data: authTypes.registerData) {
       throw new Error(responseData.message);
     }
   } catch (error) {
+    console.log(error);
+
     throw new Error("An error occurred during registration.");
   }
 }
