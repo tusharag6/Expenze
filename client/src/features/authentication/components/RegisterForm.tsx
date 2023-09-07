@@ -77,7 +77,7 @@ export function RegisterForm({ className, ...props }: UserAuthFormProps) {
 
     try {
       // Calling the login function from the auth service
-      await authService.login(data);
+      await authService.register(data);
     } catch (error) {
       setFormErrors({ server: error });
     } finally {

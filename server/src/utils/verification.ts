@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export async function sendVerificationEmail(
+export async function nodemailerSendVerificationEmail(
   email: string,
   verificationToken: string
 ) {
@@ -12,7 +12,7 @@ export async function sendVerificationEmail(
     to: email,
     subject: "Account Verification",
     html: `
-      <p>Please click <a href="${process.env.APP_URL}/verify/${verificationToken}">here</a> to verify your account.</p>
+      <p>Please click <a href="${process.env.APP_URL}/api/auth/verify/${verificationToken}">here</a> to verify your account.</p>
     `,
   };
 

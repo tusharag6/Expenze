@@ -1,11 +1,12 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { verificationService } from "../services";
+import { nodemailerSendVerificationEmail } from "../utils/verification";
 
 export const sendVerificationEmail = async (req: Request, res: Response) => {
   const { email, verificationToken } = req.body;
   try {
-    await sendVerificationEmail(email, verificationToken);
+    await nodemailerSendVerificationEmail(email, verificationToken);
     res.json({ message: "Verification email sent successfully" });
   } catch (error) {
     console.error(error);
