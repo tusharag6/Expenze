@@ -3,9 +3,9 @@ import { createContext, useContext, ReactNode, useState } from "react";
 interface Account {
   account_name: String;
   account_number: String;
-  id: Number;
-  initial_balance: Number;
-  user_id: Number;
+  id: number;
+  initial_balance: number;
+  user_id: number;
 }
 
 interface AccountContextType {

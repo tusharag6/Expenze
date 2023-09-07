@@ -4,33 +4,25 @@ import { useSelectedAccount } from "../../../context/AccountContext";
 import { useTransaction } from "../../../context/TransactionContext";
 import { Avatar, AvatarImage } from "../../../../components/ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
+import { dashboardService } from "..";
 
 export default function RecentTransaction() {
   const { transactionData, updateTransactionData } = useTransaction();
   const { selectedAccountData } = useSelectedAccount();
-  let accountId = selectedAccountData?.id;
-  useEffect(() => {
-    // console.log("Effect triggered");
 
+  useEffect(() => {
     if (selectedAccountData) {
-      const fetchTransactionData = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:8080/accounts/${accountId}/transactions`
-          );
-          const data = await response.json();
-          if (JSON.stringify(data) !== JSON.stringify(transactionData)) {
-            updateTransactionData(data);
-          }
-          // console.log("inside useEffect", transactionData);
-        } catch (error) {
-          console.log(error);
+      let accountId = selectedAccountData.id;
+      const fetchData = async () => {
+        const data = await dashboardService.fetchRecentTransactions(accountId);
+
+        if (JSON.stringify(data) !== JSON.stringify(transactionData)) {
+          updateTransactionData(data);
         }
       };
-      fetchTransactionData();
+      fetchData();
     }
   }, [selectedAccountData]);
-  // console.log("outside useEffect", transactionData);
 
   let formattedTransactions = transactionData;
   if (transactionData) {
@@ -46,12 +38,11 @@ export default function RecentTransaction() {
       .reverse()
       .slice(0, 6);
   }
+
   return (
     <div className="space-y-8">
       {formattedTransactions.map((transaction) => (
         <div className="flex items-center" key={transaction.id}>
-          {" "}
-          {/* Don't forget to provide a unique key */}
           <Avatar className="h-9 w-9">
             <AvatarImage src="/avatars/01.png" alt="Avatar" />
             <AvatarFallback>SC</AvatarFallback>

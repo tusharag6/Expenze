@@ -6,6 +6,8 @@ import {
   CardContent,
 } from "../../../../components/ui/card";
 import { useSelectedAccount } from "../../../context/AccountContext";
+import { dashboardService } from "..";
+import { useAuth } from "../../../context/AuthContext";
 
 const SummaryCards = () => {
   const { selectedAccountData } = useSelectedAccount();
@@ -15,31 +17,19 @@ const SummaryCards = () => {
     totalIncome: 0,
     numTransactions: 0,
   });
+  const { token } = useAuth();
   useEffect(() => {
     if (selectedAccountData) {
       const accountId = selectedAccountData.id;
+
       const fetchData = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:8080/accounts/${accountId}/summary`,
-            {
-              method: "GET",
-              headers: {
-                "Content-Type": "application/json",
-              },
-            }
-          );
-          if (response.ok) {
-            const data = await response.json();
-            setSummaryData(data);
-          } else {
-            const errorData = await response.json();
-            console.log(errorData);
-          }
-        } catch (error) {
-          console.log(error);
+        const data = await dashboardService.fetchSummaryData(accountId, token);
+
+        if (data) {
+          setSummaryData(data);
         }
       };
+
       fetchData();
     }
   }, [selectedAccountData]);

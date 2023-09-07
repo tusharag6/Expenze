@@ -11,6 +11,7 @@ import {
 } from "recharts";
 import { useSelectedAccount } from "../../../context/AccountContext";
 import { useAuth } from "../../../context/AuthContext";
+import { dashboardService } from "..";
 
 interface Transaction {
   id: number;
@@ -26,21 +27,20 @@ export function Overview() {
   const { token } = useAuth();
   const [transactionData, setTransactionData] = useState<Transaction[]>([]);
   const { selectedAccountData } = useSelectedAccount();
-  let accountId = selectedAccountData?.id;
+
   useEffect(() => {
     if (selectedAccountData) {
-      const fetchTransactionData = async () => {
-        try {
-          const response = await fetch(
-            `http://localhost:8080/accounts/${accountId}/transactions`
-          );
-          const data = await response.json();
-          setTransactionData(data);
-        } catch (error) {
-          console.log(error);
-        }
+      const accountId = selectedAccountData.id;
+
+      const fetchData = async () => {
+        const data = await dashboardService.fetchTransactionData(
+          accountId,
+          token
+        );
+        setTransactionData(data);
       };
-      fetchTransactionData();
+
+      fetchData();
     }
   }, [selectedAccountData, token]);
 
