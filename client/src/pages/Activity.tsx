@@ -14,7 +14,7 @@ const Activity = () => {
       const fetchTransactionData = async () => {
         try {
           const response = await fetch(
-            `http://localhost:8080/accounts/${accountId}/transactions`
+            `http://localhost:8080/api/transactions/accounts/${accountId}`
           );
           const data = await response.json();
           updateTransactionData(data);
