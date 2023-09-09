@@ -24,8 +24,8 @@ import {
 import Metrics from "../features/budget/components/Metrics";
 import CategorySpendingPieChart from "../features/budget/components/CategorySpendingChart";
 import BudgetVsActualBarChart from "../features/budget/components/BudgetVsActualChart";
-import CategoryList from "../features/budget/components/CategoryList";
 import BudgetProgressLineChart from "../features/budget/components/BudgetProgressChart";
+import CategoryList from "../features/budget/components/CategoyList";
 
 const Budget = () => {
   const [budgets, setBudgets] = useState([
