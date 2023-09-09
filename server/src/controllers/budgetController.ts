@@ -18,7 +18,7 @@ export const addBudgetCategory = async (req: Request, res: Response) => {
       return res.status(404).json({ message: "User not found" });
     }
 
-    const newCategory = await budgetCategory.createBudgetCategory(
+    const newCategory = await budgetService.createBudgetCategory(
       userId,
       budgetCategory,
       amount

@@ -50,6 +50,7 @@ export default function Dashboard() {
     useState(false);
   const [open, setOpen] = useState(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
+  const { token } = useAuth();
 
   // Initialize state variables for form inputs
   const [amount, setAmount] = useState("");
@@ -76,12 +77,12 @@ export default function Dashboard() {
     try {
       // Make an API request to add the new transaction
       const response = await fetch(
-        `http://localhost:8080/accounts/${accountId}/transactions`,
+        `http://localhost:8080/api/transactions/accounts/${accountId}`,
         {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            // Add any other necessary headers, like authorization
+            authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(data),
         }
@@ -101,12 +102,11 @@ export default function Dashboard() {
 
     setIsLoading(false);
   }
-  const { token } = useAuth();
   const [customCategories, setCustomCategories] = useState<string[]>([]);
 
   async function fetchCustomCategories() {
     try {
-      const response = await fetch("http://localhost:8080/budget", {
+      const response = await fetch("http://localhost:8080/api/budget", {
         method: "GET",
         headers: {
           authorization: `Bearer ${token}`,
