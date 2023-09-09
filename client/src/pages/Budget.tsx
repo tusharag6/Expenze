@@ -15,6 +15,17 @@ import { useEffect, useState } from "react";
 import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { Icons } from "../components/Icons";
 import { useAuth } from "../context/AuthContext";
+import {
+  Card,
+  CardContent,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import Metrics from "../features/budget/components/Metrics";
+import CategorySpendingPieChart from "../features/budget/components/CategorySpendingChart";
+import BudgetVsActualBarChart from "../features/budget/components/BudgetVsActualChart";
+import CategoryList from "../features/budget/components/CategoryList";
+import BudgetProgressLineChart from "../features/budget/components/BudgetProgressChart";
 
 const Budget = () => {
   const [budgets, setBudgets] = useState([
@@ -135,17 +146,58 @@ const Budget = () => {
       <Separator className="my-4" />
       {budgets.length > 0 ? (
         // Render the list of budgets if there are budgets available
-        <div>
-          {/* Map through the budgets and render each one */}
-          {budgets.map((budget, index) => (
-            <div key={index}>
-              <h3>{budget.budgetCategory}</h3>
-              <p>Budget Amount: ${budget.amount}</p>
-              {/* Additional budget details could be added here */}
-              <Separator className="my-2" />
-            </div>
-          ))}
-        </div>
+        // <div>
+        //   {/* Map through the budgets and render each one */}
+        //   {budgets.map((budget, index) => (
+        //     <div key={index}>
+        //       <h3>{budget.budgetCategory}</h3>
+        //       <p>Budget Amount: ${budget.amount}</p>
+        //       {/* Additional budget details could be added here */}
+        //       <Separator className="my-2" />
+        //     </div>
+        //   ))}
+        // </div>
+        <>
+          <Metrics />
+          <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-8">
+            {/* Chart */}
+            <Card className="col-span-4">
+              <CardHeader>
+                <CardTitle>Spending across Categories</CardTitle>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <CategorySpendingPieChart />
+              </CardContent>
+            </Card>
+            <Card className="col-span-4">
+              <CardHeader>
+                <CardTitle>Budget vs Actual</CardTitle>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <BudgetVsActualBarChart />
+              </CardContent>
+            </Card>
+          </div>
+          <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
+            {/* Chart */}
+            <Card className="col-span-4">
+              <CardHeader>
+                <CardTitle>Budget Progres</CardTitle>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <BudgetProgressLineChart />
+              </CardContent>
+            </Card>
+            <Card className="col-span-3">
+              <CardHeader>
+                <CardTitle>Budget Categories</CardTitle>
+              </CardHeader>
+              <CardContent className="pl-2">
+                <CategoryList />
+              </CardContent>
+            </Card>
+          </div>
+        </>
       ) : (
         // Show the empty placeholder component if no budgets are available
         <EmptyPlaceholder
