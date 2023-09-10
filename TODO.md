@@ -38,7 +38,7 @@ Will have two dashboard, one for all accounts combined and one for each individu
 
 #### Create User Interface Components
 
-- [ ] Display essentia; metrics
+- [ ] Display essential metrics
 - [ ] Category List: Display a list of budget categories, allowing users to add, edit, and delete categories easily.
 - [ ] Transaction List: Show a list of recent transactions within each category, including date, description, amount, and category.
 - [ ] Budget Allocation:
