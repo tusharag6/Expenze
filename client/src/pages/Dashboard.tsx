@@ -114,10 +114,9 @@ export default function Dashboard() {
       });
       const data = await response.json();
       const categoryNames = data.map(
-        (category: { budgetCategory: any }) => category.budgetCategory
+        (category: { category: any }) => category.category
       );
 
-      // console.log(data);
       return categoryNames;
 
       return data;
@@ -129,8 +128,8 @@ export default function Dashboard() {
 
   useEffect(() => {
     async function fetchData() {
-      const fetchedCustomCategories = await fetchCustomCategories();
-      setCustomCategories(fetchedCustomCategories);
+      const fetchedCustomCategoriesData = await fetchCustomCategories();
+      setCustomCategories(fetchedCustomCategoriesData);
     }
     fetchData();
   }, []);
@@ -254,7 +253,7 @@ export default function Dashboard() {
                   <SelectContent>
                     {customCategories.map((category) => (
                       <SelectItem key={category} value={category}>
-                        <span>{category}</span>
+                        <span className=" font-medium">{category}</span>
                       </SelectItem>
                     ))}
                   </SelectContent>
