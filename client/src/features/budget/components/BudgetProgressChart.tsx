@@ -42,19 +42,42 @@ const BudgetProgressLineChart: React.FC = () => {
     });
     return `${day} ${monthAbbreviation}`;
   };
+  const customTooltipStyle = {
+    backgroundColor: "#040D12",
+    color: "#F9F7F7",
+    border: "0px",
+    padding: "8px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  };
 
   return (
     <ResponsiveContainer width="100%" height={300}>
       <LineChart data={lineChartData}>
-        <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="intervalStart" tickFormatter={customTickFormatter} />
-        <YAxis />
-        <Tooltip />
+        {/* <CartesianGrid strokeDasharray="3 3" /> */}
+        <XAxis
+          dataKey="intervalStart"
+          stroke="#E3FDFD"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={customTickFormatter}
+        />
+        <YAxis
+          stroke="#E3FDFD"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+        />
+        <Tooltip
+          contentStyle={customTooltipStyle}
+          cursor={{ fill: "transparent", stroke: "", strokeWidth: 2 }}
+        />
         <Legend />
         <Line
           type="monotone"
           dataKey="intervalSpending"
-          stroke="#0088FE"
+          stroke="#71C9CE"
           name="Spending"
         />
       </LineChart>

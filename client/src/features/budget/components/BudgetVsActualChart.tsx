@@ -32,15 +32,32 @@ const BudgetVsActualBarChart: React.FC = () => {
     };
     fetchData();
   }, []);
+  const customTooltipStyle = {
+    backgroundColor: "#040D12",
+    border: "0px",
+    color: "#F9F7F7",
+    padding: "8px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  };
   return (
     <BarChart width={600} height={300} data={barChartData}>
-      <CartesianGrid strokeDasharray="3 3" />
-      <XAxis dataKey="category" />
-      <YAxis />
-      <Tooltip />
+      {/* <CartesianGrid strokeDasharray="3 3" /> */}
+      <XAxis
+        dataKey="category"
+        stroke="#E3FDFD"
+        fontSize={12}
+        tickLine={false}
+        axisLine={false}
+      />
+      <YAxis stroke="#E3FDFD" fontSize={12} tickLine={false} axisLine={false} />
+      <Tooltip
+        contentStyle={customTooltipStyle}
+        cursor={{ fill: "transparent" }}
+      />
       <Legend />
-      <Bar dataKey="budgetedAmount" fill="#0088FE" name="Budget" />
-      <Bar dataKey="actualSpending" fill="#FF8042" name="Actual" />
+      <Bar dataKey="budgetedAmount" fill="#71C9CE" name="Budget" />
+      <Bar dataKey="actualSpending" fill="#E3FDFD" name="Actual" />
     </BarChart>
   );
 };

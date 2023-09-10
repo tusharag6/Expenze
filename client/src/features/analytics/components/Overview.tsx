@@ -47,13 +47,21 @@ export function Overview() {
   const expenseData = transactionData.filter(
     (transaction) => transaction.type === "Expense"
   );
+  const customTooltipStyle = {
+    backgroundColor: "#040D12",
+    color: "#F9F7F7",
+    border: "0px",
+    padding: "8px",
+    borderRadius: "8px",
+    cursor: "pointer",
+  };
 
   return (
     <ResponsiveContainer width="100%" height={350}>
       <BarChart data={expenseData}>
         <XAxis
           dataKey="date"
-          stroke="#888888"
+          stroke="#E3FDFD"
           fontSize={12}
           tickLine={false}
           axisLine={false}
@@ -65,17 +73,22 @@ export function Overview() {
           }
         />
         <YAxis
-          stroke="#888888"
+          stroke="#E3FDFD"
           fontSize={12}
           tickLine={false}
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
         />
-        <Tooltip />
+        {/* <Tooltip /> */}
+        <Tooltip
+          contentStyle={customTooltipStyle}
+          cursor={{ fill: "transparent", stroke: "", strokeWidth: 2 }}
+        />
+
         <Bar
           dataKey="amount"
           name="Income"
-          fill="#adfa1d"
+          fill="#71C9CE"
           radius={[4, 4, 0, 0]}
         />
       </BarChart>

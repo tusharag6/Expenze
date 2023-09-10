@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { budgetService } from "..";
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"]; // Define colors for the pie chart segments
+const COLORS = ["#71C9CE", "#A6E3E9", "#00B8A9", "#0F4C75"];
 interface Data {
   name: string;
   value: number;
