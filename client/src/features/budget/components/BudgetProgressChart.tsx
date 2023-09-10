@@ -9,25 +9,51 @@ import {
   Legend,
   ResponsiveContainer,
 } from "recharts";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../../context/AuthContext";
+import { budgetService } from "..";
 
-const data = [
-  { date: "2023-09-01", spending: 100 },
-  { date: "2023-09-02", spending: 150 },
-  { date: "2023-09-03", spending: 120 },
-];
+interface Data {
+  intervalStart: string;
+  intervalEnd: string;
+  intervalSpending: number;
+}
 
 const BudgetProgressLineChart: React.FC = () => {
+  const [lineChartData, setLineChartData] = useState<Data[]>([]);
+  const { token } = useAuth();
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await budgetService.fetchBudgetProgressLineChartData(token);
+      console.log("data", data);
+
+      if (data) {
+        setLineChartData(data);
+      }
+    };
+    fetchData();
+  }, []);
+  // Custom tick formatter for X-axis
+  const customTickFormatter = (tick: string) => {
+    const date = new Date(tick);
+    const day = date.getDate();
+    const monthAbbreviation = date.toLocaleString("default", {
+      month: "short",
+    });
+    return `${day} ${monthAbbreviation}`;
+  };
+
   return (
     <ResponsiveContainer width="100%" height={300}>
-      <LineChart data={data}>
+      <LineChart data={lineChartData}>
         <CartesianGrid strokeDasharray="3 3" />
-        <XAxis dataKey="date" />
+        <XAxis dataKey="intervalStart" tickFormatter={customTickFormatter} />
         <YAxis />
         <Tooltip />
         <Legend />
         <Line
           type="monotone"
-          dataKey="spending"
+          dataKey="intervalSpending"
           stroke="#0088FE"
           name="Spending"
         />

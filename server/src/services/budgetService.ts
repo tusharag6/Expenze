@@ -23,7 +23,12 @@ export const getBudgetCategoriesForUser = async (userId: number) => {
     where: { user_id: userId },
   });
 
-  return budgetCategories;
+  const simplifiedCategories = budgetCategories.map((category) => ({
+    category: category.budgetCategory,
+    amount: category.amount,
+  }));
+
+  return simplifiedCategories;
 };
 
 export const getBudgetSummaryData = async (userId: number) => {

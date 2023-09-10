@@ -4,13 +4,28 @@ import {
   CardTitle,
   CardContent,
 } from "../../../../components/ui/card";
+import { useState, useEffect } from "react";
+import { useAuth } from "../../../context/AuthContext";
+import { budgetService } from "..";
 
 const Metrics = () => {
-  const totalBudgetedAmount = 5000;
-  const totalActualSpending = 3750;
-  const remainingBudget = totalBudgetedAmount - totalActualSpending;
-  const budgetUtilizationPercentage =
-    (totalActualSpending / totalBudgetedAmount) * 100;
+  const [summaryData, setSummaryData] = useState({
+    totalBudgetedAmount: 0,
+    totalActualSpending: 0,
+    remainingBudget: 0,
+    budgetUtilizationPercentage: 0,
+  });
+  const { token } = useAuth();
+  useEffect(() => {
+    const fetchData = async () => {
+      const data = await budgetService.fetchSummaryData(token);
+
+      if (data) {
+        setSummaryData(data);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
@@ -32,7 +47,9 @@ const Metrics = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${totalBudgetedAmount}</div>
+          <div className="text-2xl font-bold">
+            ${summaryData.totalBudgetedAmount}
+          </div>
           <p className="text-xs text-muted-foreground">
             +20.1% from last month
           </p>
@@ -58,7 +75,9 @@ const Metrics = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${totalActualSpending}</div>
+          <div className="text-2xl font-bold">
+            ${summaryData.totalActualSpending}
+          </div>
           <p className="text-xs text-muted-foreground">+19% from last month</p>
         </CardContent>
       </Card>
@@ -82,7 +101,9 @@ const Metrics = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">${remainingBudget}</div>
+          <div className="text-2xl font-bold">
+            ${summaryData.remainingBudget}
+          </div>
           <p className="text-xs text-muted-foreground">+19% from last month</p>
         </CardContent>
       </Card>
@@ -106,7 +127,7 @@ const Metrics = () => {
         </CardHeader>
         <CardContent>
           <div className="text-2xl font-bold">
-            {budgetUtilizationPercentage}%
+            {summaryData.budgetUtilizationPercentage}%
           </div>
           <p className="text-xs text-muted-foreground">+5% since last hour</p>
         </CardContent>

@@ -74,7 +74,8 @@ export const getCategorySpendingPieChart = async (
   res: Response
 ) => {
   try {
-    const { budgetPeriodStart } = req.body;
+    const budgetPeriodStartHeader = String(req.headers.start);
+    const budgetPeriodStart = new Date(budgetPeriodStartHeader);
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
@@ -99,7 +100,8 @@ export const getBudgetVsActualBarChart = async (
   res: Response
 ) => {
   try {
-    const { budgetPeriodStart } = req.body;
+    const budgetPeriodStartHeader = String(req.headers.start);
+    const budgetPeriodStart = new Date(budgetPeriodStartHeader);
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
@@ -123,15 +125,19 @@ export const getBudgetProgressLineChart = async (
   res: Response
 ) => {
   try {
-    const { interval } = req.body;
-    const token = req.headers.authorization?.split(" ")[1];
+    const intervalHeader = req.headers.interval;
+    const interval: "daily" | "weekly" =
+      intervalHeader === "daily" ? "daily" : "weekly";
 
+    const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ message: "Unauthorized" });
     }
 
     const userId = userService.getUserIdFromToken(token);
-    const budgetPeriodStart = new Date(req.body.budgetPeriodStart);
+    const budgetPeriodStartHeader = String(req.headers.start);
+    const budgetPeriodStart = new Date(budgetPeriodStartHeader);
+
     const lineChartData = await budgetService.getBudgetProgressLineChartData(
       userId,
       budgetPeriodStart,
