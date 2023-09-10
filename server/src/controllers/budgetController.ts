@@ -54,11 +54,92 @@ export const getBudgetCategories = async (req: Request, res: Response) => {
 
 export const getBudgetSummary = async (req: Request, res: Response) => {
   try {
-    const userId = parseInt(req.params.userId);
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = userService.getUserIdFromToken(token);
 
     const summary = await budgetService.getBudgetSummaryData(userId);
     res.status(200).json(summary);
   } catch (error) {
     res.status(500).json({ msg: "Error fetching summary data.", error });
+  }
+};
+
+export const getCategorySpendingPieChart = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { budgetPeriodStart } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = userService.getUserIdFromToken(token);
+
+    const pieChartData = await budgetService.getCategorySpendingPieChartData(
+      userId,
+      budgetPeriodStart
+    );
+    res.json(pieChartData);
+  } catch (error) {
+    console.error("Error in getCategorySpendingPieChart controller:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getBudgetVsActualBarChart = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { budgetPeriodStart } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = userService.getUserIdFromToken(token);
+    const barChartData = await budgetService.getBudgetVsActualBarChartData(
+      userId,
+      budgetPeriodStart
+    );
+    res.json(barChartData);
+  } catch (error) {
+    console.error("Error in getBudgetVsActualBarChart controller:", error);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+export const getBudgetProgressLineChart = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const { interval } = req.body;
+    const token = req.headers.authorization?.split(" ")[1];
+
+    if (!token) {
+      return res.status(401).json({ message: "Unauthorized" });
+    }
+
+    const userId = userService.getUserIdFromToken(token);
+    const budgetPeriodStart = new Date(req.body.budgetPeriodStart);
+    const lineChartData = await budgetService.getBudgetProgressLineChartData(
+      userId,
+      budgetPeriodStart,
+      interval
+    );
+    res.json(lineChartData);
+  } catch (error) {
+    console.error("Error in getBudgetProgressLineChart controller:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
