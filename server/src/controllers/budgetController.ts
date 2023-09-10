@@ -51,3 +51,14 @@ export const getBudgetCategories = async (req: Request, res: Response) => {
     res.status(500).json({ msg: "Error fetching categories.", error });
   }
 };
+
+export const getBudgetSummary = async (req: Request, res: Response) => {
+  try {
+    const userId = parseInt(req.params.userId);
+
+    const summary = await budgetService.getBudgetSummaryData(userId);
+    res.status(200).json(summary);
+  } catch (error) {
+    res.status(500).json({ msg: "Error fetching summary data.", error });
+  }
+};

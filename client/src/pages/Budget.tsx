@@ -180,7 +180,7 @@ const Budget = () => {
           </div>
           <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
             {/* Chart */}
-            <Card className="col-span-4">
+            <Card className="col-span-5">
               <CardHeader>
                 <CardTitle>Budget Progres</CardTitle>
               </CardHeader>
@@ -188,7 +188,7 @@ const Budget = () => {
                 <BudgetProgressLineChart />
               </CardContent>
             </Card>
-            <Card className="col-span-3">
+            <Card className="col-span-2">
               <CardHeader>
                 <CardTitle>Budget Categories</CardTitle>
               </CardHeader>
