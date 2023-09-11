@@ -39,6 +39,7 @@ import { useAuth } from "../../../context/AuthContext";
 import { useSelectedAccount } from "../../../context/AccountContext";
 import { Icons } from "../../../components/Icons";
 import { accountService } from "..";
+import { FaMoneyCheck } from "react-icons/fa";
 
 interface Account {
   account_name: String;
@@ -112,15 +113,11 @@ export default function AccountSwitcher() {
             role="combobox"
             aria-expanded={open}
             aria-label="Select a account"
-            className="w-[200px] justify-between"
+            className="w-[200px] justify-between content-center"
           >
-            <Avatar className="mr-2 h-5 w-5">
-              <AvatarImage
-              // src={`https://avatar.vercel.sh/${selectedAccount.value}.png`}
-              // alt={selectedAccount.label}
-              />
-              <AvatarFallback>SC</AvatarFallback>
-            </Avatar>
+            <span className="mr-2">
+              <FaMoneyCheck size="15" />
+            </span>
             {selectedAccountData?.account_name || "Select an account"}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
           </Button>
@@ -147,14 +144,9 @@ export default function AccountSwitcher() {
                     }}
                     className="text-sm"
                   >
-                    <Avatar className="mr-2 h-5 w-5">
-                      <AvatarImage
-                        // src={`https://avatar.vercel.sh/${account.value}.png`}
-                        // alt={account.label}
-                        className="grayscale"
-                      />
-                      <AvatarFallback>SC</AvatarFallback>
-                    </Avatar>
+                    <span className="mr-2">
+                      <FaMoneyCheck size="15" />
+                    </span>
                     {account.account_name}
                     {selectedAccount === account.id && (
                       <CheckIcon className="ml-auto h-4 w-4" />

@@ -8,6 +8,7 @@ import { Separator } from "../../../../components/ui/separator";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { budgetService } from "..";
+import { FaThList } from "react-icons/fa";
 
 interface Data {
   category: String;
@@ -36,10 +37,9 @@ export default function CategoryList() {
               key={index}
               className="flex justify-between  items-center py-3"
             >
-              <Avatar className="h-8 w-8">
-                <AvatarImage src="/avatars/01.png" alt="Avatar" />
-                <AvatarFallback>SC</AvatarFallback>
-              </Avatar>
+              <span>
+                <FaThList size="15" />
+              </span>
               <div className="text-md pl-3">{budgetItem.category}</div>
               <div className="ml-auto font-medium">${budgetItem.amount}</div>
             </div>

@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import AccountSwitcher from "./features/account/components/AccountSwitcher";
 import { Sidebar } from "./layout/Sidebar";
 import { UserNav } from "./features/profile/components/UserNav";
+import logo from "./assets/logo.png";
 
 function App() {
   return (
@@ -13,7 +14,7 @@ function App() {
         {/* Navbar */}
         <div className="border-b">
           <div className="flex h-16 items-center px-7 md:px-14">
-            <h1 className="text-3xl font-bold tracking-tight ">Expenze</h1>
+            <img src={logo} alt="Expenze Logo" className=" w-40 my-4" />
             {/* <MainNav className="mx-6" /> */}
             <div className="ml-auto flex items-center space-x-4">
               <AccountSwitcher />
