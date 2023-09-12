@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { buttonVariants } from "../../components/ui/button";
 import { RegisterForm } from "../features/authentication/components/RegisterForm";
-import backgroundImage from "../assets/plant.jpg";
+import backgroundImage from "../assets/authImage.webp";
 import logo from "../assets/logo.png";
 export default function AuthenticationPage() {
   return (
@@ -23,7 +23,7 @@ export default function AuthenticationPage() {
           style={{
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: "cover",
-            backgroundPosition: "left",
+            backgroundPosition: "center",
           }}
         >
           <div className="relative z-20 flex items-center text-lg font-medium">

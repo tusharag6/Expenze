@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { cn } from "../../lib/utils";
 import { buttonVariants } from "../../components/ui/button";
-import backgroundImage from "../assets/plant.jpg";
+import backgroundImage from "../assets/authImage.webp";
 import ChangePasswordForm from "../features/authentication/components/ChangePasswordForm";
 import logo from "../assets/logo.png";
 export default function ChangePasswordPage() {
@@ -23,7 +23,7 @@ export default function ChangePasswordPage() {
           style={{
             backgroundImage: `url(${backgroundImage})`,
             backgroundSize: "cover",
-            backgroundPosition: "left",
+            backgroundPosition: "center",
           }}
         >
           <div className="relative z-20 flex items-center text-lg font-medium">
