@@ -113,6 +113,7 @@ const Budget = () => {
                 <Input
                   id="budgetName"
                   placeholder="Monthly Expenses"
+                  type="text"
                   onChange={(e) => setBudgetCategory(e.target.value)}
                 />
               </div>
