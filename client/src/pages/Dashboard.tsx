@@ -9,12 +9,6 @@ import {
   CardTitle,
 } from "../../components/ui/card";
 import {
-  Tabs,
-  TabsContent,
-  TabsList,
-  TabsTrigger,
-} from "../../components/ui/tabs";
-import {
   Dialog,
   DialogContent,
   DialogDescription,
@@ -45,7 +39,6 @@ import SummaryCards from "../features/analytics/components/SummaryCards";
 import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { useAuth } from "../context/AuthContext";
 import { Separator } from "../../components/ui/separator";
-import CreateHousehold from "../features/household/components/CreateHousehold";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -159,7 +152,6 @@ export default function Dashboard() {
                 </p>
               </div>
               <div className=" space-x-4">
-                <CreateHousehold />
                 <DialogTrigger asChild>
                   <Button
                     onSelect={() => {

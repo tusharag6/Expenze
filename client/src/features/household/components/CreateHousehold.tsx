@@ -28,7 +28,7 @@ const CreateHousehold = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <Button size="lg" variant="outline" className="relative">
+        <Button size="sm" className="relative">
           Create Household
         </Button>
       </DialogTrigger>

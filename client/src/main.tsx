@@ -18,6 +18,7 @@ import ChangePasswordPage from "./pages/ChangePasswordPage";
 import { AccountProvider } from "./context/AccountContext";
 import { TransactionProvider } from "./context/TransactionContext";
 import Budget from "./pages/Budget";
+import HouseholdDashboard from "./pages/HouseholdDashboard";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -46,7 +47,7 @@ const router = createBrowserRouter([
     children: [
       {
         path: "",
-        element: <Dashboard />,
+        element: <HouseholdDashboard />,
       },
       {
         path: "/household/activity",
