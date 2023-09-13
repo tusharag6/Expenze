@@ -30,11 +30,30 @@ const router = createBrowserRouter([
         element: <Dashboard />,
       },
       {
-        path: "/activity",
+        path: "/personal/activity",
         element: <Activity />,
       },
       {
-        path: "/budget",
+        path: "/personal/budget",
+        element: <Budget />,
+      },
+    ],
+  },
+  {
+    path: "/household",
+    element: <Auth element={<App />} />,
+    errorElement: <ErrorPage />,
+    children: [
+      {
+        path: "",
+        element: <Dashboard />,
+      },
+      {
+        path: "/household/activity",
+        element: <Activity />,
+      },
+      {
+        path: "/household/budget",
         element: <Budget />,
       },
     ],

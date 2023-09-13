@@ -23,7 +23,7 @@ export function Sidebar({ className }: SidebarProps) {
       <div className="space-y-4 py-4">
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Discover
+            Personal
           </h2>
           <div className="space-y-1">
             <Link to="/">
@@ -40,7 +40,7 @@ export function Sidebar({ className }: SidebarProps) {
                 Dashboard
               </Button>
             </Link>
-            <Link to="/budget">
+            <Link to="/personal/budget">
               <Button
                 variant={selected === "Budget" ? "secondary" : "ghost"}
                 className="w-full justify-start"
@@ -55,12 +55,67 @@ export function Sidebar({ className }: SidebarProps) {
               </Button>
             </Link>
 
-            <Link to="/activity">
+            <Link to="/personal/activity">
               <Button
                 variant={selected === "Activity" ? "secondary" : "ghost"}
                 className="w-full justify-start"
                 onClick={() => {
                   setSelected("Activity");
+                }}
+              >
+                <span className="pr-2">
+                  <FaListAlt size="15" />
+                </span>
+                Activity
+              </Button>
+            </Link>
+          </div>
+        </div>
+
+        <div className="px-3 py-2">
+          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+            Household
+          </h2>
+          <div className="space-y-1">
+            <Link to="/household">
+              <Button
+                variant={
+                  selected === "HouseholdDashboard" ? "secondary" : "ghost"
+                }
+                className="w-full justify-start"
+                onClick={() => {
+                  setSelected("HouseholdDashboard");
+                }}
+              >
+                <span className="pr-2">
+                  <FaHome size="15" />
+                </span>
+                Dashboard
+              </Button>
+            </Link>
+            <Link to="/household/budget">
+              <Button
+                variant={selected === "HouseholdBudget" ? "secondary" : "ghost"}
+                className="w-full justify-start"
+                onClick={() => {
+                  setSelected("HouseholdBudget");
+                }}
+              >
+                <span className="pr-2">
+                  <FaMoneyBillWave size="15" />
+                </span>
+                Budget
+              </Button>
+            </Link>
+
+            <Link to="/household/activity">
+              <Button
+                variant={
+                  selected === "HouseholdActivity" ? "secondary" : "ghost"
+                }
+                className="w-full justify-start"
+                onClick={() => {
+                  setSelected("HouseholdActivity");
                 }}
               >
                 <span className="pr-2">
