@@ -92,7 +92,7 @@ export function Sidebar({ className }: SidebarProps) {
                   <span className="pr-2">
                     <FaHome size="15" />
                   </span>
-                  Dashboard
+                  My Household
                 </Button>
               </Link>
             </div>
@@ -111,7 +111,7 @@ export function Sidebar({ className }: SidebarProps) {
                   <span className="pr-2">
                     <FaHome size="15" />
                   </span>
-                  Dashboard
+                  My Household
                 </Button>
               </Link>
               <Link to="/household/budget">

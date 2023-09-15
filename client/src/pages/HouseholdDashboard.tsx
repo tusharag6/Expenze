@@ -1,25 +1,49 @@
+import { Dialog } from "@radix-ui/react-dialog";
+import { Button } from "../../components/ui/button";
+import { DialogTrigger } from "../../components/ui/dialog";
 import { Separator } from "../../components/ui/separator";
 import EmptyPlaceholderHousehold from "../features/household/components/EmptyPlaceholderHousehold";
+import EmptyPlaceholder from "../layout/EmptyPlaceholder";
+import InviteMembers from "../features/household/components/InviteMembers";
+import AddAccount from "../features/household/components/AddAccount";
 
 const HouseholdDashboard = () => {
+  const isEmpty: boolean = false;
   return (
-    <div className="h-full flex-col border-none p-8 data-[state=active]:flex">
-      <div className="flex items-center justify-between">
-        <div className="space-y-1">
-          <h2 className="text-2xl font-semibold tracking-tight">
-            Your Household Dashboard
-          </h2>
-          <p className="text-sm text-muted-foreground">
-            Manage your finances with ease.
-          </p>
+    <Dialog>
+      <div className="h-full flex-col border-none p-8 data-[state=active]:flex">
+        <div className="flex items-center justify-between">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Welcome to Your Household
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Get started with managing your household's finances.
+            </p>
+          </div>
+          {isEmpty ? (
+            ""
+          ) : (
+            <div className="flex space-x-4">
+              <InviteMembers />
+              <AddAccount />
+            </div>
+          )}
         </div>
+        <Separator className="my-4" />
+        {isEmpty ? (
+          <EmptyPlaceholderHousehold
+            title="No Household Yet"
+            description="It looks like you haven't joined or created a household. Start by creating a new one."
+          />
+        ) : (
+          <EmptyPlaceholder
+            title="No Members Yet"
+            description="It looks like your household does not have members. Start by inviting one."
+          />
+        )}
       </div>
-      <Separator className="my-4" />
-      <EmptyPlaceholderHousehold
-        title="No Household Joined or Created"
-        description="You haven't joined or created. Start by new a new household."
-      />
-    </div>
+    </Dialog>
   );
 };
 
