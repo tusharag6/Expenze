@@ -17,7 +17,7 @@ type SidebarProps = {
 };
 
 export function Sidebar({ className }: SidebarProps) {
-  const userRole = "Personal";
+  const userRole = "Owner";
   const [selected, setSelected] = useState("Dashboard");
   return (
     <div className={cn("pb-12 h-[100vh]", className)}>

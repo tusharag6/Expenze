@@ -4,8 +4,18 @@ import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import InviteMembers from "../features/household/components/InviteMembers";
 import AddAccount from "../features/household/components/AddAccount";
 import SummaryCards from "../features/analytics/components/SummaryCards";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from "../../components/ui/card";
+import { Overview } from "../features/analytics/components/Overview";
+import RecentTransaction from "../features/analytics/components/RecentTransaction";
 
 const HouseholdDashboard = () => {
+  const userRole = "Owner";
   const isEmpty: boolean = false;
   const isMemberPresent: boolean = true;
   const isAccountPresent: boolean = true;
@@ -22,11 +32,13 @@ const HouseholdDashboard = () => {
         </div>
         {isEmpty ? (
           ""
-        ) : (
+        ) : userRole === "Owner" ? (
           <div className="flex space-x-4">
             <InviteMembers />
             <AddAccount />
           </div>
+        ) : (
+          <AddAccount />
         )}
       </div>
       <Separator className="my-4" />
@@ -37,7 +49,33 @@ const HouseholdDashboard = () => {
         />
       ) : isMemberPresent ? (
         isAccountPresent ? (
-          <SummaryCards />
+          <>
+            <SummaryCards />
+            <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
+              {/* Chart */}
+              <Card className="col-span-4">
+                <CardHeader>
+                  <CardTitle>Overview</CardTitle>
+                </CardHeader>
+                <CardContent className="pl-2">
+                  <Overview />
+                </CardContent>
+              </Card>
+
+              {/* Recent Transaction */}
+              <Card className="col-span-4 lg:col-span-3">
+                <CardHeader>
+                  <CardTitle>Recent Transactions</CardTitle>
+                  <CardDescription>
+                    {/* You made 265 sales this month. */}
+                  </CardDescription>
+                </CardHeader>
+                <CardContent className="">
+                  <RecentTransaction />
+                </CardContent>
+              </Card>
+            </div>
+          </>
         ) : (
           <EmptyPlaceholder
             title="No accounts Added"
