@@ -5,7 +5,7 @@ import routes from "./routes";
 
 const app = express();
 
-app.use(cors());
+app.use(cors({ origin: /\.vercel\.com$/ }));
 // Enable CORS for all routes
 app.use((req, res, next) => {
   res.setHeader("Access-Control-Allow-Origin", "http://localhost:5173");
