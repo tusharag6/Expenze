@@ -43,7 +43,7 @@ import { Separator } from "../../components/ui/separator";
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
     useState(false);
-  const [open, setOpen] = useState(false);
+  const [, setOpen] = useState(false);
   const [isLoading, setIsLoading] = React.useState<boolean>(false);
   const { token } = useAuth();
 

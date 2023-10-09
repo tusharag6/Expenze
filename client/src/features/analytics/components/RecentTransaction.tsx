@@ -2,8 +2,6 @@ import { useEffect } from "react";
 import { format, parseISO } from "date-fns";
 import { useSelectedAccount } from "../../../context/AccountContext";
 import { useTransaction } from "../../../context/TransactionContext";
-import { Avatar, AvatarImage } from "../../../../components/ui/avatar";
-import { AvatarFallback } from "@radix-ui/react-avatar";
 import { dashboardService } from "..";
 import { FaReceipt } from "react-icons/fa";
 

@@ -100,7 +100,7 @@ export const columns: ColumnDef<Transaction>[] = [
     cell: ({ row }) => {
       const [showAddTransactionDialog, setShowAddTransactionDialog] =
         useState(false);
-      const [open, setOpen] = useState(false);
+      const [, setOpen] = useState(false);
       const [isLoading, setIsLoading] = useState<boolean>(false);
 
       // Initialize state variables for form inputs
