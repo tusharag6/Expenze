@@ -72,7 +72,7 @@ export default function Dashboard() {
     try {
       // Make an API request to add the new transaction
       const response = await fetch(
-        `http://localhost:8080/api/transactions/accounts/${accountId}`,
+        `https://expenze.vercel.app/api/transactions/accounts/${accountId}`,
         {
           method: "POST",
           headers: {
@@ -101,7 +101,7 @@ export default function Dashboard() {
 
   async function fetchCustomCategories() {
     try {
-      const response = await fetch("http://localhost:8080/api/budget", {
+      const response = await fetch("https://expenze.vercel.app/api/budget", {
         method: "GET",
         headers: {
           authorization: `Bearer ${token}`,

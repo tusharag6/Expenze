@@ -4,7 +4,7 @@ export async function fetchAccounts(
   token: string | null
 ): Promise<accountTypes.Account[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/accounts", {
+    const response = await fetch("https://expenze.vercel.app/api/accounts", {
       method: "GET",
       headers: {
         authorization: `${token}`,
@@ -27,7 +27,7 @@ export async function addAccount(
   accountData: Partial<accountTypes.Account>
 ): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/accounts", {
+    const response = await fetch("https://expenze.vercel.app/api/accounts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

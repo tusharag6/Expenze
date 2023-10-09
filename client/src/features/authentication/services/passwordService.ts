@@ -5,13 +5,16 @@ import { authTypes } from "../../../types";
 export async function checkTokenValidity(token: any) {
   try {
     // Sending a POST request to check the token validity
-    const response = await fetch("http://localhost:8080/api/auth/check-token", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({ token }),
-    });
+    const response = await fetch(
+      "https://expenze.vercel.app/api/auth/check-token",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ token }),
+      }
+    );
 
     // If the response is not successful, return false
     if (!response.ok) {
@@ -29,7 +32,7 @@ export async function resetPassword(data: authTypes.resetPassword) {
   try {
     // Sending a POST request to reset the password
     const response = await fetch(
-      "http://localhost:8080/api/auth/reset-password",
+      "https://expenze.vercel.app/api/auth/reset-password",
       {
         method: "POST",
         headers: {
@@ -61,7 +64,7 @@ export async function forgotPassword(data: { email: string }) {
   try {
     // Sending a POST request to initiate the forgot password process
     const response = await fetch(
-      "http://localhost:8080/api/auth/forgot-password",
+      "https://expenze.vercel.app/api/auth/forgot-password",
       {
         method: "POST",
         headers: {

@@ -7,7 +7,7 @@ export async function fetchSummaryData(
 ): Promise<summaryDataTypes.SummaryData | null> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/accounts/${accountId}/summary`,
+      `https://expenze.vercel.app/api/accounts/${accountId}/summary`,
       {
         method: "GET",
         headers: {
@@ -35,7 +35,7 @@ export async function fetchTransactionData(
 ): Promise<transactionTypes.Transaction[]> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/transactions/accounts/${accountId}`,
+      `https://expenze.vercel.app/api/transactions/accounts/${accountId}`,
       {
         headers: {
           authorization: `${token}`,
@@ -60,7 +60,7 @@ export async function fetchRecentTransactions(
 ): Promise<transactionTypes.Transaction[]> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/transactions/accounts/${accountId}`
+      `https://expenze.vercel.app/api/transactions/accounts/${accountId}`
     );
     if (response.ok) {
       const data = await response.json();

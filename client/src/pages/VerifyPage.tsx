@@ -9,7 +9,7 @@ const VerifyPage = () => {
     async function verifyEmail() {
       try {
         const response = await fetch(
-          `http://localhost:8080/api/auth/verify/${token}`
+          `https://expenze.vercel.app/api/auth/verify/${token}`
         );
         if (response.ok) {
           console.log("Email verified successfully");
