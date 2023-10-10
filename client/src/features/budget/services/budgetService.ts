@@ -1,6 +1,6 @@
 export async function getAllCategoriesData(token: string | null) {
   try {
-    const response = await fetch(`https://expenze.vercel.app/api/budget`, {
+    const response = await fetch(`http://localhost:8080/api/budget`, {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -22,16 +22,13 @@ export async function getAllCategoriesData(token: string | null) {
 
 export async function fetchSummaryData(token: string | null) {
   try {
-    const response = await fetch(
-      `https://expenze.vercel.app/api/budget/summary`,
-      {
-        method: "GET",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-      }
-    );
+    const response = await fetch(`http://localhost:8080/api/budget/summary`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        authorization: `Bearer ${token}`,
+      },
+    });
 
     if (response.ok) {
       const data = await response.json();
@@ -50,7 +47,7 @@ export async function fetchCategorySpendingChartData(token: string | null) {
     const budgetPeriodStart = "2023-08-01T00:00:00Z";
 
     const response = await fetch(
-      `https://expenze.vercel.app/api/budget/category-spending-chart`,
+      `http://localhost:8080/api/budget/category-spending-chart`,
       {
         method: "GET",
         headers: {
@@ -82,7 +79,7 @@ export async function fetchBudgetVsActualBarChartData(token: string | null) {
     const budgetPeriodStart = "2023-08-01T00:00:00Z";
 
     const response = await fetch(
-      `https://expenze.vercel.app/api/budget/budget-vs-actual-bar-chart`,
+      `http://localhost:8080/api/budget/budget-vs-actual-bar-chart`,
       {
         method: "GET",
         headers: {
@@ -111,7 +108,7 @@ export async function fetchBudgetProgressLineChartData(token: string | null) {
     const budgetPeriodStart = "2023-08-01T00:00:00Z";
 
     const response = await fetch(
-      `https://expenze.vercel.app/api/budget/budget-progress-line-chart`,
+      `http://localhost:8080/api/budget/budget-progress-line-chart`,
       {
         method: "GET",
         headers: {

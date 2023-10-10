@@ -4,7 +4,7 @@ import { authTypes } from "../../../types";
 export async function login(data: authTypes.loginData) {
   try {
     // Making a POST request to the login endpoint
-    const response = await fetch("https://expenze.vercel.app/api/auth/login", {
+    const response = await fetch("http://localhost:8080/api/auth/login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -34,16 +34,13 @@ export async function login(data: authTypes.loginData) {
 export async function register(data: authTypes.registerData) {
   try {
     // Making a POST request to the registration endpoint
-    const response = await fetch(
-      "https://expenze.vercel.app/api/auth/register",
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(data), // Sending user registration data as JSON
-      }
-    );
+    const response = await fetch("http://localhost:8080/api/auth/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data), // Sending user registration data as JSON
+    });
 
     const responseData = await response.json();
 
@@ -56,7 +53,7 @@ export async function register(data: authTypes.registerData) {
 
       // Send verification email
       const verificationResponse = await fetch(
-        "https://expenze.vercel.app/api/auth/send-verification",
+        "http://localhost:8080/api/auth/send-verification",
         {
           method: "POST",
           headers: {

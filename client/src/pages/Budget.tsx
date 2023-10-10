@@ -46,7 +46,7 @@ const Budget = () => {
       amount,
     };
     try {
-      const response = await fetch(`https://expenze.vercel.app/api/budget`, {
+      const response = await fetch(`http://localhost:8080/api/budget`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -69,7 +69,7 @@ const Budget = () => {
   useEffect(() => {
     async function fetchBudget() {
       try {
-        const response = await fetch("https://expenze.vercel.app/api/budget", {
+        const response = await fetch("http://localhost:8080/api/budget", {
           method: "GET",
           headers: {
             authorization: `Bearer ${token}`,

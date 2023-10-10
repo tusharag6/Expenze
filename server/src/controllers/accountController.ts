@@ -3,7 +3,9 @@ import { accountService } from "../services";
 
 export const createAccount = async (req: Request, res: Response) => {
   try {
-    const { accountName, accountNumber, initialBalance } = req.body;
+    console.log("req body : ", req.body);
+
+    const { account_name, account_number, initial_balance } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
 
     if (!token) {
@@ -11,9 +13,9 @@ export const createAccount = async (req: Request, res: Response) => {
     }
 
     const newAccount = await accountService.createNewAccount(
-      accountName,
-      accountNumber,
-      initialBalance,
+      account_name,
+      account_number,
+      initial_balance,
       token
     );
     res.status(201).json(newAccount);

@@ -132,7 +132,7 @@ export const columns: ColumnDef<Transaction>[] = [
         try {
           // Make an API request to add the new transaction
           const response = await fetch(
-            `https://expenze.vercel.app/api/transactions/${transactionId}/accounts/${accountId}`,
+            `http://localhost:8080/api/transactions/${transactionId}/accounts/${accountId}`,
             {
               method: "PATCH",
               headers: {
@@ -150,7 +150,7 @@ export const columns: ColumnDef<Transaction>[] = [
 
             try {
               const response = await fetch(
-                `https://expenze.vercel.app/api/transaction/accounts/${accountId}`
+                `http://localhost:8080/api/transaction/accounts/${accountId}`
               );
               const data = await response.json();
               updateTransactionData(data);
