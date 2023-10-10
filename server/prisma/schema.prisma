@@ -69,6 +69,7 @@ model Household {
   ownerUser       User              @relation(fields: [ownerUserId], references: [id])
   ownerUserId     Int               @unique
   HouseholdMember HouseholdMember[]
+  joiningId       String
 }
 
 model HouseholdMember {
