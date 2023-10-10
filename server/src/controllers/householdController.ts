@@ -21,7 +21,8 @@ export const createHousehold = async (req: Request, res: Response) => {
     }
 
     const newHousehold = await householdService.createNewHousehold(userId);
-    res.status(201).json(newHousehold);
+    const updatedUserData = await householdService.changeRoleToOwner(userId);
+    res.status(201).json({ newHousehold, updatedUserData });
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error creating household.", error });

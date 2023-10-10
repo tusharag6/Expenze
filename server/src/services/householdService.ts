@@ -10,3 +10,15 @@ export const createNewHousehold = async (userId: number) => {
   });
   return newHousehold;
 };
+
+export const changeRoleToOwner = async (userId: number) => {
+  const updatedUserData = await prisma.user.update({
+    where: {
+      id: userId,
+    },
+    data: {
+      role: "Owner",
+    },
+  });
+  return updatedUserData;
+};
