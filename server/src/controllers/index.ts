@@ -10,6 +10,8 @@ import * as transactionController from "./transactionController";
 
 import * as budgetController from "./budgetController";
 
+import * as householdController from "./householdController";
+
 export {
   authController,
   verificationController,
@@ -18,4 +20,5 @@ export {
   accountController,
   transactionController,
   budgetController,
+  householdController,
 };

@@ -1,17 +1,12 @@
-// schema.prisma
-
-// Define the Prisma client generator to generate client code
 generator client {
   provider = "prisma-client-js"
 }
 
-// Define the database connection details
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-// Define the User model
 model User {
   id                 Int                  @id @default(autoincrement())
   username           String
@@ -20,11 +15,11 @@ model User {
   role               String               @default("Personal")
   verified           Boolean              @default(false)
   verificationToken  String?
+  ownedHousehold     Household? // One user can own one household
   accounts           Account[] // Establish a one-to-many relationship with Account
   PasswordResetToken PasswordResetToken[]
   BudgetCategory     BudgetCategory[]
-  Household          Household?           @relation(fields: [householdId], references: [id])
-  householdId        Int?
+  HouseholdMember    HouseholdMember[]
 }
 
 model PasswordResetToken {
@@ -70,6 +65,16 @@ model BudgetCategory {
 }
 
 model Household {
-  id      Int    @id @default(autoincrement())
-  members User[] // Define a many-to-many relationship with users
+  id              Int               @id @default(autoincrement())
+  ownerUser       User              @relation(fields: [ownerUserId], references: [id])
+  ownerUserId     Int               @unique
+  HouseholdMember HouseholdMember[]
+}
+
+model HouseholdMember {
+  id          Int       @id @default(autoincrement())
+  user        User      @relation(fields: [userId], references: [id])
+  userId      Int
+  household   Household @relation(fields: [householdId], references: [id])
+  householdId Int
 }

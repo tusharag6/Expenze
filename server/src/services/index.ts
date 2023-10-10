@@ -10,6 +10,8 @@ import * as transactionService from "./transactionService";
 
 import * as budgetService from "./budgetService";
 
+import * as householdService from "./householdService";
+
 export {
   authService,
   passwordService,
@@ -18,4 +20,5 @@ export {
   accountService,
   transactionService,
   budgetService,
+  householdService,
 };

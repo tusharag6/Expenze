@@ -3,7 +3,7 @@ import { accountService } from "../services";
 
 export const createAccount = async (req: Request, res: Response) => {
   try {
-    console.log("req body : ", req.body);
+    // console.log("req body : ", req.body);
 
     const { account_name, account_number, initial_balance } = req.body;
     const token = req.headers.authorization?.split(" ")[1];
