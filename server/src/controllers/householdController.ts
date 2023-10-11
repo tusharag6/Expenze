@@ -73,3 +73,14 @@ export const addAccount = async (req: Request, res: Response) => {
     res.status(500).json({ msg: "Error creating account.", error });
   }
 };
+
+export const getAccountSummary = async (req: Request, res: Response) => {
+  try {
+    const householdId = parseInt(req.params.householdId);
+
+    const summary = await householdService.getHouseholdSummaryData(householdId);
+    res.status(200).json(summary);
+  } catch (error) {
+    res.status(500).json({ msg: "Error fetching summary data.", error });
+  }
+};

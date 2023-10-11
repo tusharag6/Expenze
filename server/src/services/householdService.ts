@@ -70,3 +70,50 @@ export const addNewAccountToHousehold = async (
   });
   return newAccount;
 };
+
+export const getHouseholdSummaryData = async (householdId: number) => {
+  // Retrieve all accounts for the household
+  const accounts = await prisma.account.findMany({
+    where: {
+      HouseholdAccount: { some: { householdId } },
+    },
+  });
+
+  let totalBalance = 0;
+  let totalExpense = 0;
+  let totalIncome = 0;
+  let numTransactions = 0;
+
+  // Iterate through each account and calculate the summary
+  if (accounts) {
+    for (const account of accounts) {
+      const transactions = await prisma.transaction.findMany({
+        where: { account_id: account.id },
+      });
+
+      for (const transaction of transactions) {
+        if (transaction.type === "Expense") {
+          totalExpense += transaction.amount;
+          totalBalance -= transaction.amount;
+        } else if (transaction.type === "Income") {
+          totalIncome += transaction.amount;
+          totalBalance += transaction.amount;
+        }
+      }
+
+      numTransactions += transactions.length;
+    }
+
+    // Create the summary object
+    const summary = {
+      totalBalance,
+      totalExpense,
+      totalIncome,
+      numTransactions,
+    };
+
+    return summary;
+  } else {
+    throw new Error("Account not found.");
+  }
+};
