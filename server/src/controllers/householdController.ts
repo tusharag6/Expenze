@@ -60,3 +60,16 @@ export const joinHousehold = async (req: Request, res: Response) => {
     res.status(500).json({ msg: "Error joining household.", error });
   }
 };
+
+export const addAccount = async (req: Request, res: Response) => {
+  try {
+    const { householdId, accountId } = req.body;
+    const newAccount = await householdService.addNewAccountToHousehold(
+      householdId,
+      accountId
+    );
+    res.status(201).json(newAccount);
+  } catch (error) {
+    res.status(500).json({ msg: "Error creating account.", error });
+  }
+};

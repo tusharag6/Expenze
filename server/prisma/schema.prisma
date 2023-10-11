@@ -20,6 +20,7 @@ model User {
   PasswordResetToken PasswordResetToken[]
   BudgetCategory     BudgetCategory[]
   HouseholdMember    HouseholdMember[]
+  HouseholdAccount   HouseholdAccount[]
 }
 
 model PasswordResetToken {
@@ -32,13 +33,14 @@ model PasswordResetToken {
 
 // Define the Account model
 model Account {
-  id              Int           @id @default(autoincrement())
-  account_name    String
-  account_number  String
-  initial_balance Float
-  user_id         Int
-  user            User          @relation(fields: [user_id], references: [id]) // Define the relationship with User
-  transactions    Transaction[] // Establish a one-to-many relationship with Transaction
+  id               Int                @id @default(autoincrement())
+  account_name     String
+  account_number   String
+  initial_balance  Float
+  user_id          Int
+  user             User               @relation(fields: [user_id], references: [id]) // Define the relationship with User
+  transactions     Transaction[] // Establish a one-to-many relationship with Transaction
+  HouseholdAccount HouseholdAccount[]
 }
 
 // Define the Transaction model
@@ -65,11 +67,12 @@ model BudgetCategory {
 }
 
 model Household {
-  id              Int               @id @default(autoincrement())
-  ownerUser       User              @relation(fields: [ownerUserId], references: [id])
-  ownerUserId     Int               @unique
-  HouseholdMember HouseholdMember[]
-  joiningId       String
+  id               Int                @id @default(autoincrement())
+  ownerUser        User               @relation(fields: [ownerUserId], references: [id])
+  ownerUserId      Int                @unique
+  HouseholdMember  HouseholdMember[]
+  joiningId        String
+  HouseholdAccount HouseholdAccount[]
 }
 
 model HouseholdMember {
@@ -78,4 +81,14 @@ model HouseholdMember {
   userId      Int
   household   Household @relation(fields: [householdId], references: [id])
   householdId Int
+}
+
+model HouseholdAccount {
+  id           Int       @id @default(autoincrement())
+  bank_account Account   @relation(fields: [accountId], references: [id])
+  household    Household @relation(fields: [householdId], references: [id])
+  accountId    Int
+  User         User?     @relation(fields: [userId], references: [id])
+  userId       Int?
+  householdId  Int
 }

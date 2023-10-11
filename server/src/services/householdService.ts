@@ -57,3 +57,16 @@ export const joinNewHousehold = async (userId: number, householdId: number) => {
 
   return newHouseholdMember;
 };
+
+export const addNewAccountToHousehold = async (
+  householdId: number,
+  accountId: number
+) => {
+  const newAccount = await prisma.householdAccount.create({
+    data: {
+      householdId,
+      accountId,
+    },
+  });
+  return newAccount;
+};
