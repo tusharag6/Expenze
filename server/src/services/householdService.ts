@@ -117,3 +117,25 @@ export const getHouseholdSummaryData = async (householdId: number) => {
     throw new Error("Account not found.");
   }
 };
+
+// Define the route to get transactions for a household
+export const fetchHouseholdTransactions = async (householdId: number) => {
+  // Retrieve all accounts for the household
+  const accounts = await prisma.account.findMany({
+    where: {
+      HouseholdAccount: { some: { householdId } },
+    },
+  });
+
+  let allTransactions: any[] = [];
+
+  // Iterate through each account and retrieve its transactions
+  for (const account of accounts) {
+    const transactions = await prisma.transaction.findMany({
+      where: { account_id: account.id },
+    });
+    allTransactions = allTransactions.concat(transactions);
+  }
+
+  return allTransactions;
+};

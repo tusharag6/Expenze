@@ -7,6 +7,10 @@ const router = Router();
 router.post("/", householdController.createHousehold);
 router.post("/join", householdController.joinHousehold);
 router.post("/add", householdController.addAccount);
-router.get("/summary/:householdId", householdController.getAccountSummary);
+router.get("/summary/:householdId", householdController.getHouseholdSummary);
+router.get(
+  "/transaction/:householdId",
+  householdController.getHouseholdTransactions
+);
 
 export default router;

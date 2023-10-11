@@ -74,13 +74,29 @@ export const addAccount = async (req: Request, res: Response) => {
   }
 };
 
-export const getAccountSummary = async (req: Request, res: Response) => {
+export const getHouseholdSummary = async (req: Request, res: Response) => {
   try {
     const householdId = parseInt(req.params.householdId);
 
     const summary = await householdService.getHouseholdSummaryData(householdId);
     res.status(200).json(summary);
   } catch (error) {
-    res.status(500).json({ msg: "Error fetching summary data.", error });
+    res
+      .status(500)
+      .json({ msg: "Error fetching household summary data.", error });
+  }
+};
+
+export const getHouseholdTransactions = async (req: Request, res: Response) => {
+  try {
+    const householdId = parseInt(req.params.householdId);
+    const transactions = await householdService.fetchHouseholdTransactions(
+      householdId
+    );
+    res.status(200).json(transactions);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ msg: "Error fetching household transactions.", error });
   }
 };
