@@ -17,7 +17,7 @@ export const createNewAccount = async (
     data: {
       account_name: accountName,
       account_number: accountNumber,
-      initial_balance: initialBalance,
+      total_balance: initialBalance,
       user_id: userId,
     },
   });
@@ -51,7 +51,7 @@ export const getAccountSummaryData = async (accountId: number) => {
   const numTransactions = transactions.length;
 
   if (account) {
-    totalBalance = account.initial_balance;
+    totalBalance = account.total_balance;
 
     for (const transaction of transactions) {
       if (transaction.type === "Expense") {
@@ -69,6 +69,11 @@ export const getAccountSummaryData = async (accountId: number) => {
       totalBalance,
       numTransactions,
     };
+
+    await prisma.account.update({
+      where: { id: accountId },
+      data: { total_balance: totalBalance },
+    });
 
     return summary;
   } else {

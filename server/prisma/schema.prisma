@@ -36,7 +36,7 @@ model Account {
   id               Int                @id @default(autoincrement())
   account_name     String
   account_number   String
-  initial_balance  Float
+  total_balance    Float
   user_id          Int
   user             User               @relation(fields: [user_id], references: [id]) // Define the relationship with User
   transactions     Transaction[] // Establish a one-to-many relationship with Transaction
