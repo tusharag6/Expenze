@@ -12,6 +12,20 @@ export const createNewHousehold = async (userId: number, joiningId: string) => {
   return newHousehold;
 };
 
+export const getJoiningId = async (householdId: number) => {
+  const household = await prisma.household.findUnique({
+    where: { id: householdId },
+  });
+
+  if (!household) {
+    throw new Error("Household not found.");
+  }
+
+  const joiningId = household.joiningId;
+
+  return joiningId;
+};
+
 export const changeRoleToOwner = async (userId: number) => {
   const updatedUserData = await prisma.user.update({
     where: {

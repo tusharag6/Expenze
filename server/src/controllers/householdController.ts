@@ -34,6 +34,21 @@ export const createHousehold = async (req: Request, res: Response) => {
   }
 };
 
+export const getHouseholdJoiningId = async (req: Request, res: Response) => {
+  try {
+    const householdId = parseInt(req.params.householdId);
+
+    const joiningId = await householdService.getJoiningId(householdId);
+
+    res.json({ joiningId });
+  } catch (error) {
+    console.error(error);
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the joining ID." });
+  }
+};
+
 export const joinHousehold = async (req: Request, res: Response) => {
   try {
     const { joiningId } = req.body;

@@ -37,46 +37,39 @@ export const getUserAccounts = async (token: string) => {
 };
 
 export const getAccountSummaryData = async (accountId: number) => {
-  const transactions = await prisma.transaction.findMany({
-    where: { account_id: accountId },
-  });
-
   const account = await prisma.account.findUnique({
     where: { id: accountId },
   });
 
-  let totalBalance = 0;
-  let totalExpense = 0;
-  let totalIncome = 0;
-  const numTransactions = transactions.length;
-
-  if (account) {
-    totalBalance = account.total_balance;
-
-    for (const transaction of transactions) {
-      if (transaction.type === "Expense") {
-        totalExpense += transaction.amount;
-        totalBalance -= transaction.amount;
-      } else if (transaction.type === "Income") {
-        totalIncome += transaction.amount;
-        totalBalance += transaction.amount;
-      }
-    }
-
-    const summary = {
-      totalExpense,
-      totalIncome,
-      totalBalance,
-      numTransactions,
-    };
-
-    await prisma.account.update({
-      where: { id: accountId },
-      data: { total_balance: totalBalance },
-    });
-
-    return summary;
-  } else {
+  if (!account) {
     throw new Error("Account not found.");
   }
+
+  const transactions = await prisma.transaction.findMany({
+    where: { account_id: accountId },
+  });
+
+  let totalBalance = account.total_balance;
+  let totalExpense = 0;
+  let totalIncome = 0;
+
+  for (const transaction of transactions) {
+    if (transaction.type === "Expense") {
+      totalExpense += transaction.amount;
+    } else if (transaction.type === "Income") {
+      totalIncome += transaction.amount;
+    }
+  }
+
+  // Calculate the updated total balance without making changes in the database
+  const updatedTotalBalance = totalBalance - totalExpense + totalIncome;
+
+  const summary = {
+    totalExpense,
+    totalIncome,
+    totalBalance: updatedTotalBalance, // Provide the updated total balance
+    numTransactions: transactions.length,
+  };
+
+  return summary;
 };
