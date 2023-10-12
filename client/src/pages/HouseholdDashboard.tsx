@@ -15,10 +15,10 @@ import { Overview } from "../features/analytics/components/Overview";
 import RecentTransaction from "../features/analytics/components/RecentTransaction";
 
 const HouseholdDashboard = () => {
-  const userRole = "Owner";
-  const isEmpty: boolean = false;
-  const isMemberPresent: boolean = true;
-  const isAccountPresent: boolean = true;
+  const userRole = localStorage.getItem("Role");
+  const isEmpty: boolean = true;
+  const isMemberPresent: boolean = false;
+  const isAccountPresent: boolean = false;
   return (
     <div className="h-full flex-col border-none p-8 data-[state=active]:flex">
       <div className="flex items-center justify-between">

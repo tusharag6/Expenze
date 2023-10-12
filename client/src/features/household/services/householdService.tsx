@@ -10,9 +10,34 @@ export async function createHousehold(token: string | null): Promise<void> {
 
     if (response.ok) {
       const data = await response.json();
+      localStorage.setItem("householdData", data);
+      localStorage.setItem("Role", "Owner");
       return data;
     } else {
       throw new Error("Failed to create household");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+
+export async function joinHousehold(joiningId: string | null): Promise<void> {
+  try {
+    const data = { joiningId };
+    const response = await fetch("http://localhost:8080/api/household/join", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(data),
+    });
+
+    if (response.ok) {
+      const data = await response.json();
+      localStorage.setItem("Role", "Member");
+      return data;
+    } else {
+      throw new Error("Failed to join household");
     }
   } catch (error) {
     throw error;

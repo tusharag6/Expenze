@@ -9,14 +9,30 @@ import {
   DialogTrigger,
 } from "../../../../components/ui/dialog";
 import { Button } from "../../../../components/ui/button";
+import { Icons } from "../../../components/Icons";
+import { householdService } from "..";
+import { useAuth } from "../../../context/AuthContext";
 
 const CreateHousehold = () => {
   const [showCreateHouseholdDialog, setShowCreateHouseholdDialog] =
     useState(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { token } = useAuth();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-  };
+    setIsLoading(true);
+
+    try {
+      await householdService.createHousehold(token);
+      alert("Household Created successfully");
+    } catch (error) {
+      console.error(error);
+      alert("Error creating Household");
+    }
+
+    setIsLoading(false);
+  }
 
   return (
     <Dialog
@@ -50,7 +66,14 @@ const CreateHousehold = () => {
             >
               Cancel
             </Button>
-            <Button type="submit">Create Household</Button>
+            <Button type="submit">
+              {isLoading ? (
+                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
+              ) : (
+                " "
+              )}
+              Create Household
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>
