@@ -16,7 +16,10 @@ import RecentTransaction from "../features/analytics/components/RecentTransactio
 
 const HouseholdDashboard = () => {
   const userRole = localStorage.getItem("Role");
-  const isEmpty: boolean = true;
+  const householdData = localStorage.getItem("householdData");
+  const isEmpty = householdData ? false : true;
+  console.log(userRole, householdData, false);
+
   const isMemberPresent: boolean = false;
   const isAccountPresent: boolean = false;
   return (

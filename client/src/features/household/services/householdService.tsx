@@ -10,8 +10,7 @@ export async function createHousehold(token: string | null): Promise<void> {
 
     if (response.ok) {
       const data = await response.json();
-      localStorage.setItem("householdData", data);
-      localStorage.setItem("Role", "Owner");
+      localStorage.setItem("householdId", data.id);
       return data;
     } else {
       throw new Error("Failed to create household");

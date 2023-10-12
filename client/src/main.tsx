@@ -19,6 +19,7 @@ import { AccountProvider } from "./context/AccountContext";
 import { TransactionProvider } from "./context/TransactionContext";
 import Budget from "./pages/Budget";
 import HouseholdDashboard from "./pages/HouseholdDashboard";
+import { HouseholdProvider } from "./context/HouseholdContext";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -92,7 +93,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
     <AccountProvider>
       <AuthProvider>
         <TransactionProvider>
-          <RouterProvider router={router} />
+          <HouseholdProvider>
+            <RouterProvider router={router} />
+          </HouseholdProvider>
         </TransactionProvider>
       </AuthProvider>
     </AccountProvider>

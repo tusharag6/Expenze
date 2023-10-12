@@ -27,7 +27,7 @@ export const createHousehold = async (req: Request, res: Response) => {
     );
 
     const updatedUserData = await householdService.changeRoleToOwner(userId);
-    res.status(201).json({ newHousehold, updatedUserData });
+    res.status(201).json(newHousehold);
   } catch (error) {
     console.error(error);
     res.status(500).json({ msg: "Error creating household.", error });
@@ -85,6 +85,8 @@ export const addAccount = async (req: Request, res: Response) => {
     );
     res.status(201).json(newAccount);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json({ msg: "Error creating account.", error });
   }
 };

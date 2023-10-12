@@ -12,20 +12,31 @@ import { Button } from "../../../../components/ui/button";
 import { Icons } from "../../../components/Icons";
 import { householdService } from "..";
 import { useAuth } from "../../../context/AuthContext";
+import { useHousehold } from "../../../context/HouseholdContext";
 
 const CreateHousehold = () => {
   const [showCreateHouseholdDialog, setShowCreateHouseholdDialog] =
     useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { token } = useAuth();
+  const { householdData, setHouseholdData } = useHousehold();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setIsLoading(true);
 
     try {
-      await householdService.createHousehold(token);
-      alert("Household Created successfully");
+      const data: any = await householdService.createHousehold(token);
+      if (data !== null) {
+        setHouseholdData(data);
+        localStorage.setItem("householdData", data);
+        console.log("house", householdData);
+        localStorage.setItem("Role", "Owner");
+        localStorage.setItem("isEmpty", "false");
+        alert("Household Created successfully");
+      } else {
+        alert("Error creating Household");
+      }
     } catch (error) {
       console.error(error);
       alert("Error creating Household");
@@ -33,6 +44,7 @@ const CreateHousehold = () => {
 
     setIsLoading(false);
   }
+  // console.log("house 2", householdData);
 
   return (
     <Dialog
