@@ -9,25 +9,27 @@ import {
 } from "../../../../components/ui/dialog";
 import { Button } from "../../../../components/ui/button";
 import { Label } from "../../../../components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "../../../../components/ui/select";
 import { useEffect, useState } from "react";
 import { accountService } from "../../account";
 import { useAuth } from "../../../context/AuthContext";
 import { Account } from "../../../types/account";
 import { householdService } from "..";
 import { Icons } from "../../../components/Icons";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandItem,
+  CommandList,
+} from "../../../../components/ui/command";
+import { CheckIcon } from "@radix-ui/react-icons";
+import { FaMoneyCheck } from "react-icons/fa";
 
 const AddAccount = () => {
   const { token } = useAuth();
   const [accountData, setAccountData] = useState<Account[]>([]);
   const [isLoading, setIsLoading] = useState<boolean>(false);
-  const [accountId, setAccountId] = useState<string>("");
+  const [selectedAccount, setSelectedAccount] = useState<number>();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -49,19 +51,18 @@ const AddAccount = () => {
       householdIdString !== null ? parseInt(householdIdString) : 0;
 
     try {
-      await householdService.addAccount(
-        token,
-        householdId,
-        parseInt(accountId)
-      );
-      alert("Account Added successfully");
+      if (selectedAccount != undefined) {
+        await householdService.addAccount(token, householdId, selectedAccount);
+        alert("Account Added successfully");
+      } else {
+        alert("No valid household data available. Cannot add account.");
+      }
     } catch (error) {
       console.error(error);
       alert("No valid household data available. Cannot add account.");
     }
     setIsLoading(false);
   }
-  console.log(accountId);
 
   return (
     <Dialog>
@@ -80,7 +81,7 @@ const AddAccount = () => {
         <div className="space-y-4 py-2 pb-4">
           <div className="space-y-2">
             <Label htmlFor="account">Select the account</Label>
-            <Select>
+            {/* <Select>
               <SelectTrigger>
                 <SelectValue placeholder="Select a account" />
               </SelectTrigger>
@@ -90,20 +91,42 @@ const AddAccount = () => {
                   <SelectItem
                     key={account.id}
                     value={account.id.toString()}
-                    onClick={(e) => {
-                      const newValue = e.currentTarget.getAttribute("value");
-                      console.log(newValue, "onclick");
-
-                      if (newValue !== null) {
-                        setAccountId(newValue);
-                      }
+                    onClick={() => {
+                      setSelectedAccount(account.id);
+                      console.log("inside onselect", account.id);
                     }}
                   >
                     <span className="font-medium">{account.account_name}</span>
                   </SelectItem>
                 ))}
               </SelectContent>
-            </Select>
+            </Select> */}
+
+            <Command>
+              <CommandList>
+                <CommandEmpty>No account found.</CommandEmpty>
+                <CommandGroup>
+                  {accountData.map((account) => (
+                    <CommandItem
+                      key={String(account.id)}
+                      onSelect={() => {
+                        setSelectedAccount(account.id);
+                        console.log("inside onselect", account);
+                      }}
+                      className="text-sm"
+                    >
+                      <span className="mr-2">
+                        <FaMoneyCheck size="15" />
+                      </span>
+                      {account.account_name}
+                      {selectedAccount === account.id && (
+                        <CheckIcon className="ml-auto h-4 w-4" />
+                      )}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </CommandList>
+            </Command>
           </div>
         </div>
         <form onSubmit={handleSubmit}>
