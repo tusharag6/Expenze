@@ -117,3 +117,13 @@ export const getHouseholdTransactions = async (req: Request, res: Response) => {
       .json({ msg: "Error fetching household transactions.", error });
   }
 };
+
+export const getHouseholdAccounts = async (req: Request, res: Response) => {
+  try {
+    const householdId = parseInt(req.params.householdId);
+    const accounts = await householdService.getAccounts(householdId);
+    res.status(200).json(accounts);
+  } catch (error) {
+    res.status(500).json({ msg: "Error fetching household accounts.", error });
+  }
+};

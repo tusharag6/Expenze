@@ -19,7 +19,7 @@ const CreateHousehold = () => {
     useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const { token } = useAuth();
-  const { householdData, setHouseholdData } = useHousehold();
+  const { setHouseholdData } = useHousehold();
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -28,11 +28,16 @@ const CreateHousehold = () => {
     try {
       const data: any = await householdService.createHousehold(token);
       if (data !== null) {
+        console.log(data, "household data");
+
+        // Update the local state first
         setHouseholdData(data);
-        localStorage.setItem("householdData", data);
-        console.log("house", householdData);
+
+        // Store in localStorage
+        localStorage.setItem("householdData", JSON.stringify(data));
         localStorage.setItem("Role", "Owner");
         localStorage.setItem("isEmpty", "false");
+
         alert("Household Created successfully");
       } else {
         alert("Error creating Household");
@@ -44,7 +49,6 @@ const CreateHousehold = () => {
 
     setIsLoading(false);
   }
-  // console.log("house 2", householdData);
 
   return (
     <Dialog

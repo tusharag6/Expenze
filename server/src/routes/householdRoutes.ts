@@ -13,5 +13,6 @@ router.get(
   "/transaction/:householdId",
   householdController.getHouseholdTransactions
 );
+router.get("/accounts/:householdId", householdController.getHouseholdAccounts);
 
 export default router;

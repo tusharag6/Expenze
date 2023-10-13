@@ -153,3 +153,13 @@ export const fetchHouseholdTransactions = async (householdId: number) => {
 
   return allTransactions;
 };
+
+export const getAccounts = async (householdId: number) => {
+  const accounts = await prisma.householdAccount.findMany({
+    where: {
+      householdId: householdId,
+    },
+  });
+
+  return accounts;
+};

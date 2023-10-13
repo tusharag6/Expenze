@@ -150,3 +150,26 @@ export async function getTransactionData(
     throw error;
   }
 }
+
+export async function getAddedAccounts(householdId: number): Promise<void> {
+  try {
+    const response = await fetch(
+      `http://localhost:8080/api/household/accounts/${householdId}`,
+      {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    if (response.ok) {
+      const data = await response.json();
+      return data;
+    } else {
+      throw new Error("Failed to fetch account");
+    }
+  } catch (error) {
+    throw error;
+  }
+}
