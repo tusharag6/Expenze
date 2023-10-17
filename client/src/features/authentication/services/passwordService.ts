@@ -1,6 +1,17 @@
 // Importing the necessary types from the "types" module
 import { authTypes } from "../../../types";
-
+import Swal from "sweetalert2";
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 // Function to check the validity of a token
 export async function checkTokenValidity(token: any) {
   try {
@@ -44,14 +55,28 @@ export async function resetPassword(data: authTypes.resetPassword) {
 
     // Handling different response scenarios
     if (response.ok) {
-      alert("Password Changed, Please Login");
+      Toast.fire({
+        icon: "success",
+        title: "Password Changed, Please Login.",
+      });
     } else if (response.status === 400) {
-      alert("Token Expired");
+      Toast.fire({
+        icon: "error",
+        title: "Token Expired",
+      });
     } else {
+      Toast.fire({
+        icon: "error",
+        title: "Password Changed Failed",
+      });
       throw new Error(responseData.message);
     }
     return response;
   } catch (error) {
+    Toast.fire({
+      icon: "error",
+      title: "Password Changed Failed",
+    });
     throw new Error("An error occurred during reset password.");
   }
 }
@@ -78,8 +103,15 @@ export async function forgotPassword(data: { email: string }) {
 
     // Handling different response scenarios
     if (response.ok) {
-      alert("Mail Sent!");
+      Toast.fire({
+        icon: "success",
+        title: "Mail Sent!",
+      });
     } else {
+      Toast.fire({
+        icon: "error",
+        title: "Error Sending Mail",
+      });
       throw new Error(responseData.message);
     }
   } catch (error) {

@@ -1,5 +1,16 @@
 import { authTypes } from "../../../types";
-
+import Swal from "sweetalert2";
+const Toast = Swal.mixin({
+  toast: true,
+  position: "top-end",
+  showConfirmButton: false,
+  timer: 3000,
+  timerProgressBar: true,
+  didOpen: (toast) => {
+    toast.addEventListener("mouseenter", Swal.stopTimer);
+    toast.addEventListener("mouseleave", Swal.resumeTimer);
+  },
+});
 // Function for user login
 export async function login(data: authTypes.loginData) {
   try {
@@ -16,16 +27,30 @@ export async function login(data: authTypes.loginData) {
 
     if (response.ok) {
       if (!responseData.user.verified) {
-        alert("Please verify your email before logging in.");
+        Toast.fire({
+          icon: "warning",
+          title: "Please verify your email before logging in.",
+        });
         return;
       } else {
-        alert("Logged in");
+        Toast.fire({
+          icon: "success",
+          title: "Signed in successfully",
+        });
       }
       return responseData;
     } else {
+      Toast.fire({
+        icon: "error",
+        title: "Login Failed",
+      });
       throw new Error(responseData.message);
     }
   } catch (error) {
+    Toast.fire({
+      icon: "error",
+      title: "Login Failed",
+    });
     throw new Error("An error occurred during login.");
   }
 }
@@ -49,7 +74,10 @@ export async function register(data: authTypes.registerData) {
       return;
     }
     if (response.ok) {
-      alert("Registration successful!");
+      Toast.fire({
+        icon: "success",
+        title: "Registration successful",
+      });
 
       // Send verification email
       const verificationResponse = await fetch(
@@ -67,17 +95,31 @@ export async function register(data: authTypes.registerData) {
       );
 
       if (verificationResponse.ok) {
-        alert("Verification email sent successfully!");
+        Toast.fire({
+          icon: "success",
+          title: "Verification email sent successfully",
+        });
       } else {
         const errorData = await verificationResponse.json();
-        console.log(errorData);
-        alert(`Error sending verification email: ${errorData.error}`);
+        console.log(errorData.error);
+        Toast.fire({
+          icon: "error",
+          title: "Error sending verification email",
+        });
       }
       return responseData;
     } else {
+      Toast.fire({
+        icon: "error",
+        title: "Registration Failed",
+      });
       throw new Error(responseData.message);
     }
   } catch (error) {
+    Toast.fire({
+      icon: "error",
+      title: "Registration Failed",
+    });
     throw new Error("An error occurred during registration.");
   }
 }
