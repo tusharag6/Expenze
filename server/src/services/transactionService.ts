@@ -25,7 +25,7 @@ export const createTransaction = async (
     });
 
     if (!budgetCategoryData) {
-      throw new Error("Budget category not found");
+      budgetCategory = "";
     }
 
     // Create new transaction
@@ -37,7 +37,6 @@ export const createTransaction = async (
         description,
         date: new Date(),
         account_id: accountId,
-        budgetCategoryId: budgetCategoryData.id,
       },
     });
 
