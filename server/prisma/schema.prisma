@@ -8,22 +8,23 @@ datasource db {
 }
 
 model User {
-  id                 Int                  @id @default(autoincrement())
-  username           String
-  email              String               @unique
-  password           String
-  role               String               @default("Personal")
-  verified           Boolean              @default(false)
-  verificationToken  String?
-  ownedHousehold     Household? // One user can own one household
-  accounts           Account[] // Establish a one-to-many relationship with Account
-  PasswordResetToken PasswordResetToken[]
-  BudgetCategory     BudgetCategory[]
-  HouseholdMember    HouseholdMember[]
-  HouseholdAccount   HouseholdAccount[]
-  SavingsGoal        SavingsGoal[]
-  IncomeAllocation   IncomeAllocation[]
-  Notification       Notification[]
+  id                  Int                   @id @default(autoincrement())
+  username            String
+  email               String                @unique
+  password            String
+  role                String                @default("Personal")
+  verified            Boolean               @default(false)
+  verificationToken   String?
+  ownedHousehold      Household? // One user can own one household
+  accounts            Account[] // Establish a one-to-many relationship with Account
+  PasswordResetToken  PasswordResetToken[]
+  BudgetCategory      BudgetCategory[]
+  HouseholdMember     HouseholdMember[]
+  HouseholdAccount    HouseholdAccount[]
+  SavingsGoal         SavingsGoal[]
+  IncomeAllocation    IncomeAllocation[]
+  Notification        Notification[]
+  SavingsContribution SavingsContribution[]
 }
 
 model PasswordResetToken {
@@ -70,14 +71,15 @@ model BudgetCategory {
 }
 
 model SavingsGoal {
-  id           Int                   @id @default(autoincrement())
-  name         String
-  targetAmount Float
-  dueDate      DateTime              @db.Timestamptz()
-  user         User                  @relation(fields: [userId], references: [id])
-  userId       Int
-  progress     SavingsGoalProgress[]
-  allocation   IncomeAllocation[]
+  id                  Int                   @id @default(autoincrement())
+  name                String
+  targetAmount        Float
+  dueDate             DateTime              @db.Timestamptz()
+  user                User                  @relation(fields: [userId], references: [id])
+  userId              Int
+  progress            SavingsGoalProgress[]
+  allocation          IncomeAllocation[]
+  SavingsContribution SavingsContribution[]
 }
 
 // Records progress toward savings goals over time.
@@ -87,6 +89,16 @@ model SavingsGoalProgress {
   amount        Float
   date          DateTime    @db.Timestamptz()
   savingGoal    SavingsGoal @relation(fields: [savingsGoalId], references: [id])
+}
+
+model SavingsContribution {
+  id          Int         @id @default(autoincrement())
+  userId      Int
+  goalId      Int
+  amount      Float
+  date        DateTime    @db.Timestamptz()
+  user        User        @relation(fields: [userId], references: [id])
+  savingsGoal SavingsGoal @relation(fields: [goalId], references: [id])
 }
 
 // Stores income allocation percentages for each savings goal.
@@ -104,7 +116,7 @@ model MarketplaceGoal {
   id                  Int    @id @default(autoincrement())
   name                String
   description         String
-  defaultTargetAmount Float?
+  defaultTargetAmount Float
 }
 
 model Notification {
