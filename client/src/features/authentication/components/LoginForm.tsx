@@ -84,6 +84,32 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
       setIsLoading(false);
     }
   }
+
+  async function handleDemoLogin(event: React.SyntheticEvent) {
+    event.preventDefault();
+    setIsLoading(true);
+
+    const data = {
+      email: "demo@gmail.com",
+      password: "Demo@1234",
+    };
+
+    try {
+      // Calling the login function from the authentication service
+      const responseData = await authService.login(data);
+
+      if (responseData !== undefined) {
+        login(responseData.token);
+        navigate("/"); // Navigate to the home page after successful login
+      }
+    } catch (error) {
+      console.log(error);
+      setFormErrors({ server: error });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <div className={cn("grid gap-6", className)} {...props}>
       <form onSubmit={onSubmit}>
@@ -159,7 +185,12 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
           </span>
         </div>
       </div>
-      <Button variant="outline" type="button" disabled={isLoading}>
+      <Button
+        variant="outline"
+        type="button"
+        disabled={isLoading}
+        onClick={handleDemoLogin}
+      >
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
