@@ -17,7 +17,7 @@ type SidebarProps = {
 };
 
 export function Sidebar({ className }: SidebarProps) {
-  const userRole = "Personal";
+  // const userRole = "Personal";
   const [selected, setSelected] = useState("Dashboard");
   return (
     <div className={cn("pb-12 h-[100vh]", className)}>
@@ -73,7 +73,7 @@ export function Sidebar({ className }: SidebarProps) {
           </div>
         </div>
 
-        <div className="px-3 py-2">
+        {/* <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Household
           </h2>
@@ -149,7 +149,7 @@ export function Sidebar({ className }: SidebarProps) {
               </Link>
             </div>
           )}
-        </div>
+        </div> */}
         <div className="px-3 py-2">
           <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
             Others
