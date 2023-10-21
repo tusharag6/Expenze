@@ -72,33 +72,26 @@ model BudgetCategory {
 
 model SavingsGoal {
   id                  Int                   @id @default(autoincrement())
-  name                String
+  goalName            String
+  goalDescription     String?
   targetAmount        Float
-  dueDate             DateTime              @db.Timestamptz()
+  targetDate          DateTime              @db.Timestamptz()
+  currentBalance      Float
+  isAchieved          Boolean
   user                User                  @relation(fields: [userId], references: [id])
   userId              Int
-  progress            SavingsGoalProgress[]
-  allocation          IncomeAllocation[]
   SavingsContribution SavingsContribution[]
-}
-
-// Records progress toward savings goals over time.
-model SavingsGoalProgress {
-  id            Int         @id @default(autoincrement())
-  savingsGoalId Int
-  amount        Float
-  date          DateTime    @db.Timestamptz()
-  savingGoal    SavingsGoal @relation(fields: [savingsGoalId], references: [id])
+  IncomeAllocation    IncomeAllocation[]
 }
 
 model SavingsContribution {
-  id          Int         @id @default(autoincrement())
-  userId      Int
-  goalId      Int
-  amount      Float
-  date        DateTime    @db.Timestamptz()
-  user        User        @relation(fields: [userId], references: [id])
-  savingsGoal SavingsGoal @relation(fields: [goalId], references: [id])
+  id               Int         @id @default(autoincrement())
+  userId           Int
+  goalId           Int
+  amount           Float
+  contributionDate DateTime    @db.Timestamptz()
+  user             User        @relation(fields: [userId], references: [id])
+  savingsGoal      SavingsGoal @relation(fields: [goalId], references: [id])
 }
 
 // Stores income allocation percentages for each savings goal.
@@ -120,12 +113,12 @@ model MarketplaceGoal {
 }
 
 model Notification {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  message   String
-  timestamp DateTime @db.Timestamptz()
-  seen      Boolean
-  user      User     @relation(fields: [userId], references: [id])
+  id               Int      @id @default(autoincrement())
+  userId           Int
+  message          String
+  notificationDate DateTime @db.Timestamptz()
+  isRead           Boolean
+  user             User     @relation(fields: [userId], references: [id])
 }
 
 model Household {
