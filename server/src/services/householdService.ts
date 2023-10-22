@@ -2,7 +2,7 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-export const createNewHousehold = async (userId: number, joiningId: string) => {
+export const createNewHousehold = async (userId: string, joiningId: string) => {
   const newHousehold = await prisma.household.create({
     data: {
       ownerUserId: userId,
@@ -12,7 +12,7 @@ export const createNewHousehold = async (userId: number, joiningId: string) => {
   return newHousehold;
 };
 
-export const getJoiningId = async (householdId: number) => {
+export const getJoiningId = async (householdId: string) => {
   const household = await prisma.household.findUnique({
     where: { id: householdId },
   });
@@ -26,7 +26,7 @@ export const getJoiningId = async (householdId: number) => {
   return joiningId;
 };
 
-export const changeRoleToOwner = async (userId: number) => {
+export const changeRoleToOwner = async (userId: string) => {
   const updatedUserData = await prisma.user.update({
     where: {
       id: userId,
@@ -38,7 +38,7 @@ export const changeRoleToOwner = async (userId: number) => {
   return updatedUserData;
 };
 
-export const changeRoleToMember = async (userId: number) => {
+export const changeRoleToMember = async (userId: string) => {
   const updatedUserData = await prisma.user.update({
     where: {
       id: userId,
@@ -61,7 +61,7 @@ export const findHouseholdIdFromJoiningId = async (joiningId: string) => {
   return householdId;
 };
 
-export const joinNewHousehold = async (userId: number, householdId: number) => {
+export const joinNewHousehold = async (userId: string, householdId: string) => {
   const newHouseholdMember = await prisma.householdMember.create({
     data: {
       userId,
@@ -73,8 +73,8 @@ export const joinNewHousehold = async (userId: number, householdId: number) => {
 };
 
 export const addNewAccountToHousehold = async (
-  householdId: number,
-  accountId: number
+  householdId: string,
+  accountId: string
 ) => {
   const newAccount = await prisma.householdAccount.create({
     data: {
@@ -85,7 +85,7 @@ export const addNewAccountToHousehold = async (
   return newAccount;
 };
 
-export const getHouseholdSummaryData = async (householdId: number) => {
+export const getHouseholdSummaryData = async (householdId: string) => {
   // Retrieve all accounts for the household
   const accounts = await prisma.account.findMany({
     where: {
@@ -133,7 +133,7 @@ export const getHouseholdSummaryData = async (householdId: number) => {
 };
 
 // Define the route to get transactions for a household
-export const fetchHouseholdTransactions = async (householdId: number) => {
+export const fetchHouseholdTransactions = async (householdId: string) => {
   // Retrieve all accounts for the household
   const accounts = await prisma.account.findMany({
     where: {
@@ -154,7 +154,7 @@ export const fetchHouseholdTransactions = async (householdId: number) => {
   return allTransactions;
 };
 
-export const getAccounts = async (householdId: number) => {
+export const getAccounts = async (householdId: string) => {
   const accounts = await prisma.householdAccount.findMany({
     where: {
       householdId: householdId,

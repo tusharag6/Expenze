@@ -36,7 +36,7 @@ export const createHousehold = async (req: Request, res: Response) => {
 
 export const getHouseholdJoiningId = async (req: Request, res: Response) => {
   try {
-    const householdId = parseInt(req.params.householdId);
+    const householdId = req.params.householdId;
 
     const joiningId = await householdService.getJoiningId(householdId);
 
@@ -93,7 +93,7 @@ export const addAccount = async (req: Request, res: Response) => {
 
 export const getHouseholdSummary = async (req: Request, res: Response) => {
   try {
-    const householdId = parseInt(req.params.householdId);
+    const householdId = req.params.householdId;
 
     const summary = await householdService.getHouseholdSummaryData(householdId);
     res.status(200).json(summary);
@@ -106,7 +106,7 @@ export const getHouseholdSummary = async (req: Request, res: Response) => {
 
 export const getHouseholdTransactions = async (req: Request, res: Response) => {
   try {
-    const householdId = parseInt(req.params.householdId);
+    const householdId = req.params.householdId;
     const transactions = await householdService.fetchHouseholdTransactions(
       householdId
     );
@@ -120,7 +120,7 @@ export const getHouseholdTransactions = async (req: Request, res: Response) => {
 
 export const getHouseholdAccounts = async (req: Request, res: Response) => {
   try {
-    const householdId = parseInt(req.params.householdId);
+    const householdId = req.params.householdId;
     const accounts = await householdService.getAccounts(householdId);
     res.status(200).json(accounts);
   } catch (error) {

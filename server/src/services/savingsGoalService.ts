@@ -8,7 +8,7 @@ export const createGoal = async (
   goalDescription: string,
   targetAmount: number,
   targetDate: string,
-  userId: number
+  userId: string
 ) => {
   const newGoal = await prisma.savingsGoal.create({
     data: {
@@ -23,7 +23,7 @@ export const createGoal = async (
 };
 
 // get a list of all goals associated with a user
-export const getGoal = async (userId: number) => {
+export const getGoal = async (userId: string) => {
   const goals = await prisma.savingsGoal.findMany({
     where: {
       userId,
@@ -36,7 +36,7 @@ export const getGoal = async (userId: number) => {
 export const updateGoal = async (
   targetAmount: number,
   targetDate: string,
-  goalId: number
+  goalId: string
 ) => {
   const updatedGoal = await prisma.savingsGoal.update({
     where: { id: goalId },
@@ -49,7 +49,7 @@ export const updateGoal = async (
 };
 
 // delete a goal
-export const deleteGoal = async (goalId: number) => {
+export const deleteGoal = async (goalId: string) => {
   const goal = await prisma.savingsGoal.delete({
     where: {
       id: goalId,
@@ -59,8 +59,8 @@ export const deleteGoal = async (goalId: number) => {
 
 // add contribution towards the goal
 export const goalContribution = async (
-  userId: number,
-  goalId: number,
+  userId: string,
+  goalId: string,
   amount: number,
   contributionDate: string
 ) => {
@@ -76,7 +76,7 @@ export const goalContribution = async (
 };
 
 // get a lost of all contributions associated with a specific goal
-export const getContributions = async (goalId: number) => {
+export const getContributions = async (goalId: string) => {
   const allContributions = await prisma.savingsContribution.findMany({
     where: {
       id: goalId,
@@ -87,8 +87,8 @@ export const getContributions = async (goalId: number) => {
 
 // contribute a percentage of goal towards the goal
 export const createAllocation = async (
-  userId: number,
-  goalId: number,
+  userId: string,
+  goalId: string,
   allocationPercentage: number
 ) => {
   const allocation = await prisma.incomeAllocation.create({
@@ -102,7 +102,7 @@ export const createAllocation = async (
 };
 
 export const updateAllocation = async (
-  allocationId: number,
+  allocationId: string,
   allocationPercentage: number
 ) => {
   const updatedAllocation = await prisma.incomeAllocation.update({
@@ -137,10 +137,10 @@ export const getMarketGoals = async () => {
 
 // add the predefined market goal to personal account
 export const addMarketGoalToPersonal = async (
-  marketGoalId: number,
+  marketGoalId: string,
   targetAmount: number,
   targetDate: string,
-  userId: number
+  userId: string
 ) => {
   const marketplaceGoal = await prisma.marketplaceGoal.findUnique({
     where: {

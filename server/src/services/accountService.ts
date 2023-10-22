@@ -36,7 +36,7 @@ export const getUserAccounts = async (token: string) => {
   return accountsData;
 };
 
-export const getAccountSummaryData = async (accountId: number) => {
+export const getAccountSummaryData = async (accountId: string) => {
   const account = await prisma.account.findUnique({
     where: { id: accountId },
   });

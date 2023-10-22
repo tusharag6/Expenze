@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createBudgetCategory = async (
-  userId: number,
+  userId: string,
   budgetCategory: string,
   amount: number
 ) => {
@@ -18,7 +18,7 @@ export const createBudgetCategory = async (
   return newCategory;
 };
 
-export const getBudgetCategoriesForUser = async (userId: number) => {
+export const getBudgetCategoriesForUser = async (userId: string) => {
   const budgetCategories = await prisma.budgetCategory.findMany({
     where: { user_id: userId },
   });
@@ -31,7 +31,7 @@ export const getBudgetCategoriesForUser = async (userId: number) => {
   return simplifiedCategories;
 };
 
-export const getBudgetSummaryData = async (userId: number) => {
+export const getBudgetSummaryData = async (userId: string) => {
   try {
     // Fetch all budget categories for the user
     const budgetCategories = await prisma.budgetCategory.findMany({
@@ -78,7 +78,7 @@ export const getBudgetSummaryData = async (userId: number) => {
 };
 
 export const getCategorySpendingPieChartData = async (
-  userId: number,
+  userId: string,
   budgetPeriodStart: Date
 ) => {
   try {
@@ -126,7 +126,7 @@ export const getCategorySpendingPieChartData = async (
 };
 
 export const getBudgetVsActualBarChartData = async (
-  userId: number,
+  userId: string,
   budgetPeriodStart: Date
 ) => {
   try {
@@ -180,7 +180,7 @@ export const getBudgetVsActualBarChartData = async (
 };
 
 export const getBudgetProgressLineChartData = async (
-  userId: number,
+  userId: string,
   budgetPeriodStart: Date,
   interval: "daily" | "weekly"
 ) => {

@@ -4,7 +4,7 @@ import { transactionService, userService } from "../services";
 export const addTransaction = async (req: Request, res: Response) => {
   try {
     const { amount, type, budgetCategory, description } = req.body;
-    const accountId = parseInt(req.params.accountId);
+    const accountId = req.params.accountId;
 
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
@@ -36,7 +36,7 @@ export const addTransaction = async (req: Request, res: Response) => {
 
 export const getTransactions = async (req: Request, res: Response) => {
   try {
-    const accountId = parseInt(req.params.accountId);
+    const accountId = req.params.accountId;
     const transactions = await transactionService.fetchTransactions(accountId);
     res.status(200).json(transactions);
   } catch (error) {
@@ -46,8 +46,8 @@ export const getTransactions = async (req: Request, res: Response) => {
 
 export const editTransaction = async (req: Request, res: Response) => {
   try {
-    const accountId = parseInt(req.params.accountId);
-    const transactionId = parseInt(req.params.transactionId);
+    const accountId = req.params.accountId;
+    const transactionId = req.params.transactionId;
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ msg: "Authorization token not found." });
