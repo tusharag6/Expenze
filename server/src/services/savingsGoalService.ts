@@ -2,49 +2,53 @@ import { PrismaClient } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
+// Create a goal
 export const createGoal = async (
-  name: string,
+  goalName: string,
+  goalDescription: string,
   targetAmount: number,
-  dueDate: string,
+  targetDate: string,
   userId: number
 ) => {
   const newGoal = await prisma.savingsGoal.create({
     data: {
-      name,
+      goalName,
+      goalDescription,
       targetAmount,
-      dueDate,
+      targetDate,
       userId,
     },
   });
   return newGoal;
 };
 
-export const getGoal = async (goalId: number) => {
-  const goal = await prisma.savingsGoal.findUnique({
+// get a list of all goals associated with a user
+export const getGoal = async (userId: number) => {
+  const goals = await prisma.savingsGoal.findMany({
     where: {
-      id: goalId,
+      userId,
     },
   });
-  return goal;
+  return goals;
 };
 
+// update an existing goal
 export const updateGoal = async (
-  name: string,
   targetAmount: number,
-  dueDate: string,
+  targetDate: string,
   goalId: number
 ) => {
   const updatedGoal = await prisma.savingsGoal.update({
     where: { id: goalId },
     data: {
-      name,
       targetAmount,
-      dueDate,
+      targetDate,
     },
   });
   return updateGoal;
 };
 
+// delete a goal
 export const deleteGoal = async (goalId: number) => {
   const goal = await prisma.savingsGoal.delete({
     where: {
@@ -53,24 +57,26 @@ export const deleteGoal = async (goalId: number) => {
   });
 };
 
-export const goalContribute = async (
+// add contribution towards the goal
+export const goalContribution = async (
   userId: number,
   goalId: number,
   amount: number,
-  date: string
+  contributionDate: string
 ) => {
   const newContribution = await prisma.savingsContribution.create({
     data: {
       userId,
       goalId,
       amount,
-      date,
+      contributionDate,
     },
   });
   return newContribution;
 };
 
-export const getContribute = async (goalId: number) => {
+// get a lost of all contributions associated with a specific goal
+export const getContributions = async (goalId: number) => {
   const allContributions = await prisma.savingsContribution.findMany({
     where: {
       id: goalId,
@@ -79,21 +85,7 @@ export const getContribute = async (goalId: number) => {
   return allContributions;
 };
 
-export const addSavingsProgress = async (
-  goalId: number,
-  amount: number,
-  date: string
-) => {
-  const newProgress = await prisma.savingsGoalProgress.create({
-    data: {
-      savingsGoalId: goalId,
-      amount,
-      date,
-    },
-  });
-  return newProgress;
-};
-
+// contribute a percentage of goal towards the goal
 export const createAllocation = async (
   userId: number,
   goalId: number,
@@ -122,6 +114,7 @@ export const updateAllocation = async (
   return updatedAllocation;
 };
 
+// create custom goal for the market
 export const createMarketGoal = async (
   name: string,
   description: string,
@@ -142,10 +135,11 @@ export const getMarketGoals = async () => {
   return marketplaceGoal;
 };
 
+// add the predefined market goal to personal account
 export const addMarketGoalToPersonal = async (
   marketGoalId: number,
   targetAmount: number,
-  dueDate: string,
+  targetDate: string,
   userId: number
 ) => {
   const marketplaceGoal = await prisma.marketplaceGoal.findUnique({
@@ -160,9 +154,10 @@ export const addMarketGoalToPersonal = async (
 
     const newGoal = await prisma.savingsGoal.create({
       data: {
-        name: marketplaceGoal.name,
+        goalName: marketplaceGoal.name,
+        goalDescription: marketplaceGoal.description,
         targetAmount,
-        dueDate,
+        targetDate,
         userId,
       },
     });
