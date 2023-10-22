@@ -117,10 +117,11 @@ CREATE TABLE "Bill" (
     "id" TEXT NOT NULL,
     "billName" TEXT NOT NULL,
     "dueDate" TIMESTAMPTZ NOT NULL,
-    "billAmout" DOUBLE PRECISION NOT NULL,
+    "billAmount" DOUBLE PRECISION NOT NULL,
     "isRecurring" BOOLEAN NOT NULL,
     "interval" TEXT NOT NULL,
     "category" TEXT NOT NULL,
+    "isPaid" BOOLEAN NOT NULL,
     "userId" TEXT NOT NULL,
 
     CONSTRAINT "Bill_pkey" PRIMARY KEY ("id")

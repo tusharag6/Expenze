@@ -127,10 +127,11 @@ model Bill {
   id           String         @id @default(uuid())
   billName     String
   dueDate      DateTime       @db.Timestamptz()
-  billAmout    Float
+  billAmount   Float
   isRecurring  Boolean
   interval     String
   category     String
+  isPaid       Boolean?
   user         User           @relation(fields: [userId], references: [id])
   userId       String
   billPayments BillPayments[]
@@ -144,6 +145,7 @@ model Subscription {
   monthlyCost      Float
   renewalDate      DateTime @db.Timestamptz()
   category         String
+  isCancelled      Boolean
   user             User     @relation(fields: [userId], references: [id])
   userId           String
 }
