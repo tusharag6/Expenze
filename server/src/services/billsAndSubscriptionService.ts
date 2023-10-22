@@ -216,9 +216,53 @@ export const upcomingSubscription = async (userId: string) => {
 // Bill Payment API:
 
 // Record a bill payment
+export const billPayment = async (
+  paymentDate: string,
+  paymentAmount: number,
+  billId: string,
+  accountId: string
+) => {
+  const payment = await prisma.billPayments.create({
+    data: {
+      paymentDate,
+      paymentAmount,
+      billId,
+    },
+  });
+  const transaction = await prisma.transaction.create({
+    data: {
+      date: paymentDate,
+      amount: paymentAmount,
+      type: "Expense",
+      account_id: accountId,
+    },
+  });
+  return payment;
+};
+
 // Get a list of bill payments
+export const getPayments = async (userId: string) => {
+  const allPayments = await prisma.billPayments.findMany({
+    where: {
+      bill: {
+        user: {
+          id: userId,
+        },
+      },
+    },
+  });
+  return allPayments;
+};
+
 // Calculate total payments for a specific period
+
 // Fetch payment history for a bill
+export const getHistory = async (billId: string) => {
+  const payments = await prisma.billPayments.findMany({
+    where: { billId },
+  });
+  return payments;
+};
 
 // Notification API:
 
