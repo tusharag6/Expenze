@@ -14,6 +14,8 @@ import * as householdService from "./householdService";
 
 import * as savingsGoalService from "./savingsGoalService";
 
+import * as billAndSubscriptionService from "./billAndSubscriptionService";
+
 export {
   authService,
   passwordService,
@@ -24,4 +26,5 @@ export {
   budgetService,
   householdService,
   savingsGoalService,
+  billAndSubscriptionService,
 };
