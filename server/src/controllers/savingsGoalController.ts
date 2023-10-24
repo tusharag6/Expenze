@@ -44,7 +44,7 @@ export const fetchAllGoals = async (req: Request, res: Response) => {
 export const updateGoalDetails = async (req: Request, res: Response) => {
   try {
     const { targetAmount, targetDate } = req.body;
-    const goalId = req.params.goalId;
+    const goalId: string = req.query.goalId as string;
     const updatedGoal = savingsGoalService.updateGoal(
       targetAmount,
       targetDate,
@@ -59,7 +59,7 @@ export const updateGoalDetails = async (req: Request, res: Response) => {
 
 export const deleteGoal = async (req: Request, res: Response) => {
   try {
-    const goalId = req.params.goalId;
+    const goalId: string = req.query.goalId as string;
     savingsGoalService.deleteGoal(goalId);
     res.status(200).json({ msg: "Goal Deleted" });
   } catch (error) {
@@ -71,7 +71,7 @@ export const deleteGoal = async (req: Request, res: Response) => {
 export const addContributionToGoal = async (req: Request, res: Response) => {
   try {
     const { amount } = req.body;
-    const goalId = req.params.goalId;
+    const goalId: string = req.query.goalId as string;
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ msg: "Authorization token not found." });
@@ -94,7 +94,7 @@ export const addContributionToGoal = async (req: Request, res: Response) => {
 
 export const getAllContributions = async (req: Request, res: Response) => {
   try {
-    const goalId = req.params.goalId;
+    const goalId: string = req.query.goalId as string;
     const allContributions = savingsGoalService.getContributions(goalId);
     res.status(200).json(allContributions);
   } catch (error) {
@@ -109,7 +109,7 @@ export const contributePercentageIncome = async (
 ) => {
   try {
     const { allocationPercentage } = req.body;
-    const goalId = req.params.goalId;
+    const goalId: string = req.query.goalId as string;
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ msg: "Authorization token not found." });
@@ -134,7 +134,7 @@ export const updatePercentageAllocationDetails = async (
 ) => {
   try {
     const { allocationPercentage } = req.body;
-    const allocationId = req.params.allocationId;
+    const allocationId: string = req.query.allocationId as string;
     const updateAllocation = savingsGoalService.updateAllocation(
       allocationId,
       allocationPercentage
@@ -179,7 +179,7 @@ export const addMarketplaceGoalToPersonal = async (
 ) => {
   try {
     const { targetAmount, targetDate } = req.body;
-    const marketGoalId = req.params.marketGoalId;
+    const marketGoalId: string = req.query.marketGoalId as string;
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
       return res.status(401).json({ msg: "Authorization token not found." });
