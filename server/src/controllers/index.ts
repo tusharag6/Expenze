@@ -14,6 +14,10 @@ import * as householdController from "./householdController";
 
 import * as savingsGoalController from "./savingsGoalController";
 
+import * as billsController from "./billsController";
+
+import * as subscriptionController from "./subscriptionController";
+
 export {
   authController,
   verificationController,
@@ -24,4 +28,6 @@ export {
   budgetController,
   householdController,
   savingsGoalController,
+  billsController,
+  subscriptionController,
 };
