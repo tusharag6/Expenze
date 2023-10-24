@@ -41,7 +41,7 @@ export const getAccounts = async (req: Request, res: Response) => {
 
 export const getAccountSummary = async (req: Request, res: Response) => {
   try {
-    const accountId = parseInt(req.params.accountId);
+    const accountId = req.params.accountId;
 
     const summary = await accountService.getAccountSummaryData(accountId);
     res.status(200).json(summary);

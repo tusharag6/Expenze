@@ -8,36 +8,42 @@ datasource db {
 }
 
 model User {
-  id                 Int                  @id @default(autoincrement())
-  username           String
-  email              String               @unique
-  password           String
-  role               String               @default("Personal")
-  verified           Boolean              @default(false)
-  verificationToken  String?
-  ownedHousehold     Household? // One user can own one household
-  accounts           Account[] // Establish a one-to-many relationship with Account
-  PasswordResetToken PasswordResetToken[]
-  BudgetCategory     BudgetCategory[]
-  HouseholdMember    HouseholdMember[]
-  HouseholdAccount   HouseholdAccount[]
+  id                  String                @id @default(uuid())
+  username            String
+  email               String                @unique
+  password            String
+  role                String                @default("Personal")
+  verified            Boolean               @default(false)
+  verificationToken   String?
+  ownedHousehold      Household? // One user can own one household
+  accounts            Account[] // Establish a one-to-many relationship with Account
+  PasswordResetToken  PasswordResetToken[]
+  BudgetCategory      BudgetCategory[]
+  HouseholdMember     HouseholdMember[]
+  HouseholdAccount    HouseholdAccount[]
+  SavingsGoal         SavingsGoal[]
+  IncomeAllocation    IncomeAllocation[]
+  Notification        Notification[]
+  SavingsContribution SavingsContribution[]
+  Subscription        Subscription[]
+  Bill                Bill[]
 }
 
 model PasswordResetToken {
-  id        Int      @id @default(autoincrement())
+  id        String   @id @default(uuid())
   token     String   @unique
   expiresAt DateTime @db.Timestamptz()
-  userId    Int
+  userId    String
   user      User     @relation(fields: [userId], references: [id])
 }
 
 // Define the Account model
 model Account {
-  id               Int                @id @default(autoincrement())
+  id               String             @id @default(uuid())
   account_name     String
   account_number   String
   total_balance    Float
-  user_id          Int
+  user_id          String
   user             User               @relation(fields: [user_id], references: [id]) // Define the relationship with User
   transactions     Transaction[] // Establish a one-to-many relationship with Transaction
   HouseholdAccount HouseholdAccount[]
@@ -45,50 +51,136 @@ model Account {
 
 // Define the Transaction model
 model Transaction {
-  id               Int             @id @default(autoincrement())
+  id               String          @id @default(uuid())
   date             DateTime        @db.Timestamptz()
   amount           Float
   type             String
   budgetCategory   String?
   description      String?
-  account_id       Int
+  account_id       String
   account          Account         @relation(fields: [account_id], references: [id]) // Define the relationship with Account
   BudgetCategory   BudgetCategory? @relation(fields: [budgetCategoryId], references: [id])
-  budgetCategoryId Int?
+  budgetCategoryId String?
 }
 
 model BudgetCategory {
-  id             Int           @id @default(autoincrement())
+  id             String        @id @default(uuid())
   budgetCategory String
   amount         Float
-  user_id        Int // Reference the User
+  user_id        String // Reference the User
   user           User          @relation(fields: [user_id], references: [id])
   transactions   Transaction[] // Establish a relationship with Transaction
 }
 
+model SavingsGoal {
+  id                  String                @id @default(uuid())
+  goalName            String
+  goalDescription     String?
+  targetAmount        Float
+  targetDate          DateTime              @db.Timestamptz()
+  currentBalance      Float?
+  isAchieved          Boolean?
+  user                User                  @relation(fields: [userId], references: [id])
+  userId              String
+  SavingsContribution SavingsContribution[]
+  IncomeAllocation    IncomeAllocation[]
+}
+
+model SavingsContribution {
+  id               String      @id @default(uuid())
+  userId           String
+  goalId           String
+  amount           Float
+  contributionDate DateTime    @db.Timestamptz()
+  user             User        @relation(fields: [userId], references: [id])
+  savingsGoal      SavingsGoal @relation(fields: [goalId], references: [id])
+}
+
+// Stores income allocation percentages for each savings goal.
+model IncomeAllocation {
+  id                   String      @id @default(uuid())
+  allocationPercentage Float
+  user                 User        @relation(fields: [userId], references: [id])
+  savingsGoal          SavingsGoal @relation(fields: [savingsGoalId], references: [id])
+  userId               String
+  savingsGoalId        String
+}
+
+// Stores predefined savings goals available in the marketplace.
+model MarketplaceGoal {
+  id                  String @id @default(uuid())
+  name                String
+  description         String
+  defaultTargetAmount Float
+}
+
+model Notification {
+  id               String   @id @default(uuid())
+  userId           String
+  message          String
+  notificationDate DateTime @db.Timestamptz()
+  isRead           Boolean
+  user             User     @relation(fields: [userId], references: [id])
+}
+
+model Bill {
+  id           String         @id @default(uuid())
+  billName     String
+  dueDate      DateTime       @db.Timestamptz()
+  billAmount   Float
+  isRecurring  Boolean
+  interval     String
+  category     String
+  isPaid       Boolean?
+  user         User           @relation(fields: [userId], references: [id])
+  userId       String
+  billPayments BillPayments[]
+}
+
+model Subscription {
+  id               String   @id @default(uuid())
+  subscriptionName String
+  startDate        DateTime @db.Timestamptz()
+  endDate          DateTime @db.Timestamptz()
+  monthlyCost      Float
+  renewalDate      DateTime @db.Timestamptz()
+  category         String
+  isCancelled      Boolean
+  user             User     @relation(fields: [userId], references: [id])
+  userId           String
+}
+
+model BillPayments {
+  id            String   @id @default(uuid())
+  paymentDate   DateTime @db.Timestamptz()
+  paymentAmount Float
+  billId        String
+  bill          Bill     @relation(fields: [billId], references: [id])
+}
+
 model Household {
-  id               Int                @id @default(autoincrement())
+  id               String             @id @default(uuid())
   ownerUser        User               @relation(fields: [ownerUserId], references: [id])
-  ownerUserId      Int                @unique
+  ownerUserId      String             @unique
   HouseholdMember  HouseholdMember[]
   joiningId        String
   HouseholdAccount HouseholdAccount[]
 }
 
 model HouseholdMember {
-  id          Int       @id @default(autoincrement())
+  id          String    @id @default(uuid())
   user        User      @relation(fields: [userId], references: [id])
-  userId      Int
+  userId      String
   household   Household @relation(fields: [householdId], references: [id])
-  householdId Int
+  householdId String
 }
 
 model HouseholdAccount {
-  id           Int       @id @default(autoincrement())
+  id           String    @id @default(uuid())
   bank_account Account   @relation(fields: [accountId], references: [id])
   household    Household @relation(fields: [householdId], references: [id])
-  accountId    Int
+  accountId    String
   User         User?     @relation(fields: [userId], references: [id])
-  userId       Int?
-  householdId  Int
+  userId       String?
+  householdId  String
 }

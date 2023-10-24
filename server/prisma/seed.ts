@@ -1,203 +1,84 @@
 import { PrismaClient } from "@prisma/client";
+import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 async function seed() {
   try {
-    // Seed Accounts
+    // Create a user
+    const hashedPassword = await bcrypt.hash("Demo@1234", 10);
+
+    const user = await prisma.user.create({
+      data: {
+        username: "Demo User",
+        email: "demo@user.com",
+        password: hashedPassword,
+        verified: true,
+      },
+    });
+
+    // Create two accounts for the user
     const account1 = await prisma.account.create({
       data: {
-        account_name: "ABC Bank - Savings Account",
-        account_number: "12345678",
-        total_balance: 5000.0,
-        user: {
-          connect: { id: 2 },
-        },
+        account_name: "Account 1",
+        account_number: "123456789",
+        total_balance: 1000.0,
+        user_id: user.id,
       },
     });
 
     const account2 = await prisma.account.create({
       data: {
-        account_name: "DEF Bank - Current Account",
-        account_number: "87654321",
-        total_balance: 2500.0,
-        user: {
-          connect: { id: 2 },
-        },
+        account_name: "Account 2",
+        account_number: "987654321",
+        total_balance: 2000.0,
+        user_id: user.id,
       },
     });
 
-    // Seed Budget Categories
+    // Create two budget categories
     const budgetCategory1 = await prisma.budgetCategory.create({
       data: {
-        budgetCategory: "Groceries",
+        budgetCategory: "Category 1",
         amount: 500.0,
-        user: {
-          connect: { id: 2 },
-        },
+        user_id: user.id,
       },
     });
 
     const budgetCategory2 = await prisma.budgetCategory.create({
       data: {
-        budgetCategory: "Entertainment",
-        amount: 300.0,
-        user: {
-          connect: { id: 2 },
-        },
+        budgetCategory: "Category 2",
+        amount: 800.0,
+        user_id: user.id,
       },
     });
 
-    // Seed Transactions for Budget Category 1
-    const transaction1 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 50.0,
-        type: "Expense",
-        description: "Grocery shopping",
-        account: {
-          connect: { id: 3 },
+    // Create five transactions in each budget category
+    for (let i = 1; i <= 5; i++) {
+      await prisma.transaction.create({
+        data: {
+          date: new Date(),
+          amount: 100.0 * i,
+          type: "Expense",
+          budgetCategoryId: budgetCategory1.id,
+          account_id: account1.id,
         },
-        BudgetCategory: {
-          connect: { id: budgetCategory1.id },
-        },
-      },
-    });
+      });
 
-    const transaction2 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 25.0,
-        type: "Expense",
-        description: "Dinner ingredients",
-        account: {
-          connect: { id: 3 },
+      await prisma.transaction.create({
+        data: {
+          date: new Date(),
+          amount: 200.0 * i,
+          type: "Expense",
+          budgetCategoryId: budgetCategory2.id,
+          account_id: account2.id,
         },
-        BudgetCategory: {
-          connect: { id: budgetCategory1.id },
-        },
-      },
-    });
+      });
+    }
 
-    const transaction3 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 30.0,
-        type: "Expense",
-        description: "Monthly groceries",
-        account: {
-          connect: { id: 4 },
-        },
-        BudgetCategory: {
-          connect: { id: budgetCategory1.id },
-        },
-      },
-    });
-
-    const transaction4 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 20.0,
-        type: "Expense",
-        description: "Grocery shopping",
-        account: {
-          connect: { id: 4 },
-        },
-        BudgetCategory: {
-          connect: { id: budgetCategory1.id },
-        },
-      },
-    });
-
-    const transaction5 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 40.0,
-        type: "Expense",
-        description: "Weekly groceries",
-        account: {
-          connect: { id: 3 },
-        },
-        BudgetCategory: {
-          connect: { id: budgetCategory1.id },
-        },
-      },
-    });
-
-    // Seed Transactions for Budget Category 2
-    const transaction6 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 15.0,
-        type: "Expense",
-        description: "Movie tickets",
-        account: {
-          connect: { id: 3 },
-        },
-        BudgetCategory: {
-          connect: { id: budgetCategory2.id },
-        },
-      },
-    });
-
-    const transaction7 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 10.0,
-        type: "Expense",
-        description: "Concert tickets",
-        account: {
-          connect: { id: 3 },
-        },
-        BudgetCategory: {
-          connect: { id: budgetCategory2.id },
-        },
-      },
-    });
-
-    const transaction8 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 20.0,
-        type: "Expense",
-        description: "Movie night snacks",
-        account: {
-          connect: { id: 4 },
-        },
-        BudgetCategory: {
-          connect: { id: budgetCategory2.id },
-        },
-      },
-    });
-
-    // Seed income Transactions
-    const transaction9 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 300.0,
-        type: "Income",
-        description: "Part-time job",
-        account: {
-          connect: { id: 3 },
-        },
-      },
-    });
-
-    const transaction10 = await prisma.transaction.create({
-      data: {
-        date: new Date(),
-        amount: 200.0,
-        type: "Income",
-        description: "Freelance work",
-        account: {
-          connect: { id: 4 },
-        },
-      },
-    });
-
-    console.log("Data seeded successfully!");
+    console.log("Seed data has been created.");
   } catch (error) {
-    console.error("Error seeding data:", error);
+    console.error("Error:", error);
   } finally {
     await prisma.$disconnect();
   }

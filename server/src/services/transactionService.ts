@@ -3,7 +3,7 @@ import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 
 export const createTransaction = async (
-  accountId: number,
+  accountId: string,
   amount: number,
   type: string,
   budgetCategory: string,
@@ -47,7 +47,7 @@ export const createTransaction = async (
   }
 };
 
-export const fetchTransactions = async (accountId: number) => {
+export const fetchTransactions = async (accountId: string) => {
   const transactions = await prisma.transaction.findMany({
     where: { account_id: accountId },
   });
@@ -56,7 +56,7 @@ export const fetchTransactions = async (accountId: number) => {
 };
 
 export const updateTransaction = async (
-  transactionId: number,
+  transactionId: string,
   updatedFields: any
 ) => {
   const updatedTransaction = await prisma.transaction.update({

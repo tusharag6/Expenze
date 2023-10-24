@@ -18,8 +18,8 @@ export const getUserIdFromToken = (token: string) => {
 };
 
 export const checkAccountOwnership = async (
-  accountId: number,
-  userId: number
+  accountId: string,
+  userId: string
 ) => {
   const userAccount = await prisma.account.findFirst({
     where: { id: accountId, user_id: userId },
