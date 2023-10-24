@@ -34,7 +34,7 @@ export const updateBill = async (req: Request, res: Response) => {
     const { billName, billAmount, dueDate, isRecurring, interval, category } =
       req.body;
 
-    const billId = req.params.billId;
+    const billId: string = req.query.billId as string;
 
     const updatedBill = billAndSubscriptionService.updateBill(
       billName,
@@ -54,7 +54,7 @@ export const updateBill = async (req: Request, res: Response) => {
 
 export const deleteBill = async (req: Request, res: Response) => {
   try {
-    const billId = req.params.billId;
+    const billId: string = req.query.billId as string;
     billAndSubscriptionService.deleteBill(billId);
     res.status(200).json({ msg: "Bill Deleted" });
   } catch (error) {
@@ -81,7 +81,7 @@ export const getAllBill = async (req: Request, res: Response) => {
 
 export const markBillPaid = async (req: Request, res: Response) => {
   try {
-    const billId = req.params.billId;
+    const billId: string = req.query.billId as string;
     const updatedBill = billAndSubscriptionService.markPaid(billId);
     res.status(200).json(updatedBill);
   } catch (error) {
@@ -109,9 +109,8 @@ export const getUpcomingBills = async (req: Request, res: Response) => {
 export const payBill = async (req: Request, res: Response) => {
   try {
     const { paymentAmount, paymentDate } = req.body;
-    const billId = req.params.billId;
-    const accountId = req.params.accountId;
-
+    const billId: string = req.query.billId as string;
+    const accountId: string = req.query.accountId as string;
     const payment = billAndSubscriptionService.billPayment(
       paymentAmount,
       paymentDate,
@@ -142,7 +141,7 @@ export const getAllBillPayments = async (req: Request, res: Response) => {
 
 export const getPaymentHistory = async (req: Request, res: Response) => {
   try {
-    const billId = req.params.billId;
+    const billId: string = req.query.billId as string;
     const payments = billAndSubscriptionService.getHistory(billId);
     res.status(200).json(payments);
   } catch (error) {

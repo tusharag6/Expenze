@@ -46,7 +46,7 @@ export const updateSubscription = async (req: Request, res: Response) => {
       category,
     } = req.body;
 
-    const subscriptionId = req.params.subscriptionId;
+    const subscriptionId: string = req.query.subscriptionId as string;
 
     const updatedSubscription = billAndSubscriptionService.updateSubscription(
       subscriptionName,
@@ -66,7 +66,7 @@ export const updateSubscription = async (req: Request, res: Response) => {
 
 export const deleteSubscription = async (req: Request, res: Response) => {
   try {
-    const subscriptionId = req.params.subscriptionId;
+    const subscriptionId: string = req.query.subscriptionId as string;
     billAndSubscriptionService.deleteSubscription(subscriptionId);
     res.status(200).json({ msg: "Subscription Deleted" });
   } catch (error) {
@@ -94,7 +94,7 @@ export const getAllSubscription = async (req: Request, res: Response) => {
 export const renewSubscription = async (req: Request, res: Response) => {
   try {
     const { startDate, endDate } = req.body;
-    const subscriptionId = req.params.subscriptionId;
+    const subscriptionId: string = req.query.subscriptionId as string;
     const renewedSubscription = billAndSubscriptionService.renewSubscription(
       startDate,
       endDate,
@@ -109,7 +109,7 @@ export const renewSubscription = async (req: Request, res: Response) => {
 
 export const cancelSubscription = async (req: Request, res: Response) => {
   try {
-    const subscriptionId = req.params.subscriptionId;
+    const subscriptionId: string = req.query.subscriptionId as string;
 
     const cancelledSubscription =
       billAndSubscriptionService.cancelSubscription(subscriptionId);
