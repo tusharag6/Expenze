@@ -167,7 +167,7 @@ export const renewSubscription = async (
       endDate,
     },
   });
-  return renewSubscription;
+  return renewedSubscription;
 };
 
 export const cancelSubscription = async (subscriptionId: string) => {
@@ -196,7 +196,7 @@ export const upcomingBills = async (userId: string) => {
   return upcomingBills;
 };
 
-export const upcomingSubscription = async (userId: string) => {
+export const upcomingSubscriptions = async (userId: string) => {
   const today = new Date();
   const sevenDaysLater = addDays(today, 7);
   const upcomingSubscriptions = await prisma.subscription.findMany({
