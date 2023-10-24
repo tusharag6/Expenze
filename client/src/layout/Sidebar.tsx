@@ -10,6 +10,7 @@ import {
   FaLock,
   FaInfoCircle,
   FaPhoneAlt,
+  FaPiggyBank,
 } from "react-icons/fa";
 
 type SidebarProps = {
@@ -67,7 +68,22 @@ export function Sidebar({ className }: SidebarProps) {
                 <span className="pr-2">
                   <FaListAlt size="15" />
                 </span>
-                Activity
+                Transactions
+              </Button>
+            </Link>
+
+            <Link to="/personal/goals">
+              <Button
+                variant={selected === "Savings Goal" ? "secondary" : "ghost"}
+                className="w-full justify-start"
+                onClick={() => {
+                  setSelected("Savings Goal");
+                }}
+              >
+                <span className="pr-2">
+                  <FaPiggyBank size="16" />
+                </span>
+                Savings Goal
               </Button>
             </Link>
           </div>

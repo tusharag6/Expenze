@@ -20,6 +20,7 @@ import { TransactionProvider } from "./context/TransactionContext";
 import Budget from "./pages/Budget";
 import HouseholdDashboard from "./pages/HouseholdDashboard";
 import { HouseholdProvider } from "./context/HouseholdContext";
+import SavingsGoalDashboard from "./pages/SavingsGoalDashboard";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -38,6 +39,10 @@ const router = createBrowserRouter([
       {
         path: "/personal/budget",
         element: <Budget />,
+      },
+      {
+        path: "/personal/goals",
+        element: <SavingsGoalDashboard />,
       },
     ],
   },

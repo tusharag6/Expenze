@@ -90,7 +90,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true);
 
     const data = {
-      email: "demo@gmail.com",
+      email: "demo@user.com",
       password: "Demo@1234",
     };
 
