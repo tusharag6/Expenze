@@ -26,7 +26,9 @@ export function GoalsCard({ width, height, goals }: GoalsProps) {
       </div>
       <div className="space-y-1 text-sm">
         <h3 className="font-medium leading-none">{goals.name}</h3>
-        <p className="text-xs text-muted-foreground">{goals.targetDate}</p>
+        <p className="text-xs text-muted-foreground text-slate-500">
+          {goals.targetDate}
+        </p>
       </div>
     </div>
   );
