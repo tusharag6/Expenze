@@ -8,9 +8,23 @@ interface PreventLoggedInProps {
 
 const PreventLoggedIn: React.FC<PreventLoggedInProps> = ({ element }) => {
   const { token } = useAuth();
+  const isAuthorizedUser = !!token;
 
-  if (token) {
-    return <Navigate to="/login" />;
+  if (isAuthorizedUser) {
+    if (
+      window.location.pathname === "/login" ||
+      window.location.pathname === "/register"
+    ) {
+      return <Navigate to="/" />;
+    }
+  } else if (!isAuthorizedUser) {
+    if (
+      window.location.pathname !== "/" &&
+      window.location.pathname !== "/login" &&
+      window.location.pathname !== "/register"
+    ) {
+      return <Navigate to="/" />;
+    }
   }
 
   return element;

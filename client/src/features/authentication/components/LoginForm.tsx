@@ -194,9 +194,9 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
+          <Icons.logo className="mr-2 h-4 w-4" />
         )}{" "}
-        Demo Login
+        Continue With Demo Account
       </Button>
     </div>
   );

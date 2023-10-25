@@ -23,11 +23,11 @@ module.exports = {
         border: "#1B262C",
         input: "#1B262C",
         ring: "#1B262C",
-        background: "#fff",
+        background: "#F9F7F7",
         foreground: "#000",
         primary: {
-          DEFAULT: "#F9F7F7",
-          foreground: "#040D12",
+          DEFAULT: "#05445E",
+          foreground: "#F9F7F7",
         },
         secondary: {
           DEFAULT: "#1B262C",
@@ -42,8 +42,8 @@ module.exports = {
           // foreground: "#F9F7F7",
         },
         accent: {
-          DEFAULT: "#1B262C",
-          // foreground: "#F9F7F7",
+          DEFAULT: "#05445E",
+          foreground: "#F9F7F7",
         },
         popover: {
           DEFAULT: "#1B262C",
