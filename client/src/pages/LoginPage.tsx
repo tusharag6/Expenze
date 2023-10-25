@@ -9,6 +9,15 @@ export default function AuthenticationPage() {
       <div className="md:hidden"></div>
       <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:px-0">
         <Link
+          to="/"
+          className={cn(
+            buttonVariants({ variant: "outline" }),
+            "absolute left-6 top-6 md:left-8 md:top-8"
+          )}
+        >
+          Return To Home Page
+        </Link>
+        <Link
           to="/register"
           className={cn(
             buttonVariants({ variant: "outline" }),
