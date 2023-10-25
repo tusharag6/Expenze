@@ -23,8 +23,8 @@ module.exports = {
         border: "#1B262C",
         input: "#1B262C",
         ring: "#1B262C",
-        background: "#040D12",
-        foreground: "#F9F7F7",
+        background: "#fff",
+        foreground: "#000",
         primary: {
           DEFAULT: "#F9F7F7",
           foreground: "#040D12",

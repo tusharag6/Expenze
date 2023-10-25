@@ -22,15 +22,21 @@ import HouseholdDashboard from "./pages/HouseholdDashboard";
 import { HouseholdProvider } from "./context/HouseholdContext";
 import SavingsGoalDashboard from "./pages/SavingsGoalDashboard";
 import SavingsGoalDetailsPage from "./pages/SavingsGoalDetailsPage";
+import Home from "./pages/Home";
 // Defining routes
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    errorElement: <ErrorPage />,
+  },
   {
     path: "/",
     element: <Auth element={<App />} />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "",
+        path: "/personal/dashboard",
         element: <Dashboard />,
       },
       {
@@ -78,9 +84,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    index: true,
     path: "/login",
-    element: <PreventLoggedIn element={<LoginPage />} />,
+    // element: <PreventLoggedIn element={<LoginPage />} />,
+    element: <LoginPage />,
     errorElement: <ErrorPage />,
   },
   {

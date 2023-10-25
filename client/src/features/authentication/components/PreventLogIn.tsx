@@ -10,7 +10,7 @@ const PreventLoggedIn: React.FC<PreventLoggedInProps> = ({ element }) => {
   const { token } = useAuth();
 
   if (token) {
-    return <Navigate to="/" />;
+    return <Navigate to="/login" />;
   }
 
   return element;

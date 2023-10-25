@@ -28,7 +28,7 @@ export function Sidebar({ className }: SidebarProps) {
             Personal
           </h2>
           <div className="space-y-1">
-            <Link to="/">
+            <Link to="/personal/dashboard">
               <Button
                 variant={selected === "Dashboard" ? "secondary" : "ghost"}
                 className="w-full justify-start"
