@@ -30,8 +30,8 @@ module.exports = {
           foreground: "#F9F7F7",
         },
         secondary: {
-          DEFAULT: "#1B262C",
-          // foreground: "#F9F7F7",
+          DEFAULT: "#05445E",
+          foreground: "#F9F7F7",
         },
         destructive: {
           DEFAULT: "#1B262C",
@@ -50,7 +50,7 @@ module.exports = {
           // foreground: "#F9F7F7",
         },
         card: {
-          DEFAULT: "#1B262C",
+          // DEFAULT: "#1B262C",
           // foreground: "#F9F7F7",
         },
       },
