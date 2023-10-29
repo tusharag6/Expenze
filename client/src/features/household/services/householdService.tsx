@@ -1,12 +1,15 @@
 export async function createHousehold(token: string | null): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/household", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://expenze-api.onrender.com/api/household",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -23,13 +26,16 @@ export async function createHousehold(token: string | null): Promise<void> {
 export async function joinHousehold(joiningId: string | null): Promise<void> {
   try {
     const data = { joiningId };
-    const response = await fetch("http://localhost:8080/api/household/join", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data),
-    });
+    const response = await fetch(
+      "https://expenze-api.onrender.com/api/household/join",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data),
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -50,14 +56,17 @@ export async function addAccount(
 ): Promise<void> {
   try {
     const accountData = { householdId, accountId };
-    const response = await fetch("http://localhost:8080/api/household/add", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(accountData),
-    });
+    const response = await fetch(
+      "https://expenze-api.onrender.com/api/household/add",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(accountData),
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -76,7 +85,7 @@ export async function inviteMembers(
 ): Promise<void> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/household/join/${householdId}`,
+      `https://expenze-api.onrender.com/api/household/join/${householdId}`,
       {
         method: "GET",
         headers: {
@@ -103,7 +112,7 @@ export async function getSummaryData(
 ): Promise<void> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/household/summary/${householdId}`,
+      `https://expenze-api.onrender.com/api/household/summary/${householdId}`,
       {
         method: "GET",
         headers: {
@@ -130,7 +139,7 @@ export async function getTransactionData(
 ): Promise<void> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/household/transaction/${householdId}`,
+      `https://expenze-api.onrender.com/api/household/transaction/${householdId}`,
       {
         method: "GET",
         headers: {
@@ -154,7 +163,7 @@ export async function getTransactionData(
 export async function getAddedAccounts(householdId: number): Promise<void> {
   try {
     const response = await fetch(
-      `http://localhost:8080/api/household/accounts/${householdId}`,
+      `https://expenze-api.onrender.com/api/household/accounts/${householdId}`,
       {
         method: "GET",
         headers: {

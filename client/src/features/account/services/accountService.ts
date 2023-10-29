@@ -4,12 +4,15 @@ export async function fetchAccounts(
   token: string | null
 ): Promise<accountTypes.Account[]> {
   try {
-    const response = await fetch("http://localhost:8080/api/accounts", {
-      method: "GET",
-      headers: {
-        authorization: `${token}`,
-      },
-    });
+    const response = await fetch(
+      "https://expenze-api.onrender.com/api/accounts",
+      {
+        method: "GET",
+        headers: {
+          authorization: `${token}`,
+        },
+      }
+    );
 
     if (response.ok) {
       const data = await response.json();
@@ -27,14 +30,17 @@ export async function addAccount(
   accountData: Partial<accountTypes.Account>
 ): Promise<void> {
   try {
-    const response = await fetch("http://localhost:8080/api/accounts", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        authorization: `Bearer ${token}`,
-      },
-      body: JSON.stringify(accountData),
-    });
+    const response = await fetch(
+      "https://expenze-api.onrender.com/api/accounts",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(accountData),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Failed to add an account");

@@ -15,13 +15,16 @@ const Toast = Swal.mixin({
 export async function login(data: authTypes.loginData) {
   try {
     // Making a POST request to the login endpoint
-    const response = await fetch("http://localhost:8080/api/auth/login", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // Sending user login data as JSON
-    });
+    const response = await fetch(
+      "https://expenze-api.onrender.com/api/auth/login",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data), // Sending user login data as JSON
+      }
+    );
 
     const responseData = await response.json();
 
@@ -59,13 +62,16 @@ export async function login(data: authTypes.loginData) {
 export async function register(data: authTypes.registerData) {
   try {
     // Making a POST request to the registration endpoint
-    const response = await fetch("http://localhost:8080/api/auth/register", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(data), // Sending user registration data as JSON
-    });
+    const response = await fetch(
+      "https://expenze-api.onrender.com/api/auth/register",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(data), // Sending user registration data as JSON
+      }
+    );
 
     const responseData = await response.json();
 
@@ -81,7 +87,7 @@ export async function register(data: authTypes.registerData) {
 
       // Send verification email
       const verificationResponse = await fetch(
-        "http://localhost:8080/api/auth/send-verification",
+        "https://expenze-api.onrender.com/api/auth/send-verification",
         {
           method: "POST",
           headers: {

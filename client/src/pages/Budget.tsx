@@ -46,14 +46,17 @@ const Budget = () => {
       amount,
     };
     try {
-      const response = await fetch(`http://localhost:8080/api/budget`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(data),
-      });
+      const response = await fetch(
+        `https://expenze-api.onrender.com/api/budget`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(data),
+        }
+      );
 
       if (response.ok) {
         alert("Budget added");
@@ -69,12 +72,15 @@ const Budget = () => {
   useEffect(() => {
     async function fetchBudget() {
       try {
-        const response = await fetch("http://localhost:8080/api/budget", {
-          method: "GET",
-          headers: {
-            authorization: `Bearer ${token}`,
-          },
-        });
+        const response = await fetch(
+          "https://expenze-api.onrender.com/api/budget",
+          {
+            method: "GET",
+            headers: {
+              authorization: `Bearer ${token}`,
+            },
+          }
+        );
         const data = await response.json();
         setBudgets(data);
       } catch (error) {
