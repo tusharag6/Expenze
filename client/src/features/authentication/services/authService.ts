@@ -122,6 +122,8 @@ export async function register(data: authTypes.registerData) {
       throw new Error(responseData.message);
     }
   } catch (error) {
+    console.log(error);
+
     Toast.fire({
       icon: "error",
       title: "Registration Failed",

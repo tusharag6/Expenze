@@ -5,6 +5,11 @@ import { passwordController } from "../controllers";
 
 const router = Router();
 
+// hello world route
+router.get("/", (req, res) => {
+  res.send("Hello World");
+});
+
 // Register Route
 router.post("/register", authController.register);
 

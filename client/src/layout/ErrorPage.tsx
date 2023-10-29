@@ -1,8 +1,10 @@
-import { useRouteError } from "react-router-dom";
+import { useRouteError, useLocation } from "react-router-dom";
 import { Link } from "react-router-dom";
+
 export default function ErrorPage() {
   const error: any = useRouteError();
   console.error(error);
+  const location = useLocation();
 
   return (
     <div className="h-screen flex flex-col items-center justify-center">
