@@ -21,6 +21,7 @@ module.exports = {
       },
       colors: {
         border: "#1B262C",
+        borderSecond: "#F9F7F7",
         input: "#1B262C",
         ring: "#1B262C",
         background: "#040D12",
