@@ -39,6 +39,7 @@ import SummaryCards from "../features/analytics/components/SummaryCards";
 import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { useAuth } from "../context/AuthContext";
 import { Separator } from "../../components/ui/separator";
+import { DatePickerCard } from "../components/DatePickerCard";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -145,12 +146,13 @@ export default function Dashboard() {
             <div className="flex items-center justify-between ">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold tracking-tight">
-                  Your Budget Tracker
+                  Hello, John!
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Manage your finances with ease.
+                  Let's conquer your financial goals today.
                 </p>
               </div>
+
               <div className=" space-x-4">
                 <DialogTrigger asChild>
                   <Button
@@ -169,10 +171,11 @@ export default function Dashboard() {
             <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
               {/* Chart */}
               <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Overview</CardTitle>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 pl-6">
+                  <CardTitle>Spending Trends</CardTitle>
+                  <DatePickerCard />
                 </CardHeader>
-                <CardContent className="pl-2">
+                <CardContent className="p-0 pr-6 pb-4">
                   <Overview />
                 </CardContent>
               </Card>
