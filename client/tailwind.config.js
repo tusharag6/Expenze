@@ -23,15 +23,15 @@ module.exports = {
         border: "#1B262C",
         input: "#1B262C",
         ring: "#1B262C",
-        background: "#F9F7F7",
-        foreground: "#000",
+        background: "#040D12",
+        foreground: "#F9F7F7",
         primary: {
-          DEFAULT: "#05445E",
-          foreground: "#F9F7F7",
+          DEFAULT: "#F9F7F7",
+          foreground: "#040D12",
         },
         secondary: {
-          DEFAULT: "#05445E",
-          foreground: "#F9F7F7",
+          DEFAULT: "#1B262C",
+          // foreground: "#F9F7F7",
         },
         destructive: {
           DEFAULT: "#1B262C",
@@ -42,15 +42,15 @@ module.exports = {
           // foreground: "#F9F7F7",
         },
         accent: {
-          DEFAULT: "#05445E",
-          foreground: "#F9F7F7",
+          DEFAULT: "#1B262C",
+          // foreground: "#F9F7F7",
         },
         popover: {
           DEFAULT: "#1B262C",
           // foreground: "#F9F7F7",
         },
         card: {
-          // DEFAULT: "#1B262C",
+          DEFAULT: "#1B262C",
           // foreground: "#F9F7F7",
         },
       },

@@ -18,10 +18,7 @@ type SidebarProps = {
 export function Sidebar({ className }: SidebarProps) {
   const [selected, setSelected] = useState("Dashboard");
   return (
-    <div
-      className={cn("pb-12 h-[100vh]", className)}
-      style={{ backgroundColor: "#191919", color: "#FFF", maxWidth: "17.5rem" }}
-    >
+    <div className={cn("pb-12 h-[100vh]", className)}>
       <div className="my-12 mx-5 flex flex-col justify-between h-full">
         <div>
           <div className="pb-10 flex justify-center">
