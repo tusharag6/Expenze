@@ -141,8 +141,8 @@ export default function Dashboard() {
             description="Please add an account to view its details."
           />
         ) : (
-          <div className="h-full flex-col border-none data-[state=active]:flex">
-            <div className="flex items-center justify-between">
+          <div className="h-full flex-col border-none data-[state=active]:flex ">
+            <div className="flex items-center justify-between ">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold tracking-tight">
                   Your Budget Tracker
