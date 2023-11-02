@@ -42,6 +42,9 @@ import { Separator } from "../../components/ui/separator";
 import { DatePickerCard } from "../components/DatePickerCard";
 import Balance from "../features/analytics/components/Balance";
 import { Progress } from "../../components/ui/progress";
+import SingleBillsCard from "../features/analytics/components/SingleBillsCard";
+import Bills from "../features/analytics/components/Bills";
+import AddNewBill from "../features/analytics/components/AddNewBill";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -203,6 +206,26 @@ export default function Dashboard() {
                     </CardContent>
                   </Card>
                 </div>
+                <Card className="">
+                  <CardHeader>
+                    <CardTitle>Recent Transactions</CardTitle>
+                    <CardDescription>
+                      {/* You made 265 sales this month. */}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="">
+                    <RecentTransaction />
+                  </CardContent>
+                </Card>
+                <Card>
+                  <CardHeader>
+                    <CardTitle>Upcoming Bills</CardTitle>
+                  </CardHeader>
+                  <CardContent className="flex items-center">
+                    <AddNewBill />
+                    <Bills />
+                  </CardContent>
+                </Card>
               </div>
 
               <div className="flex flex-col gap-4">
@@ -236,17 +259,6 @@ export default function Dashboard() {
                         <p className="pt-2 font-semibold">40%</p>
                       </div>
                     </div>
-                  </CardContent>
-                </Card>
-                <Card className="">
-                  <CardHeader>
-                    <CardTitle>Recent Transactions</CardTitle>
-                    <CardDescription>
-                      {/* You made 265 sales this month. */}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="">
-                    <RecentTransaction />
                   </CardContent>
                 </Card>
               </div>
