@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../../components/ui/button";
 import { cn } from "../../lib/utils";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import {
   FaHome,
   FaMoneyBillWave,
@@ -10,6 +10,8 @@ import {
   FaUser,
 } from "react-icons/fa";
 import { Separator } from "../../components/ui/separator";
+import { useAuth } from "../context/AuthContext";
+import { profileService } from "../features/profile";
 
 type SidebarProps = {
   className?: string;
@@ -17,6 +19,28 @@ type SidebarProps = {
 
 export function Sidebar({ className }: SidebarProps) {
   const [selected, setSelected] = useState("Dashboard");
+  const { token, logout } = useAuth();
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await profileService.fetchUserData(token);
+        setUserName(user.username);
+        setUserEmail(user.email);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUser();
+  }, [token]);
+
+  const handleLogout = () => {
+    logout();
+    return <Navigate to="/login" />;
+  };
   return (
     <div className={cn("pb-12 h-[100vh]", className)}>
       <div className="my-12 mx-5 flex flex-col justify-between h-full">
@@ -221,6 +245,7 @@ export function Sidebar({ className }: SidebarProps) {
         </div> */}
         <div className="mt-auto mb-12 mx-2">
           <Button
+            onClick={handleLogout}
             variant="secondary"
             className="w-full justify-start text-base mb-11 py-6"
           >
@@ -235,7 +260,7 @@ export function Sidebar({ className }: SidebarProps) {
               <FaUser size="25" />
             </span>
             <div>
-              <h2 className="font-semibold">Tushar Agrawal</h2>
+              <h2 className="font-semibold">{userName}</h2>
               <p className="text-xs">View Profile</p>
             </div>
           </div>
