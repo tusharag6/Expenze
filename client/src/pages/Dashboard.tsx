@@ -40,6 +40,8 @@ import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { useAuth } from "../context/AuthContext";
 import { Separator } from "../../components/ui/separator";
 import { DatePickerCard } from "../components/DatePickerCard";
+import Balance from "../features/analytics/components/Balance";
+import { Progress } from "../../components/ui/progress";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -130,6 +132,12 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  const [progress, setProgress] = React.useState(13);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setProgress(66), 500);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <Dialog
       open={showAddTransactionDialog}
@@ -166,32 +174,50 @@ export default function Dashboard() {
               </div>
             </div>
             <Separator className="my-4" />
+            <div className="grid grid-cols-5 gap-4">
+              <div className="flex flex-col gap-4 col-span-4">
+                <div className="">
+                  <SummaryCards />
+                </div>
+                <div className="">
+                  <Card className="">
+                    <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 pl-6">
+                      <CardTitle>Spending Trends</CardTitle>
+                      <DatePickerCard />
+                    </CardHeader>
+                    <CardContent className="p-0 pr-6 pb-4">
+                      <Overview />
+                    </CardContent>
+                  </Card>
+                </div>
+              </div>
 
-            <SummaryCards />
-            <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
-              {/* Chart */}
-              <Card className="col-span-4">
-                <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 pl-6">
-                  <CardTitle>Spending Trends</CardTitle>
-                  <DatePickerCard />
-                </CardHeader>
-                <CardContent className="p-0 pr-6 pb-4">
-                  <Overview />
-                </CardContent>
-              </Card>
-
-              {/* Recent Transaction */}
-              <Card className="col-span-4 lg:col-span-3">
-                <CardHeader>
-                  <CardTitle>Recent Transactions</CardTitle>
-                  <CardDescription>
-                    {/* You made 265 sales this month. */}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="">
-                  <RecentTransaction />
-                </CardContent>
-              </Card>
+              <div className="flex flex-col gap-4">
+                <Card className="">
+                  <CardHeader>
+                    <CardTitle>This Month</CardTitle>
+                    <CardDescription>Total Income of 10%</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <Balance />
+                    <div>
+                      <Progress value={progress} className="w-[60%]" />
+                      <Progress value={33} />
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="">
+                  <CardHeader>
+                    <CardTitle>Recent Transactions</CardTitle>
+                    <CardDescription>
+                      {/* You made 265 sales this month. */}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="">
+                    <RecentTransaction />
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         )}
