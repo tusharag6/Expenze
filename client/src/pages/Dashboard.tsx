@@ -45,6 +45,9 @@ import { Progress } from "../../components/ui/progress";
 import SingleBillsCard from "../features/analytics/components/SingleBillsCard";
 import Bills from "../features/analytics/components/Bills";
 import AddNewBill from "../features/analytics/components/AddNewBill";
+import Savings from "../features/analytics/components/Savings";
+import AddNewSavings from "../features/analytics/components/AddNewSavings";
+import { ChevronRight } from "lucide-react";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -179,33 +182,42 @@ export default function Dashboard() {
             <Separator className="my-4" />
             <div className="grid grid-cols-5 gap-4">
               <div className="flex flex-col gap-4 col-span-4">
-                <div className="">
-                  <SummaryCards />
-                </div>
-                <div className="">
-                  <Card className="">
-                    <CardHeader className="flex flex-row items-center justify-between">
-                      <CardTitle>Spending Trends</CardTitle>
-                      {/* <DatePickerCard /> */}
-                      <div className="space-y-2">
-                        <Select defaultValue="daily">
-                          <SelectTrigger className="w-[180px]">
-                            <SelectValue placeholder="Select time frame" />
-                          </SelectTrigger>
-                          <SelectContent>
-                            <SelectItem value="daily">Daily</SelectItem>
-                            <SelectItem value="monthly">Monthly</SelectItem>
-                            <SelectItem value="quarterly">Quarterly</SelectItem>
-                            <SelectItem value="yearly">Yearly</SelectItem>
-                          </SelectContent>
-                        </Select>
-                      </div>
-                    </CardHeader>
-                    <CardContent className="p-0 pr-6 pb-4">
-                      <Overview />
-                    </CardContent>
-                  </Card>
-                </div>
+                <SummaryCards />
+
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Upcoming Bills</CardTitle>
+                    <ChevronRight className="cursor-pointer" />
+                  </CardHeader>
+                  <CardContent className="flex items-center py-0 gap-2">
+                    <AddNewBill />
+                    <Bills />
+                  </CardContent>
+                </Card>
+
+                <Card className="">
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Spending Trends</CardTitle>
+                    {/* <DatePickerCard /> */}
+                    <div className="space-y-2">
+                      <Select defaultValue="daily">
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select time frame" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="daily">Daily</SelectItem>
+                          <SelectItem value="monthly">Monthly</SelectItem>
+                          <SelectItem value="quarterly">Quarterly</SelectItem>
+                          <SelectItem value="yearly">Yearly</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-0 pr-6 pb-4">
+                    <Overview />
+                  </CardContent>
+                </Card>
+
                 <Card className="">
                   <CardHeader>
                     <CardTitle>Recent Transactions</CardTitle>
@@ -215,15 +227,6 @@ export default function Dashboard() {
                   </CardHeader>
                   <CardContent className="">
                     <RecentTransaction />
-                  </CardContent>
-                </Card>
-                <Card>
-                  <CardHeader>
-                    <CardTitle>Upcoming Bills</CardTitle>
-                  </CardHeader>
-                  <CardContent className="flex items-center">
-                    <AddNewBill />
-                    <Bills />
                   </CardContent>
                 </Card>
               </div>
@@ -259,6 +262,25 @@ export default function Dashboard() {
                         <p className="pt-2 font-semibold">40%</p>
                       </div>
                     </div>
+                  </CardContent>
+                </Card>
+                <Card className="">
+                  <CardHeader className="border border-border rounded-ss-md py-5 flex flex-row items-center justify-between">
+                    <CardTitle>My Savings</CardTitle>
+                    <ChevronRight className="cursor-pointer" />
+                  </CardHeader>
+                  <div className="flex flex-row items-end justify-between px-6 py-4 pb-6">
+                    <p className="text-muted-foreground text-md">
+                      Total Savings
+                    </p>
+                    <p className="font-semibold text-xl">
+                      $12,500{" "}
+                      <span className="text-muted-foreground text-sm">.00</span>{" "}
+                    </p>
+                  </div>
+                  <CardContent className="flex flex-col items-center py-0 gap-4">
+                    <AddNewSavings />
+                    <Savings />
                   </CardContent>
                 </Card>
               </div>
