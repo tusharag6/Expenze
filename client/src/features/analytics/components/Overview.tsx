@@ -61,7 +61,7 @@ export function Overview() {
   return (
     <ResponsiveContainer width="100%" height={350}>
       <LineChart data={expenseData}>
-        <CartesianGrid vertical={false} strokeDasharray="4 4" opacity={0.15} />
+        <CartesianGrid vertical={false} strokeDasharray="4 4" opacity={0.1} />
         <XAxis
           dataKey="date"
           stroke="#E3FDFD"

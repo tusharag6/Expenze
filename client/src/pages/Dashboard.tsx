@@ -181,9 +181,22 @@ export default function Dashboard() {
                 </div>
                 <div className="">
                   <Card className="">
-                    <CardHeader className="flex flex-row items-center justify-between space-y-0 p-0 pl-6">
+                    <CardHeader className="flex flex-row items-center justify-between">
                       <CardTitle>Spending Trends</CardTitle>
-                      <DatePickerCard />
+                      {/* <DatePickerCard /> */}
+                      <div className="space-y-2">
+                        <Select defaultValue="daily">
+                          <SelectTrigger className="w-[180px]">
+                            <SelectValue placeholder="Select time frame" />
+                          </SelectTrigger>
+                          <SelectContent>
+                            <SelectItem value="daily">Daily</SelectItem>
+                            <SelectItem value="monthly">Monthly</SelectItem>
+                            <SelectItem value="quarterly">Quarterly</SelectItem>
+                            <SelectItem value="yearly">Yearly</SelectItem>
+                          </SelectContent>
+                        </Select>
+                      </div>
                     </CardHeader>
                     <CardContent className="p-0 pr-6 pb-4">
                       <Overview />

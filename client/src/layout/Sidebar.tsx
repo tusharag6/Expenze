@@ -221,7 +221,7 @@ export function Sidebar({ className }: SidebarProps) {
         </div> */}
         <div className="mt-auto mb-12 mx-2">
           <Button
-            variant="destructive"
+            variant="secondary"
             className="w-full justify-start text-base mb-11 py-6"
           >
             <span className="pr-2">
