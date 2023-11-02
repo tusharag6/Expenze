@@ -1,5 +1,12 @@
 import React from "react";
-import { PieChart, Pie, Cell, ResponsiveContainer, Legend } from "recharts";
+import {
+  PieChart,
+  Pie,
+  Cell,
+  ResponsiveContainer,
+  Legend,
+  Label,
+} from "recharts";
 import { useState, useEffect } from "react";
 import { useAuth } from "../../../context/AuthContext";
 import { budgetService } from "../../budget";
@@ -13,12 +20,12 @@ const data = [
 // const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 const Balance: React.FC = () => {
   return (
-    <ResponsiveContainer width="100%" height={300}>
-      <PieChart width={800} height={400}>
+    <ResponsiveContainer width="100%" height={190}>
+      <PieChart width={800} height={100}>
         <Pie
           data={data}
           cx={120}
-          cy={200}
+          cy={77}
           innerRadius={60}
           outerRadius={80}
           fill="#8884d8"

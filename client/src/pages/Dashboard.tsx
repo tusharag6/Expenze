@@ -212,10 +212,29 @@ export default function Dashboard() {
                     <CardDescription>Total Income of 10%</CardDescription>
                   </CardHeader>
                   <CardContent>
-                    <Balance />
-                    <div>
-                      <Progress value={progress} className="w-[60%]" />
-                      <Progress value={33} />
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="absolute mb-6 ml-2 text-center">
+                        <span className="font-light text-md">Total</span>
+                        <br />
+                        <span className="font-bold text-xl">$21,329</span>
+                      </div>
+                      <Balance />
+                    </div>
+                    <div className="grid grid-cols-2 gap-14 text-center">
+                      <div>
+                        <p className="pb-2 text-sm text-muted-foreground">
+                          Income
+                        </p>
+                        <Progress value={progress} />
+                        <p className="pt-2 font-semibold">60%</p>
+                      </div>
+                      <div>
+                        <p className="pb-2 text-sm text-muted-foreground">
+                          Revenue
+                        </p>
+                        <Progress value={progress} />
+                        <p className="pt-2 font-semibold">40%</p>
+                      </div>
                     </div>
                   </CardContent>
                 </Card>
