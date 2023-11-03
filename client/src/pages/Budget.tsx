@@ -88,12 +88,13 @@ const Budget = () => {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Your Budget Tracker
+            Budget Overview
           </h2>
           <p className="text-sm text-muted-foreground">
-            Manage your finances with ease.
+            Take control of your finances effortlessly.
           </p>
         </div>
+
         <Dialog>
           <DialogTrigger>
             <Button size="sm" className="relative">

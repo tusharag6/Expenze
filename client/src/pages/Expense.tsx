@@ -23,10 +23,10 @@ const Expense = () => {
         <div className="flex items-center justify-between ">
           <div className="space-y-1">
             <h2 className="text-2xl font-semibold tracking-tight">
-              Hello, John!
+              Expense Breakdown
             </h2>
             <p className="text-sm text-muted-foreground">
-              Let's conquer your financial goals today.
+              Get a detailed view of your spending habits.
             </p>
           </div>
         </div>
