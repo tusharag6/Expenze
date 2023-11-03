@@ -24,7 +24,7 @@ export default function CategoryList() {
     fetchData();
   }, []);
   return (
-    <ScrollArea className=" h-72 w-100 rounded-md border">
+    <ScrollArea className=" h-72 w-100 rounded-md">
       <div className="p-4">
         {budgetData.map((budgetItem, index) => (
           <>
@@ -35,10 +35,12 @@ export default function CategoryList() {
               <span>
                 <FaThList size="15" />
               </span>
-              <div className="text-md pl-3">{budgetItem.category}</div>
-              <div className="ml-auto font-medium">${budgetItem.amount}</div>
+              <div className="text-md pl-3 text-lg font-semibold">
+                {budgetItem.category}
+              </div>
+              <div className="ml-auto">${budgetItem.amount}</div>
             </div>
-            <Separator className="my-2" />
+            <Separator className="my-2 opacity-10" />
           </>
         ))}
       </div>

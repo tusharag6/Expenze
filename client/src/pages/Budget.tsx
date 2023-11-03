@@ -180,9 +180,9 @@ const Budget = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
+          <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-8">
             {/* Chart */}
-            <Card className="col-span-5">
+            <Card className="col-span-6">
               <CardHeader>
                 <CardTitle>Budget Progres</CardTitle>
               </CardHeader>
