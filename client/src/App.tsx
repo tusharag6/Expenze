@@ -11,7 +11,7 @@ function App() {
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <div className="grid lg:grid-cols-6 bg-background text-foreground">
         {/* Sidebar */}
-        <Sidebar className="hidden lg:block" />
+        <Sidebar className="hidden lg:block sticky top-0" />
         <div
           className="md:flex-col md:flex col-span-3 lg:col-span-5 lg:border-l border-border
         "
