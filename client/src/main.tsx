@@ -23,6 +23,7 @@ import { HouseholdProvider } from "./context/HouseholdContext";
 import SavingsGoalDashboard from "./pages/SavingsGoalDashboard";
 import SavingsGoalDetailsPage from "./pages/SavingsGoalDetailsPage";
 import Home from "./pages/Home";
+import Expense from "./pages/Expense";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -42,6 +43,10 @@ const router = createBrowserRouter([
       {
         path: "/personal/activity",
         element: <Activity />,
+      },
+      {
+        path: "/personal/expenses",
+        element: <Expense />,
       },
       {
         path: "/personal/budget",
