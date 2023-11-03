@@ -64,20 +64,6 @@ export function Sidebar({ className }: SidebarProps) {
                 Overview
               </Button>
             </Link>
-            <Link to="/personal/balance">
-              <Button
-                variant={selected === "Balance" ? "secondary" : "ghost"}
-                className="w-full justify-start text-base py-4 my-1"
-                onClick={() => {
-                  setSelected("Balance");
-                }}
-              >
-                <span className="pr-2">
-                  <FaHome size="15" />
-                </span>
-                Balance
-              </Button>
-            </Link>
             <Link to="/personal/activity">
               <Button
                 variant={selected === "Activity" ? "secondary" : "ghost"}

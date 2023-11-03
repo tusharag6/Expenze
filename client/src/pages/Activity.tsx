@@ -4,6 +4,7 @@ import { DataTable } from "../components/DataTable";
 import { useSelectedAccount } from "../context/AccountContext";
 import { format, parseISO } from "date-fns";
 import { useTransaction } from "../context/TransactionContext";
+import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
 
 const Activity = () => {
   const { transactionData, updateTransactionData } = useTransaction();
@@ -40,18 +41,17 @@ const Activity = () => {
   }
   return (
     <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
-          <p className="text-muted-foreground">
-            Here&apos;s a list of your transactions !
-          </p>
-        </div>
-        {/* <div className="flex items-center space-x-2">
-          <UserNav />
-        </div> */}
+      <div className="flex items-center justify-between ">
+        <p className="text-2xl">Recent Transactions</p>
       </div>
-      <DataTable data={formattedTransactions} columns={columns} />
+      <Tabs defaultValue="all" className="w-[400px]">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="all">All</TabsTrigger>
+          <TabsTrigger value="income">Income</TabsTrigger>
+          <TabsTrigger value="expense">Expense</TabsTrigger>
+        </TabsList>
+      </Tabs>
+      <DataTable data={formattedTransactions} columns={columns} border-border />
       {/* <RecentTransaction /> */}
     </div>
   );
