@@ -24,6 +24,7 @@ import SavingsGoalDashboard from "./pages/SavingsGoalDashboard";
 import SavingsGoalDetailsPage from "./pages/SavingsGoalDetailsPage";
 import Home from "./pages/Home";
 import Expense from "./pages/Expense";
+import Bills from "./pages/Bills";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -51,6 +52,10 @@ const router = createBrowserRouter([
       {
         path: "/personal/budget",
         element: <Budget />,
+      },
+      {
+        path: "/personal/bills",
+        element: <Bills />,
       },
       {
         path: "/personal/goals",
