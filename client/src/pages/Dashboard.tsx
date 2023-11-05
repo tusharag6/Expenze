@@ -257,9 +257,9 @@ export default function Dashboard() {
                       </div>
                       <div>
                         <p className="pb-2 text-sm text-muted-foreground">
-                          Revenue
+                          Expense
                         </p>
-                        <Progress value={progress} />
+                        <Progress value={40} />
                         <p className="pt-2 font-semibold">40%</p>
                       </div>
                     </div>

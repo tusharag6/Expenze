@@ -8,30 +8,23 @@ import {
   Legend,
   CartesianGrid,
 } from "recharts";
-import { useState, useEffect } from "react";
-import { useAuth } from "../../../context/AuthContext";
-import { budgetService } from "../../budget";
 
-interface Data {
-  category: String;
-  budgetedAmount: number;
-  actualSpending: number;
-  isOverBudget: boolean;
-}
+const yearData = [
+  { category: "January", income: 5000, expense: 4200 },
+  { category: "February", income: 5500, expense: 4000 },
+  { category: "March", income: 5900, expense: 5900 },
+  { category: "April", income: 5200, expense: 4400 },
+  { category: "May", income: 6000, expense: 6100 },
+  { category: "June", income: 5600, expense: 5500 },
+  { category: "July", income: 5800, expense: 4200 },
+  { category: "August", income: 6000, expense: 3600 },
+  { category: "September", income: 5500, expense: 5700 },
+  { category: "October", income: 5700, expense: 4500 },
+  { category: "November", income: 6100, expense: 6000 },
+  { category: "December", income: 5900, expense: 5300 },
+];
 
 const ComparisionChart: React.FC = () => {
-  const [barChartData, setBarChartData] = useState<Data[]>([]);
-  const { token } = useAuth();
-  useEffect(() => {
-    const fetchData = async () => {
-      const data = await budgetService.fetchBudgetVsActualBarChartData(token);
-
-      if (data) {
-        setBarChartData(data);
-      }
-    };
-    fetchData();
-  }, []);
   const customTooltipStyle = {
     backgroundColor: "#040D12",
     border: "0px",
@@ -41,7 +34,7 @@ const ComparisionChart: React.FC = () => {
     cursor: "pointer",
   };
   return (
-    <BarChart width={1500} height={300} data={barChartData}>
+    <BarChart width={1500} height={300} data={yearData}>
       <CartesianGrid vertical={false} strokeDasharray="4 4" opacity={0.1} />
       <XAxis
         dataKey="category"
@@ -56,8 +49,8 @@ const ComparisionChart: React.FC = () => {
         cursor={{ fill: "transparent" }}
       />
       <Legend />
-      <Bar dataKey="budgetedAmount" fill="#71C9CE" name="Budget" />
-      <Bar dataKey="actualSpending" fill="#E3FDFD" name="Actual" />
+      <Bar dataKey="income" fill="#71C9CE" name="Income" />
+      <Bar dataKey="expense" fill="#E3FDFD" name="Expense" />
     </BarChart>
   );
 };

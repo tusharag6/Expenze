@@ -9,17 +9,34 @@ import { Separator } from "../../../../components/ui/separator";
 import netflix from "../../../assets/netflix.jpg";
 import { ChevronRight } from "lucide-react";
 
-const SingleBillsCard = () => {
+type SingleBillsCardProps = {
+  title: string;
+  img?: string;
+  amount: number;
+  date: string;
+};
+
+const SingleBillsCard = (props: SingleBillsCardProps) => {
+  const { title, img, amount, date } = props;
+
   return (
     <Card className="rounded-sm">
       <CardHeader className="py-4 justify-between flex flex-row items-center ">
         <div className="flex flex-row gap-4 items-center">
-          <img
-            src={netflix}
-            alt="netflix"
-            className="h-8 w-8 rounded-lg border-border border"
-          />
-          <CardTitle className="font-semibold">Netflix</CardTitle>
+          {img ? (
+            <img
+              src={img}
+              alt="netflix"
+              className="h-8 w-8 rounded-lg border-border border"
+            />
+          ) : (
+            <img
+              src={netflix}
+              alt="netflix"
+              className="h-8 w-8 rounded-lg border-border border"
+            />
+          )}
+          <CardTitle className="font-semibold">{title}</CardTitle>
         </div>
         <ChevronRight />
       </CardHeader>
@@ -29,9 +46,9 @@ const SingleBillsCard = () => {
       justify-between py-4"
       >
         <p className="font-semibold text-lg">
-          $125 <span className="text-muted-foreground text-sm">.00</span>{" "}
+          ${amount} <span className="text-muted-foreground text-sm">.00</span>{" "}
         </p>
-        <p className="text-muted-foreground text-sm">22/11/2023</p>
+        <p className="text-muted-foreground text-sm">{date}</p>
       </CardContent>
     </Card>
   );
