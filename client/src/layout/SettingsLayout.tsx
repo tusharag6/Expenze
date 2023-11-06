@@ -1,7 +1,6 @@
 import { Outlet } from "react-router-dom";
 import { Separator } from "../../components/ui/separator";
 import { SidebarNav } from "../features/settings/components/SidebarNav";
-import Settings from "../pages/Settings";
 
 const sidebarNavItems = [
   {
@@ -9,22 +8,10 @@ const sidebarNavItems = [
     href: "/settings/profile",
   },
   {
-    title: "Account",
-    href: "/examples/forms/account",
-  },
-  {
     title: "Appearance",
     href: "/settings/appearance",
   },
-  {
-    title: "Notifications",
-    href: "/examples/forms/notifications",
-  },
 ];
-
-interface SettingsLayoutProps {
-  children: React.ReactNode;
-}
 
 export default function SettingsLayout() {
   return (
