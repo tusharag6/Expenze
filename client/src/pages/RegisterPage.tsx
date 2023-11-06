@@ -6,7 +6,7 @@ export default function AuthenticationPage() {
   return (
     <>
       <div className="md:hidden"></div>
-      <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:px-0">
+      <div className="bg-background text-foreground container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:px-0">
         <Link
           to="/"
           className={cn(

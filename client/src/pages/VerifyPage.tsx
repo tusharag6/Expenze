@@ -25,7 +25,7 @@ const VerifyPage = () => {
   }, [token]);
 
   return (
-    <div>
+    <div className="bg-background text-foreground">
       <h1>Verifying...</h1>
     </div>
   );

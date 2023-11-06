@@ -28,6 +28,7 @@ import Bills from "./pages/Bills";
 import Settings from "./pages/Settings";
 import SettingsLayout from "./layout/SettingsLayout";
 import AppearanceForm from "./features/settings/components/AppearanceForm";
+import { ThemeProvider } from "./components/theme-provider";
 // Defining routes
 const router = createBrowserRouter([
   {
@@ -139,7 +140,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <TransactionProvider>
           <HouseholdProvider>
-            <RouterProvider router={router} />
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+              <RouterProvider router={router} />
+            </ThemeProvider>
           </HouseholdProvider>
         </TransactionProvider>
       </AuthProvider>
