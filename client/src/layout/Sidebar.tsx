@@ -135,7 +135,7 @@ export function Sidebar({ className }: SidebarProps) {
                 Goal
               </Button>
             </Link>
-            <Link to="/settings">
+            <Link to="/settings/profile">
               <Button
                 variant={selected === "Settings" ? "secondary" : "ghost"}
                 className="w-full justify-start text-base"
@@ -247,7 +247,9 @@ export function Sidebar({ className }: SidebarProps) {
             </span>
             <div>
               <h2 className="font-semibold">{userName}</h2>
-              <p className="text-xs">View Profile</p>
+              <Link to="/settings/profile">
+                <p className="text-xs">View Profile</p>
+              </Link>
             </div>
           </div>
         </div>
