@@ -88,12 +88,13 @@ const Budget = () => {
       <div className="flex items-center justify-between">
         <div className="space-y-1">
           <h2 className="text-2xl font-semibold tracking-tight">
-            Your Budget Tracker
+            Budget Overview
           </h2>
           <p className="text-sm text-muted-foreground">
-            Manage your finances with ease.
+            Take control of your finances effortlessly.
           </p>
         </div>
+
         <Dialog>
           <DialogTrigger>
             <Button size="sm" className="relative">
@@ -179,9 +180,9 @@ const Budget = () => {
               </CardContent>
             </Card>
           </div>
-          <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
+          <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-8">
             {/* Chart */}
-            <Card className="col-span-5">
+            <Card className="col-span-6">
               <CardHeader>
                 <CardTitle>Budget Progres</CardTitle>
               </CardHeader>

@@ -20,15 +20,29 @@ import { TransactionProvider } from "./context/TransactionContext";
 import Budget from "./pages/Budget";
 import HouseholdDashboard from "./pages/HouseholdDashboard";
 import { HouseholdProvider } from "./context/HouseholdContext";
+import SavingsGoalDashboard from "./pages/SavingsGoalDashboard";
+import SavingsGoalDetailsPage from "./pages/SavingsGoalDetailsPage";
+import Home from "./pages/Home";
+import Expense from "./pages/Expense";
+import Bills from "./pages/Bills";
+import Settings from "./pages/Settings";
+import SettingsLayout from "./layout/SettingsLayout";
+import AppearanceForm from "./features/settings/components/AppearanceForm";
+import { ThemeProvider } from "./components/theme-provider";
 // Defining routes
 const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <Home />,
+    errorElement: <ErrorPage />,
+  },
   {
     path: "/",
     element: <Auth element={<App />} />,
     errorElement: <ErrorPage />,
     children: [
       {
-        path: "",
+        path: "/personal/dashboard",
         element: <Dashboard />,
       },
       {
@@ -36,8 +50,40 @@ const router = createBrowserRouter([
         element: <Activity />,
       },
       {
+        path: "/personal/expenses",
+        element: <Expense />,
+      },
+      {
         path: "/personal/budget",
         element: <Budget />,
+      },
+      {
+        path: "/personal/bills",
+        element: <Bills />,
+      },
+      {
+        path: "/settings",
+        element: <SettingsLayout />,
+        children: [
+          {
+            path: "/settings/profile",
+            element: <Settings />,
+          },
+          {
+            path: "/settings/appearance",
+            element: <AppearanceForm />,
+          },
+        ],
+      },
+      {
+        path: "/personal/goals",
+        element: <SavingsGoalDashboard />,
+        children: [
+          {
+            path: "/personal/goals/:goalId",
+            element: <SavingsGoalDetailsPage />,
+          },
+        ],
       },
     ],
   },
@@ -66,9 +112,9 @@ const router = createBrowserRouter([
     errorElement: <ErrorPage />,
   },
   {
-    index: true,
     path: "/login",
-    element: <PreventLoggedIn element={<LoginPage />} />,
+    // element: <PreventLoggedIn element={<LoginPage />} />,
+    element: <LoginPage />,
     errorElement: <ErrorPage />,
   },
   {
@@ -94,7 +140,9 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
       <AuthProvider>
         <TransactionProvider>
           <HouseholdProvider>
-            <RouterProvider router={router} />
+            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+              <RouterProvider router={router} />
+            </ThemeProvider>
           </HouseholdProvider>
         </TransactionProvider>
       </AuthProvider>

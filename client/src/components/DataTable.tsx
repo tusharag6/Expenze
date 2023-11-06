@@ -52,7 +52,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <div>
-      <div className="flex items-center py-4">
+      {/* <div className="flex items-center py-4">
         <Input
           placeholder="Search transaction by memo ..."
           value={
@@ -63,12 +63,12 @@ export function DataTable<TData, TValue>({
           }
           className="max-w-sm"
         />
-      </div>
-      <div className="rounded-md border">
+      </div> */}
+      <div className="rounded-md border border-border">
         <Table>
           <TableHeader>
             {table.getHeaderGroups().map((headerGroup) => (
-              <TableRow key={headerGroup.id}>
+              <TableRow className="border-border" key={headerGroup.id}>
                 {headerGroup.headers.map((header) => {
                   return (
                     <TableHead key={header.id}>
@@ -88,6 +88,7 @@ export function DataTable<TData, TValue>({
             {table.getRowModel().rows?.length ? (
               table.getRowModel().rows.map((row) => (
                 <TableRow
+                  className="border-border"
                   key={row.id}
                   data-state={row.getIsSelected() && "selected"}
                 >

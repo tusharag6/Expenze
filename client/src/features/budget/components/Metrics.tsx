@@ -26,6 +26,10 @@ const Metrics = () => {
     };
     fetchData();
   }, []);
+
+  const roundedBudgetUtilization =
+    summaryData.budgetUtilizationPercentage.toFixed(2);
+
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
       <Card>
@@ -126,9 +130,7 @@ const Metrics = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            {summaryData.budgetUtilizationPercentage}%
-          </div>
+          <div className="text-2xl font-bold">{roundedBudgetUtilization}%</div>
           <p className="text-xs text-muted-foreground">+5% since last hour</p>
         </CardContent>
       </Card>

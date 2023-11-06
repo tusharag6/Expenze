@@ -1,50 +1,102 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../../components/ui/button";
 import { cn } from "../../lib/utils";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import {
   FaHome,
   FaMoneyBillWave,
   FaListAlt,
-  FaQuestionCircle,
-  FaLock,
-  FaInfoCircle,
-  FaPhoneAlt,
+  FaPiggyBank,
+  FaUser,
 } from "react-icons/fa";
+import { Separator } from "../../components/ui/separator";
+import { useAuth } from "../context/AuthContext";
+import { profileService } from "../features/profile";
 
 type SidebarProps = {
   className?: string;
 };
 
 export function Sidebar({ className }: SidebarProps) {
-  // const userRole = "Personal";
   const [selected, setSelected] = useState("Dashboard");
+  const { token, logout } = useAuth();
+  const [userName, setUserName] = useState("");
+  const [userEmail, setUserEmail] = useState("");
+
+  useEffect(() => {
+    const fetchUser = async () => {
+      try {
+        const user = await profileService.fetchUserData(token);
+        setUserName(user.username);
+        setUserEmail(user.email);
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    fetchUser();
+  }, [token]);
+
+  const handleLogout = () => {
+    logout();
+    return <Navigate to="/login" />;
+  };
   return (
     <div className={cn("pb-12 h-[100vh]", className)}>
-      <div className="space-y-4 py-4">
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Personal
-          </h2>
-          <div className="space-y-1">
-            <Link to="/">
+      <div className="my-12 mx-5 flex flex-col justify-between h-full">
+        <div>
+          <div className="pb-10 flex justify-center">
+            <img src="../../src/assets/logo.png" alt="" className="w-36" />
+          </div>
+
+          <div>
+            <Link to="/personal/dashboard">
               <Button
-                variant={selected === "Dashboard" ? "secondary" : "ghost"}
-                className="w-full justify-start"
+                variant={selected === "Overview" ? "secondary" : "ghost"}
+                className="w-full justify-start text-base py-4 my-1"
                 onClick={() => {
-                  setSelected("Dashboard");
+                  setSelected("Overview");
                 }}
               >
                 <span className="pr-2">
                   <FaHome size="15" />
                 </span>
-                Dashboard
+                Overview
               </Button>
             </Link>
+            <Link to="/personal/activity">
+              <Button
+                variant={selected === "Activity" ? "secondary" : "ghost"}
+                className="w-full justify-start text-base py-4 my-1"
+                onClick={() => {
+                  setSelected("Activity");
+                }}
+              >
+                <span className="pr-2">
+                  <FaListAlt size="15" />
+                </span>
+                Transactions
+              </Button>
+            </Link>
+            <Link to="/personal/expenses">
+              <Button
+                variant={selected === "Expenses" ? "secondary" : "ghost"}
+                className="w-full justify-start text-base py-4 my-1"
+                onClick={() => {
+                  setSelected("Expenses");
+                }}
+              >
+                <span className="pr-2">
+                  <FaListAlt size="15" />
+                </span>
+                Expenses
+              </Button>
+            </Link>
+
             <Link to="/personal/budget">
               <Button
                 variant={selected === "Budget" ? "secondary" : "ghost"}
-                className="w-full justify-start"
+                className="w-full justify-start text-base py-4 my-1"
                 onClick={() => {
                   setSelected("Budget");
                 }}
@@ -55,26 +107,53 @@ export function Sidebar({ className }: SidebarProps) {
                 Budget
               </Button>
             </Link>
-
-            <Link to="/personal/activity">
+            <Link to="/personal/bills">
               <Button
-                variant={selected === "Activity" ? "secondary" : "ghost"}
-                className="w-full justify-start"
+                variant={selected === "Bills" ? "secondary" : "ghost"}
+                className="w-full justify-start text-base py-4 my-1"
                 onClick={() => {
-                  setSelected("Activity");
+                  setSelected("Bills");
                 }}
               >
                 <span className="pr-2">
                   <FaListAlt size="15" />
                 </span>
-                Activity
+                Bills
+              </Button>
+            </Link>
+            <Link to="/personal/goals">
+              <Button
+                variant={selected === "Goal" ? "secondary" : "ghost"}
+                className="w-full justify-start text-base py-4 my-1"
+                onClick={() => {
+                  setSelected("Goal");
+                }}
+              >
+                <span className="pr-2">
+                  <FaPiggyBank size="16" />
+                </span>
+                Goal
+              </Button>
+            </Link>
+            <Link to="/settings/profile">
+              <Button
+                variant={selected === "Settings" ? "secondary" : "ghost"}
+                className="w-full justify-start text-base"
+                onClick={() => {
+                  setSelected("Settings");
+                }}
+              >
+                <span className="pr-2">
+                  <FaListAlt size="15" />
+                </span>
+                Settings
               </Button>
             </Link>
           </div>
         </div>
 
         {/* <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
+          <h2 className="mb-2 px-4 text-base font-semibold tracking-tight">
             Household
           </h2>
           {userRole === "Personal" ? (
@@ -150,35 +229,28 @@ export function Sidebar({ className }: SidebarProps) {
             </div>
           )}
         </div> */}
-        <div className="px-3 py-2">
-          <h2 className="mb-2 px-4 text-lg font-semibold tracking-tight">
-            Others
-          </h2>
-          <div className="space-y-1">
-            <Button variant="ghost" className="w-full justify-start">
-              <span className="pr-2">
-                <FaQuestionCircle size="15" />
-              </span>
-              Support
-            </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <span className="pr-2">
-                <FaLock size="15" />
-              </span>
-              Privacy
-            </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <span className="pr-2">
-                <FaInfoCircle size="15" />
-              </span>
-              About Us
-            </Button>
-            <Button variant="ghost" className="w-full justify-start">
-              <span className="pr-2">
-                <FaPhoneAlt size="15" />
-              </span>
-              Contact Us
-            </Button>
+        <div className="mt-auto mb-12 mx-2">
+          <Button
+            onClick={handleLogout}
+            variant="secondary"
+            className="w-full justify-start text-base mb-11 py-6"
+          >
+            <span className="pr-2">
+              <FaListAlt size="15" />
+            </span>
+            Logout
+          </Button>
+          <Separator />
+          <div className="flex py-4 items-center">
+            <span className="mr-2 pr-4">
+              <FaUser size="25" />
+            </span>
+            <div>
+              <h2 className="font-semibold">{userName}</h2>
+              <Link to="/settings/profile">
+                <p className="text-xs">View Profile</p>
+              </Link>
+            </div>
           </div>
         </div>
       </div>

@@ -39,6 +39,15 @@ import SummaryCards from "../features/analytics/components/SummaryCards";
 import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { useAuth } from "../context/AuthContext";
 import { Separator } from "../../components/ui/separator";
+import { DatePickerCard } from "../components/DatePickerCard";
+import Balance from "../features/analytics/components/Balance";
+import { Progress } from "../../components/ui/progress";
+import SingleBillsCard from "../features/analytics/components/SingleBillsCard";
+import Bills from "../features/analytics/components/Bills";
+import AddNewBill from "../features/analytics/components/AddNewBill";
+import Savings from "../features/analytics/components/Savings";
+import AddNewSavings from "../features/analytics/components/AddNewSavings";
+import { ChevronRight } from "lucide-react";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -129,6 +138,12 @@ export default function Dashboard() {
     fetchData();
   }, []);
 
+  const [progress, setProgress] = React.useState(13);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setProgress(66), 500);
+    return () => clearTimeout(timer);
+  }, []);
   return (
     <Dialog
       open={showAddTransactionDialog}
@@ -141,16 +156,17 @@ export default function Dashboard() {
             description="Please add an account to view its details."
           />
         ) : (
-          <div className="h-full flex-col border-none data-[state=active]:flex">
-            <div className="flex items-center justify-between">
+          <div className="h-full flex-col border-none data-[state=active]:flex ">
+            <div className="flex items-center justify-between ">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold tracking-tight">
-                  Your Budget Tracker
+                  Hello, John!
                 </h2>
                 <p className="text-sm text-muted-foreground">
-                  Manage your finances with ease.
+                  Let's conquer your financial goals today.
                 </p>
               </div>
+
               <div className=" space-x-4">
                 <DialogTrigger asChild>
                   <Button
@@ -164,31 +180,111 @@ export default function Dashboard() {
               </div>
             </div>
             <Separator className="my-4" />
+            <div className="grid grid-cols-5 gap-4">
+              <div className="flex flex-col gap-4 col-span-4">
+                <SummaryCards />
 
-            <SummaryCards />
-            <div className="grid gap-4 grid-cols-2 pt-4 lg:grid-cols-7">
-              {/* Chart */}
-              <Card className="col-span-4">
-                <CardHeader>
-                  <CardTitle>Overview</CardTitle>
-                </CardHeader>
-                <CardContent className="pl-2">
-                  <Overview />
-                </CardContent>
-              </Card>
+                <Card>
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Upcoming Bills</CardTitle>
+                    <ChevronRight className="cursor-pointer" />
+                  </CardHeader>
+                  <CardContent className="flex items-center py-0 gap-2">
+                    <AddNewBill />
+                    <Bills />
+                  </CardContent>
+                </Card>
 
-              {/* Recent Transaction */}
-              <Card className="col-span-4 lg:col-span-3">
-                <CardHeader>
-                  <CardTitle>Recent Transactions</CardTitle>
-                  <CardDescription>
-                    {/* You made 265 sales this month. */}
-                  </CardDescription>
-                </CardHeader>
-                <CardContent className="">
-                  <RecentTransaction />
-                </CardContent>
-              </Card>
+                <Card className="">
+                  <CardHeader className="flex flex-row items-center justify-between">
+                    <CardTitle>Spending Trends</CardTitle>
+                    {/* <DatePickerCard /> */}
+                    <div className="space-y-2">
+                      <Select defaultValue="daily">
+                        <SelectTrigger className="w-[180px]">
+                          <SelectValue placeholder="Select time frame" />
+                        </SelectTrigger>
+                        <SelectContent>
+                          <SelectItem value="daily">Daily</SelectItem>
+                          <SelectItem value="weekly">Weekly</SelectItem>
+                          <SelectItem value="monthly">Monthly</SelectItem>
+                          <SelectItem value="quarterly">Quarterly</SelectItem>
+                          <SelectItem value="yearly">Yearly</SelectItem>
+                        </SelectContent>
+                      </Select>
+                    </div>
+                  </CardHeader>
+                  <CardContent className="p-0 pr-6 pb-4">
+                    <Overview />
+                  </CardContent>
+                </Card>
+
+                <Card className="">
+                  <CardHeader>
+                    <CardTitle>Recent Transactions</CardTitle>
+                    <CardDescription>
+                      {/* You made 265 sales this month. */}
+                    </CardDescription>
+                  </CardHeader>
+                  <CardContent className="">
+                    <RecentTransaction />
+                  </CardContent>
+                </Card>
+              </div>
+
+              <div className="flex flex-col gap-4">
+                <Card className="">
+                  <CardHeader>
+                    <CardTitle>This Month</CardTitle>
+                    <CardDescription>Total Income of 10%</CardDescription>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="flex flex-col items-center justify-center">
+                      <div className="absolute mb-6 ml-2 text-center">
+                        <span className="font-light text-md">Total</span>
+                        <br />
+                        <span className="font-bold text-xl">$21,329</span>
+                      </div>
+                      <Balance />
+                    </div>
+                    <div className="grid grid-cols-2 gap-14 text-center">
+                      <div>
+                        <p className="pb-2 text-sm text-muted-foreground">
+                          Income
+                        </p>
+                        <Progress value={progress} />
+                        <p className="pt-2 font-semibold">60%</p>
+                      </div>
+                      <div>
+                        <p className="pb-2 text-sm text-muted-foreground">
+                          Expense
+                        </p>
+                        <Progress value={40} />
+                        <p className="pt-2 font-semibold">40%</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <Card className="">
+                  <CardHeader className="border border-border rounded-ss-md py-5 flex flex-row items-center justify-between">
+                    <CardTitle>My Savings</CardTitle>
+                    <ChevronRight className="cursor-pointer" />
+                  </CardHeader>
+                  <div className="flex flex-row items-end justify-between px-6 py-4 pb-6">
+                    <p className="text-muted-foreground text-md">
+                      Total Savings
+                    </p>
+                    <p className="font-semibold text-xl">
+                      $12,500{" "}
+                      <span className="text-muted-foreground text-sm">.00</span>{" "}
+                    </p>
+                  </div>
+                  <CardContent className="flex flex-col items-center py-0 gap-4">
+                    <AddNewSavings />
+                    <Savings />
+                  </CardContent>
+                </Card>
+              </div>
             </div>
           </div>
         )}

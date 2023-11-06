@@ -90,7 +90,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
     setIsLoading(true);
 
     const data = {
-      email: "demo@gmail.com",
+      email: "demo@user.com",
       password: "Demo@1234",
     };
 
@@ -100,7 +100,7 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
 
       if (responseData !== undefined) {
         login(responseData.token);
-        navigate("/"); // Navigate to the home page after successful login
+        navigate("/personal/dashboard"); // Navigate to the home page after successful login
       }
     } catch (error) {
       console.log(error);
@@ -194,9 +194,9 @@ export function LoginForm({ className, ...props }: UserAuthFormProps) {
         {isLoading ? (
           <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
         ) : (
-          <Icons.google className="mr-2 h-4 w-4" />
+          <Icons.logo className="mr-2 h-4 w-4" />
         )}{" "}
-        Demo Login
+        Continue With Demo Account
       </Button>
     </div>
   );

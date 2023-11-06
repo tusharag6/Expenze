@@ -8,7 +8,7 @@ export default function ChangePasswordPage() {
   return (
     <>
       <div className="md:hidden"></div>
-      <div className="container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
+      <div className="bg-background text-foreground container relative h-screen flex-col items-center justify-center grid lg:max-w-none lg:grid-cols-2 lg:px-0">
         <Link
           to="/login"
           className={cn(

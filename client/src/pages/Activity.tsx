@@ -4,6 +4,8 @@ import { DataTable } from "../components/DataTable";
 import { useSelectedAccount } from "../context/AccountContext";
 import { format, parseISO } from "date-fns";
 import { useTransaction } from "../context/TransactionContext";
+import { Tabs, TabsList, TabsTrigger } from "../../components/ui/tabs";
+import { Separator } from "../../components/ui/separator";
 
 const Activity = () => {
   const { transactionData, updateTransactionData } = useTransaction();
@@ -39,20 +41,36 @@ const Activity = () => {
       .reverse();
   }
   return (
-    <div className="hidden h-full flex-1 flex-col space-y-8 p-8 md:flex">
-      <div className="flex items-center justify-between space-y-2">
-        <div>
-          <h2 className="text-2xl font-bold tracking-tight">Welcome back!</h2>
-          <p className="text-muted-foreground">
-            Here&apos;s a list of your transactions !
-          </p>
+    <div className="flex-1 space-y-4 pt-6 md:px-7 h-full mb-4">
+      <div className="flex-col border-none data-[state=active]:flex ">
+        <div className="flex items-center justify-between ">
+          <div className="space-y-1">
+            <h2 className="text-2xl font-semibold tracking-tight">
+              Your Transaction History
+            </h2>
+            <p className="text-sm text-muted-foreground">
+              Stay on top of your finances.
+            </p>
+          </div>
         </div>
-        {/* <div className="flex items-center space-x-2">
-          <UserNav />
-        </div> */}
       </div>
-      <DataTable data={formattedTransactions} columns={columns} />
-      {/* <RecentTransaction /> */}
+      <Separator className="my-4" />
+
+      <div className="hidden h-full flex-1 flex-col space-y-8 md:flex">
+        <Tabs defaultValue="all" className="w-[400px]">
+          <TabsList className="grid w-full grid-cols-3">
+            <TabsTrigger value="all">All</TabsTrigger>
+            <TabsTrigger value="income">Income</TabsTrigger>
+            <TabsTrigger value="expense">Expense</TabsTrigger>
+          </TabsList>
+        </Tabs>
+        <DataTable
+          data={formattedTransactions}
+          columns={columns}
+          border-border
+        />
+        {/* <RecentTransaction /> */}
+      </div>
     </div>
   );
 };

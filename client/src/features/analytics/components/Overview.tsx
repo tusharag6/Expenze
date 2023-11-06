@@ -1,9 +1,11 @@
-"use client";
-
 import { useEffect, useState } from "react";
 import {
   Bar,
   BarChart,
+  CartesianGrid,
+  Legend,
+  Line,
+  LineChart,
   ResponsiveContainer,
   Tooltip,
   XAxis,
@@ -58,7 +60,8 @@ export function Overview() {
 
   return (
     <ResponsiveContainer width="100%" height={350}>
-      <BarChart data={expenseData}>
+      <LineChart data={expenseData}>
+        <CartesianGrid vertical={false} strokeDasharray="4 4" opacity={0.1} />
         <XAxis
           dataKey="date"
           stroke="#E3FDFD"
@@ -79,8 +82,44 @@ export function Overview() {
           axisLine={false}
           tickFormatter={(value) => `$${value}`}
         />
-        {/* <Tooltip /> */}
         <Tooltip
+          contentStyle={customTooltipStyle}
+          cursor={{ fill: "transparent", stroke: "", strokeWidth: 2 }}
+        />
+        <Legend />
+        <Line
+          type="monotone"
+          dataKey="amount"
+          name="Income"
+          stroke="#71C9CE"
+          strokeWidth={2}
+        />
+        {/* Add another Line for expense if you have the data */}
+      </LineChart>
+
+      {/* <BarChart data={expenseData}>
+        <XAxis
+          dataKey="date"
+          stroke="#E3FDFD"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value) =>
+            new Date(value).toLocaleDateString("en-US", {
+              day: "numeric",
+              month: "short",
+            })
+          }
+        />
+        <YAxis
+          stroke="#E3FDFD"
+          fontSize={12}
+          tickLine={false}
+          axisLine={false}
+          tickFormatter={(value) => `$${value}`}
+        /> */}
+      {/* <Tooltip /> */}
+      {/* <Tooltip
           contentStyle={customTooltipStyle}
           cursor={{ fill: "transparent", stroke: "", strokeWidth: 2 }}
         />
@@ -91,7 +130,7 @@ export function Overview() {
           fill="#71C9CE"
           radius={[4, 4, 0, 0]}
         />
-      </BarChart>
+      </BarChart> */}
     </ResponsiveContainer>
   );
 }
