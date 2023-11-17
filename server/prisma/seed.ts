@@ -251,6 +251,61 @@ async function seed() {
       },
     });
 
+    const bills = await prisma.bill.createMany({
+      data: [
+        {
+          billName: "Rent",
+          dueDate: new Date("2023-12-01"),
+          billAmount: 1200.0,
+          isRecurring: true,
+          interval: "monthly",
+          category: "Housing",
+          isPaid: false,
+          userId: user.id,
+        },
+        {
+          billName: "Utilities",
+          dueDate: new Date("2023-12-05"),
+          billAmount: 200.0,
+          isRecurring: true,
+          interval: "monthly",
+          category: "Utilities",
+          isPaid: false,
+          userId: user.id,
+        },
+        {
+          billName: "Internet",
+          dueDate: new Date("2023-12-10"),
+          billAmount: 50.0,
+          isRecurring: true,
+          interval: "monthly",
+          category: "Utilities",
+          isPaid: false,
+          userId: user.id,
+        },
+        {
+          billName: "Gym Membership",
+          dueDate: new Date("2023-12-15"),
+          billAmount: 30.0,
+          isRecurring: true,
+          interval: "monthly",
+          category: "Fitness",
+          isPaid: false,
+          userId: user.id,
+        },
+        {
+          billName: "Credit Card Payment",
+          dueDate: new Date("2023-12-20"),
+          billAmount: 150.0,
+          isRecurring: true,
+          interval: "monthly",
+          category: "Debt",
+          isPaid: false,
+          userId: user.id,
+        },
+      ],
+    });
+
     console.log("Seed data has been created.");
   } catch (error) {
     console.error("Error:", error);

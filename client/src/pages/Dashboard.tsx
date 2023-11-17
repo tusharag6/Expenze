@@ -50,6 +50,7 @@ import { useMutation, useQuery } from "@tanstack/react-query";
 import { profileService } from "../features/profile";
 import { dashboardService } from "../features/analytics";
 import Toast from "../components/Toast";
+import { Link } from "react-router-dom";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -168,7 +169,9 @@ export default function Dashboard() {
                 <Card>
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Upcoming Bills</CardTitle>
-                    <ChevronRight className="cursor-pointer" />
+                    <Link to="/personal/bills">
+                      <ChevronRight className="cursor-pointer" />
+                    </Link>
                   </CardHeader>
                   <CardContent className="flex items-center py-0 gap-2">
                     <AddNewBill />

@@ -183,13 +183,13 @@ export const cancelSubscription = async (subscriptionId: string) => {
 // Fetch upcoming bills and subscriptions
 export const upcomingBills = async (userId: string) => {
   const today = new Date();
-  const sevenDaysLater = addDays(today, 7);
+  const thirtyDaysLater = addDays(today, 30);
   const upcomingBills = await prisma.bill.findMany({
     where: {
       userId,
       dueDate: {
         gte: today,
-        lte: sevenDaysLater,
+        lte: thirtyDaysLater,
       },
     },
   });

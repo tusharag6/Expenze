@@ -71,7 +71,8 @@ export const getAllBill = async (req: Request, res: Response) => {
     }
 
     const userId = userService.getUserIdFromToken(token);
-    const bills = billAndSubscriptionService.deleteBill(userId);
+
+    const bills = await billAndSubscriptionService.getBills(userId);
     res.status(200).json(bills);
   } catch (error) {
     console.error(error);
