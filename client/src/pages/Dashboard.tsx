@@ -39,17 +39,17 @@ import SummaryCards from "../features/analytics/components/SummaryCards";
 import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { useAuth } from "../context/AuthContext";
 import { Separator } from "../../components/ui/separator";
-import { DatePickerCard } from "../components/DatePickerCard";
 import Balance from "../features/analytics/components/Balance";
 import { Progress } from "../../components/ui/progress";
-import SingleBillsCard from "../features/analytics/components/SingleBillsCard";
 import Bills from "../features/analytics/components/Bills";
 import AddNewBill from "../features/analytics/components/AddNewBill";
 import Savings from "../features/analytics/components/Savings";
 import AddNewSavings from "../features/analytics/components/AddNewSavings";
 import { ChevronRight } from "lucide-react";
-import { useQuery } from "@tanstack/react-query";
+import { useMutation, useQuery } from "@tanstack/react-query";
 import { profileService } from "../features/profile";
+import { dashboardService } from "../features/analytics";
+import Toast from "../components/Toast";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -66,79 +66,37 @@ export default function Dashboard() {
 
   const { selectedAccountData } = useSelectedAccount();
 
+  const addTransactionMutation = useMutation({
+    mutationFn: async (data: any) => {
+      dashboardService.addTransaction(selectedAccountData?.id, token, data);
+    },
+    onSuccess: () => {
+      Toast.fire({
+        icon: "success",
+        title: "Transaction added successfully",
+      });
+    },
+    onError: () => {
+      Toast.fire({
+        icon: "error",
+        title: "Uh oh! Something went wrong.",
+        text: "There was a problem with creating your transaction.",
+      });
+    },
+  });
+
   async function handleNewTransaction(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-
     const data = {
       amount: parseFloat(amount),
       type,
       budgetCategory,
       description,
     };
-
-    console.log(data);
-    let accountId = selectedAccountData?.id;
-
-    try {
-      // Make an API request to add the new transaction
-      const response = await fetch(
-        `http://localhost:8080/api/transactions/accounts/${accountId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (response.ok) {
-        alert("Transaction added");
-        // Transaction added successfully
-        // Handle success behavior here
-      } else {
-        alert("Error");
-        // Handle error behavior here
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
+    await addTransactionMutation.mutateAsync(data);
     setIsLoading(false);
   }
-  const [customCategories, setCustomCategories] = useState<string[]>([]);
-
-  async function fetchCustomCategories() {
-    try {
-      const response = await fetch("http://localhost:8080/api/budget", {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      const categoryNames = data.map(
-        (category: { category: any }) => category.category
-      );
-
-      return categoryNames;
-
-      return data;
-    } catch (error) {
-      console.error("Error fetching custom categories:", error);
-      return [];
-    }
-  }
-
-  useEffect(() => {
-    async function fetchData() {
-      const fetchedCustomCategoriesData = await fetchCustomCategories();
-      setCustomCategories(fetchedCustomCategoriesData);
-    }
-    fetchData();
-  }, []);
 
   const [progress, setProgress] = React.useState(13);
 
@@ -146,6 +104,16 @@ export default function Dashboard() {
     const timer = setTimeout(() => setProgress(66), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  const { data: customCategories } = useQuery({
+    queryKey: ["customCategories"],
+    queryFn: async () => {
+      const customCategories = await dashboardService.fetchBudgetCategories(
+        token
+      );
+      return customCategories;
+    },
+  });
 
   const { data: userData } = useQuery({
     queryKey: ["user"],
