@@ -2,7 +2,7 @@ import { summaryDataTypes } from "../../../types";
 import { transactionTypes } from "../../../types";
 
 export async function fetchSummaryData(
-  accountId: number,
+  accountId: string,
   token: string | null
 ): Promise<summaryDataTypes.SummaryData | null> {
   try {
@@ -30,7 +30,7 @@ export async function fetchSummaryData(
 }
 
 export async function addTransaction(
-  accountId: number | undefined,
+  accountId: string | undefined,
   token: string | null,
   transaction: {
     amount: number;

@@ -3,7 +3,7 @@ import { createContext, useContext, ReactNode, useState } from "react";
 interface Account {
   account_name: String;
   account_number: String;
-  id: number;
+  id: string;
   initial_balance: number;
   user_id: number;
 }

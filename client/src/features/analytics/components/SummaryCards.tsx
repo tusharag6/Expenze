@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import {
   Card,
   CardHeader,
@@ -8,31 +7,41 @@ import {
 import { useSelectedAccount } from "../../../context/AccountContext";
 import { dashboardService } from "..";
 import { useAuth } from "../../../context/AuthContext";
+import { useQuery } from "@tanstack/react-query";
+import { useDispatch } from "react-redux";
+import { setSummary } from "../reducers/summarySlice";
+import { useEffect } from "react";
 
 const SummaryCards = () => {
   const { selectedAccountData } = useSelectedAccount();
-  const [summaryData, setSummaryData] = useState({
-    totalBalance: 0,
-    totalExpense: 0,
-    totalIncome: 0,
-    numTransactions: 0,
-  });
   const { token } = useAuth();
+  const dispatch = useDispatch();
+  let accountId: string = "";
+  if (selectedAccountData) {
+    accountId = selectedAccountData?.id;
+  }
+  const { data: summaryData } = useQuery({
+    queryKey: ["summaryData", accountId],
+    queryFn: async () => {
+      const summary = await dashboardService.fetchSummaryData(accountId, token);
+      return summary;
+    },
+  });
+  const totalBalance = summaryData?.totalBalance.toFixed(2) || 0;
+  const totalIncome = summaryData?.totalIncome.toFixed(2) || 0;
+  const totalExpense = summaryData?.totalExpense.toFixed(2) || 0;
+
   useEffect(() => {
-    if (selectedAccountData) {
-      const accountId = selectedAccountData.id;
-
-      const fetchData = async () => {
-        const data = await dashboardService.fetchSummaryData(accountId, token);
-
-        if (data) {
-          setSummaryData(data);
-        }
-      };
-
-      fetchData();
+    if (summaryData) {
+      dispatch(
+        setSummary({
+          income: summaryData.totalIncome.toFixed(2),
+          expenses: summaryData.totalExpense.toFixed(2),
+          balance: summaryData.totalBalance.toFixed(2),
+        })
+      );
     }
-  }, [selectedAccountData]);
+  }, [summaryData, dispatch]);
 
   return (
     <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
@@ -53,9 +62,7 @@ const SummaryCards = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            ${summaryData.totalBalance.toFixed(2)}
-          </div>
+          <div className="text-2xl font-bold">${totalBalance}</div>
           <p className="text-xs text-muted-foreground">
             +20.1% from last month
           </p>
@@ -79,9 +86,7 @@ const SummaryCards = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            ${summaryData.totalIncome.toFixed(2)}
-          </div>
+          <div className="text-2xl font-bold">${totalIncome}</div>
           <p className="text-xs text-muted-foreground">+19% from last month</p>
         </CardContent>
       </Card>
@@ -103,9 +108,7 @@ const SummaryCards = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            ${summaryData.totalExpense.toFixed(2)}
-          </div>
+          <div className="text-2xl font-bold">${totalExpense}</div>
           <p className="text-xs text-muted-foreground">+19% from last month</p>
         </CardContent>
       </Card>
@@ -126,9 +129,7 @@ const SummaryCards = () => {
           </svg>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold">
-            +{summaryData.numTransactions}
-          </div>
+          <div className="text-2xl font-bold">+16</div>
           <p className="text-xs text-muted-foreground">+201 since last hour</p>
         </CardContent>
       </Card>
