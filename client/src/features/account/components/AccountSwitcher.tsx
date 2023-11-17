@@ -35,19 +35,12 @@ import { useSelectedAccount } from "../../../context/AccountContext";
 import { Icons } from "../../../components/Icons";
 import { accountService } from "..";
 import { FaMoneyCheck } from "react-icons/fa";
-
-interface Account {
-  account_name: String;
-  account_number: String;
-  id: number;
-  initial_balance: number;
-  user_id: number;
-}
+import { useMutation, useQuery } from "@tanstack/react-query";
+import Toast from "../../../components/Toast";
 
 export default function AccountSwitcher() {
   const [open, setOpen] = useState(false);
   const [showNewAccountDialog, setShowNewAccountDialog] = useState(false);
-  const [accountData, setAccountData] = useState<Account[]>([]);
   const [selectedAccount, setSelectedAccount] = useState<Number>();
   const { selectedAccountData, setSelectedAccountData } = useSelectedAccount();
   const { token } = useAuth();
@@ -57,45 +50,44 @@ export default function AccountSwitcher() {
   const [accountNumber, setAccountNumber] = useState("");
   const [initialBalance, setInitialBalance] = useState(0);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const accounts = await accountService.fetchAccounts(token);
+  const { data: accountData, refetch } = useQuery({
+    queryKey: ["accounts"],
+    queryFn: async () => {
+      const accounts = await accountService.fetchAccounts(token);
+      return accounts;
+    },
+  });
 
-        setAccountData(accounts);
-
-        if (accounts.length > 0) {
-          const storedAccountData = localStorage.getItem("accountData");
-          if (!storedAccountData) {
-            localStorage.setItem("accountData", JSON.stringify(accounts[0]));
-            setSelectedAccountData(accounts[0]);
-          }
-        }
-      } catch (error) {
-        console.error(error);
-      }
-    };
-    fetchData();
-  }, [token]);
-
+  const addAccountMutation = useMutation({
+    mutationFn: async (data: any) => {
+      await accountService.addAccount(token, data);
+    },
+    onSuccess: () => {
+      console.log("Account added successfully");
+      Toast.fire({
+        icon: "success",
+        title: "Account added successfully",
+      });
+      refetch();
+    },
+    onError: (error) => {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: "Uh oh! Something went wrong.",
+        text: "There was a problem with creating your account.",
+      });
+    },
+  });
   async function handleAddAccount(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-
     const data = {
       account_name: accountName,
       account_number: accountNumber,
       initial_balance: initialBalance,
     };
-
-    try {
-      await accountService.addAccount(token, data);
-      alert("Account added successfully");
-    } catch (error) {
-      console.error(error);
-      alert("Error adding account");
-    }
-
+    await addAccountMutation.mutateAsync(data);
     setIsLoading(false);
   }
 
@@ -123,7 +115,7 @@ export default function AccountSwitcher() {
               <CommandInput placeholder="Search account..." />
               <CommandEmpty>No account found.</CommandEmpty>
               <CommandGroup>
-                {accountData.map((account) => (
+                {accountData?.map((account) => (
                   <CommandItem
                     key={String(account.id)}
                     onSelect={() => {
@@ -218,11 +210,9 @@ export default function AccountSwitcher() {
           >
             Cancel
           </Button>
-          <Button type="submit" onClick={handleAddAccount}>
-            {isLoading ? (
+          <Button type="submit" onClick={handleAddAccount} disabled={isLoading}>
+            {isLoading && (
               <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />
-            ) : (
-              " "
             )}
             Add Account
           </Button>

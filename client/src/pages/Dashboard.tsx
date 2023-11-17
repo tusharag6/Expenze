@@ -48,6 +48,8 @@ import AddNewBill from "../features/analytics/components/AddNewBill";
 import Savings from "../features/analytics/components/Savings";
 import AddNewSavings from "../features/analytics/components/AddNewSavings";
 import { ChevronRight } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import { profileService } from "../features/profile";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -144,6 +146,17 @@ export default function Dashboard() {
     const timer = setTimeout(() => setProgress(66), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const user = await profileService.fetchUserData(token);
+      return user;
+    },
+  });
+
+  const userName = userData?.username || "User";
+
   return (
     <Dialog
       open={showAddTransactionDialog}
@@ -160,7 +173,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between ">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold tracking-tight">
-                  Hello, John!
+                  Hello, {userName}!
                 </h2>
                 <p className="text-sm text-muted-foreground">
                   Let's conquer your financial goals today.

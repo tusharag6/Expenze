@@ -12,6 +12,7 @@ import {
 import { Separator } from "../../components/ui/separator";
 import { useAuth } from "../context/AuthContext";
 import { profileService } from "../features/profile";
+import { useQuery } from "@tanstack/react-query";
 
 type SidebarProps = {
   className?: string;
@@ -20,22 +21,16 @@ type SidebarProps = {
 export function Sidebar({ className }: SidebarProps) {
   const [selected, setSelected] = useState("Dashboard");
   const { token, logout } = useAuth();
-  const [userName, setUserName] = useState("");
-  const [userEmail, setUserEmail] = useState("");
 
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const user = await profileService.fetchUserData(token);
-        setUserName(user.username);
-        setUserEmail(user.email);
-      } catch (error) {
-        console.error(error);
-      }
-    };
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const user = await profileService.fetchUserData(token);
+      return user;
+    },
+  });
 
-    fetchUser();
-  }, [token]);
+  const userName = userData?.username || "User";
 
   const handleLogout = () => {
     logout();
