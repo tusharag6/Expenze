@@ -1,3 +1,5 @@
+import { useSelector } from "react-redux";
+import SingleBill from "../features/bills/components/SingleBill";
 import { Separator } from "../../components/ui/separator";
 import {
   Card,
@@ -5,21 +7,10 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import SingleBill from "../features/bills/components/SingleBill";
-import { useQuery } from "@tanstack/react-query";
-import { billsService } from "../features/bills";
-import { useAuth } from "../context/AuthContext";
-import { SkeletonBills } from "../features/bills/components/Skeleton";
+
 const Bills = () => {
-  const { token } = useAuth();
-  const { data: billsData, isLoading } = useQuery({
-    queryKey: ["bills"],
-    queryFn: async () => {
-      const bills = await billsService.fetchBills(token);
-      return bills;
-    },
-  });
-  console.log(billsData);
+  const data = useSelector((state: any) => state.bills);
+  const billsData = data.bills.billsData;
 
   return (
     <div className="flex-1 space-y-4 pt-6 md:px-7 h-full mb-4">
@@ -50,21 +41,17 @@ const Bills = () => {
           <Separator className="opacity-20" />
         </CardHeader>
         <CardContent>
-          {isLoading ? (
-            <SkeletonBills />
-          ) : (
-            billsData.map((bill: any) => (
-              <SingleBill
-                key={bill.id}
-                billName={bill.billName}
-                dueDate={bill.dueDate}
-                billAmount={bill.billAmount}
-                isRecurring={bill.isRecurring}
-                interval={bill.interval}
-                category={bill.category}
-              />
-            ))
-          )}
+          {billsData.map((bill: any) => (
+            <SingleBill
+              key={bill.id}
+              billName={bill.billName}
+              dueDate={bill.dueDate}
+              billAmount={bill.billAmount}
+              isRecurring={bill.isRecurring}
+              interval={bill.interval}
+              category={bill.category}
+            />
+          ))}
         </CardContent>
       </Card>
     </div>

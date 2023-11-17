@@ -1,44 +1,51 @@
 import SingleBillsCard from "./SingleBillsCard";
 import { ScrollArea, ScrollBar } from "../../../../components/ui/scroll-area";
+import { useDispatch, useSelector } from "react-redux";
+import { useQuery } from "@tanstack/react-query";
+import { useAuth } from "../../../context/AuthContext";
+import { billsService } from "../../bills";
+import { SkeletonBills } from "../../bills/components/Skeleton";
+import { useEffect } from "react";
+import { setBills } from "../../bills/reducers/billsSlice";
 
 const Bills = () => {
-  const billsData = [
-    { title: "Netflix", amount: 125, date: "22/11/2023" },
-    {
-      title: "Electricity",
-      img: "https://listcarbrands.com/wp-content/uploads/2017/10/Tata-Motors-Logo-1988.png",
-      amount: 75,
-      date: "15/11/2023",
+  const { token } = useAuth();
+  const dispatch = useDispatch();
+
+  const { data: billsData, isLoading } = useQuery({
+    queryKey: ["bills"],
+    queryFn: async () => {
+      const bills = await billsService.fetchBills(token);
+      return bills;
     },
-    {
-      title: "Internet",
-      img: "https://s3-ap-southeast-1.amazonaws.com/bsy/iportal/images/airtel-logo-white-text-horizontal.jpg",
-      amount: 60,
-      date: "10/11/2023",
-    },
-    {
-      title: "Water",
-      img: "https://listcarbrands.com/wp-content/uploads/2017/10/Tata-Motors-Logo-1988.png",
-      amount: 40,
-      date: "18/11/2023",
-    },
-    { title: "Gas", amount: 50, date: "20/11/2023" },
-    { title: "Phone", amount: 30, date: "14/11/2023" },
-    { title: "Credit Card", amount: 100, date: "28/11/2023" },
-  ];
+  });
+
+  useEffect(() => {
+    if (billsData) {
+      dispatch(
+        setBills({
+          billsData,
+        })
+      );
+    }
+  }, [billsData, dispatch]);
 
   return (
-    <ScrollArea className="whitespace-nowrap rounded-">
+    <ScrollArea className="whitespace-nowrap rounded">
       <div className="flex space-x-4 p-4">
-        {billsData.map((bill, index) => (
-          <SingleBillsCard
-            key={index}
-            title={bill.title}
-            img={bill.img}
-            amount={bill.amount}
-            date={bill.date}
-          />
-        ))}
+        {isLoading ? (
+          <SkeletonBills />
+        ) : (
+          billsData.map((bill: any) => (
+            <SingleBillsCard
+              key={bill.id}
+              title={bill.billName}
+              img={bill.img}
+              amount={bill.billAmount}
+              date={bill.dueDate}
+            />
+          ))
+        )}
       </div>
       <ScrollBar className="" orientation="horizontal" />
     </ScrollArea>
