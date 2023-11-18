@@ -100,10 +100,10 @@ export default function AccountSwitcher() {
             role="combobox"
             aria-expanded={open}
             aria-label="Select a account"
-            className="w-[200px] justify-between content-center"
+            className="w-[200px] justify-between content-center items-center"
           >
             <span className="mr-2">
-              <FaMoneyCheck size="15" />
+              <Icons.bank className="h-4 w-4" />
             </span>
             {selectedAccountData?.account_name || "Select an account"}
             <CaretSortIcon className="ml-auto h-4 w-4 shrink-0 opacity-50" />
@@ -132,7 +132,7 @@ export default function AccountSwitcher() {
                     className="text-sm"
                   >
                     <span className="mr-2">
-                      <FaMoneyCheck size="15" />
+                      <Icons.bank className="h-4 w-4" />
                     </span>
                     {account.account_name}
                     {selectedAccount === account.id && (
