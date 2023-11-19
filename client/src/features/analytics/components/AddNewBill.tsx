@@ -9,7 +9,6 @@ import {
 } from "../../../../components/ui/dialog";
 import { Icons } from "../../../components/Icons";
 import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
 import { Label } from "../../../../components/ui/label";
 import { Input } from "../../../../components/ui/input";
 import {
@@ -50,6 +49,7 @@ const AddNewBill = () => {
   const [step, setStep] = useState(0);
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
     useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const formTitles = [
     "Add New Bill",
     "Recurring Details",
@@ -72,20 +72,26 @@ const AddNewBill = () => {
   ) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const onSubmit = (event: any) => {
+  const onSubmit = async (event: any) => {
     event.preventDefault();
+    setIsSubmitting(true);
+
     console.log(formData);
-    alert("Bill Added!");
-    setFormData({
-      billName: "",
-      dueDate: undefined,
-      billAmount: 0,
-      isRecurring: false,
-      interval: "",
-      category: "",
-      isPaid: false,
-    });
-    setStep(0);
+
+    setTimeout(() => {
+      alert("Bill Added!");
+      setFormData({
+        billName: "",
+        dueDate: undefined,
+        billAmount: 0,
+        isRecurring: false,
+        interval: "",
+        category: "",
+        isPaid: false,
+      });
+      setStep(0);
+      setIsSubmitting(false);
+    }, 5000);
   };
 
   const stepDisplay = () => {
@@ -108,7 +114,6 @@ const AddNewBill = () => {
               id="billAmount"
               type="number"
               placeholder="Enter amount"
-              // value={formData.billAmount}
               onChange={(e) => handleInputChange("billAmount", e.target.value)}
               ref={null}
             />
@@ -304,18 +309,17 @@ const AddNewBill = () => {
             </div>
             <Button
               type="submit"
-              // disabled={isSubmitting}
+              disabled={isSubmitting}
               className={step == formTitles.length - 1 ? "" : "hidden"}
             >
-              {/* {isSubmitting ? (
-                <div>
+              {isSubmitting ? (
+                <div className="flex items-center justify-center">
                   <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
-                  <span>Adding</span>
+                  <span>Adding ...</span>
                 </div>
               ) : (
-                " "
-              )} */}
-              Add Bill
+                <span>Add Bill</span>
+              )}
             </Button>
           </DialogFooter>
         </form>
