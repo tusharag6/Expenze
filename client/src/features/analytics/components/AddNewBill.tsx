@@ -10,7 +10,6 @@ import {
 import { Icons } from "../../../components/Icons";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useForm } from "react-hook-form";
 import { Label } from "../../../../components/ui/label";
 import { Input } from "../../../../components/ui/input";
 import {
@@ -30,14 +29,16 @@ import { Calendar } from "../../../../components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Switch } from "../../../../components/ui/switch";
 import { useState } from "react";
+import { format } from "date-fns";
+import { cn } from "../../../../lib/utils";
 
 const billSchema = z.object({
   billName: z.string().min(1, "Bill Name is required"),
-  dueDate: z.date(),
+  dueDate: z.date().optional(),
   billAmount: z
     .number()
     .min(0, "Bill Amount must be greater than or equal to 0"),
-  isRecurring: z.boolean(),
+  isRecurring: z.boolean().optional(),
   interval: z.string().optional(),
   category: z.string().optional(),
   isPaid: z.boolean().optional(),
@@ -47,41 +48,58 @@ type FormData = z.infer<typeof billSchema>;
 
 const AddNewBill = () => {
   const [step, setStep] = useState(0);
-
+  const [showAddTransactionDialog, setShowAddTransactionDialog] =
+    useState(false);
   const formTitles = [
     "Add New Bill",
     "Recurring Details",
     "Additional Information",
   ];
   let isRecurring: boolean = true;
-  const {
-    register,
-    handleSubmit,
-    formState: { errors, isSubmitting },
-    reset,
-  } = useForm<FormData>({
-    resolver: zodResolver(billSchema),
+
+  const [formData, setFormData] = useState<FormData>({
+    billName: "",
+    dueDate: undefined,
+    billAmount: 0,
+    isRecurring: false,
+    interval: "",
+    category: "",
+    isPaid: false,
   });
-
-  const onSubmit = async (data: FormData) => {
-    // TODO: submit to server
-    // ...
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    reset();
+  const handleInputChange = (
+    name: keyof FormData,
+    value: FormData[keyof FormData]
+  ) => {
+    setFormData((prevData) => ({ ...prevData, [name]: value }));
+  };
+  const onSubmit = (event: any) => {
+    event.preventDefault();
+    console.log(formData);
+    alert("Bill Added!");
+    setFormData({
+      billName: "",
+      dueDate: undefined,
+      billAmount: 0,
+      isRecurring: false,
+      interval: "",
+      category: "",
+      isPaid: false,
+    });
+    setStep(0);
   };
 
   const stepDisplay = () => {
     if (step == 0) {
       return (
-        <div className="flex flex-col gap-4 pb-2">
+        <div className="flex flex-col gap-4 py-4">
           <div className="space-y-2">
             <Label htmlFor="billName">Bill Name</Label>
             <Input
               id="billName"
               type="text"
               placeholder="Enter bill name"
-              {...register("billName")}
+              value={formData.billName}
+              onChange={(e) => handleInputChange("billName", e.target.value)}
             />
           </div>
           <div className="space-y-2">
@@ -90,29 +108,38 @@ const AddNewBill = () => {
               id="billAmount"
               type="number"
               placeholder="Enter amount"
-              {...register("billAmount")}
+              // value={formData.billAmount}
+              onChange={(e) => handleInputChange("billAmount", e.target.value)}
+              ref={null}
             />
           </div>
-          <div className="space-y-2 flex flex-col">
+          <div className="space-y-2 flex flex-col pt-2">
             <Label htmlFor="dueDate">Due Date</Label>
             <Popover>
               <PopoverTrigger asChild>
                 <Button
                   variant={"outline"}
-                  className="pl-3 text-left font-normal"
+                  className={cn(
+                    "w-full pt justify-start text-left font-normal",
+                    !formData.dueDate && "text-muted-foreground"
+                  )}
                 >
-                  <span>Pick a date</span>
-
-                  <CalendarIcon className="ml-auto h-4 w-4 opacity-50" />
+                  <CalendarIcon className="mr-2 h-4 w-4" />
+                  {formData.dueDate ? (
+                    format(formData.dueDate, "PPP")
+                  ) : (
+                    <span>Pick a date</span>
+                  )}
                 </Button>
               </PopoverTrigger>
               <PopoverContent className="w-auto p-0" align="start">
                 <Calendar
                   mode="single"
-                  disabled={(date) =>
-                    date > new Date() || date < new Date("1900-01-01")
-                  }
                   initialFocus
+                  selected={formData.dueDate}
+                  onSelect={(e) => {
+                    handleInputChange("dueDate", e);
+                  }}
                 />
               </PopoverContent>
             </Popover>
@@ -121,7 +148,7 @@ const AddNewBill = () => {
       );
     } else if (step == 1) {
       return (
-        <div className="flex flex-col gap-4 pb-2">
+        <div className="flex flex-col gap-4 py-4">
           {/* Recurring Bill Switch */}
           <div className="flex flex-row items-center justify-between rounded-lg border border-border p-4">
             <div className="space-y-0.5">
@@ -131,7 +158,10 @@ const AddNewBill = () => {
               </div>
             </div>
             <div>
-              <Switch />
+              <Switch
+                checked={formData.isRecurring}
+                onCheckedChange={(e) => handleInputChange("isRecurring", e)}
+              />
             </div>
           </div>
 
@@ -139,7 +169,7 @@ const AddNewBill = () => {
           {isRecurring && (
             <div className="space-y-2">
               <Label htmlFor="interval">Billing Interval</Label>
-              <Select>
+              <Select onValueChange={(e) => handleInputChange("interval", e)}>
                 <SelectTrigger>
                   <SelectValue placeholder="Select an interval" />
                 </SelectTrigger>
@@ -164,11 +194,11 @@ const AddNewBill = () => {
       );
     } else if (step == 2) {
       return (
-        <div className="flex flex-col gap-4 pb-2">
+        <div className="flex flex-col gap-4 py-4">
           {/* Bill Category */}
           <div className="space-y-2">
             <Label htmlFor="category">Bill Category</Label>
-            <Select>
+            <Select onValueChange={(e) => handleInputChange("category", e)}>
               <SelectTrigger>
                 <SelectValue placeholder="Select a category" />
               </SelectTrigger>
@@ -195,7 +225,10 @@ const AddNewBill = () => {
               </div>
             </div>
             <div>
-              <Switch />
+              <Switch
+                checked={formData.isPaid}
+                onCheckedChange={(e) => handleInputChange("isPaid", e)}
+              />
             </div>
           </div>
         </div>
@@ -204,7 +237,10 @@ const AddNewBill = () => {
   };
 
   return (
-    <Dialog>
+    <Dialog
+      open={showAddTransactionDialog}
+      onOpenChange={setShowAddTransactionDialog}
+    >
       <DialogTrigger>
         <div className=" w-36 border-dashed border-2 border-border rounded-sm p-6 text-muted-foreground cursor-pointer flex flex-col items-center">
           <div>
@@ -214,65 +250,75 @@ const AddNewBill = () => {
         </div>
       </DialogTrigger>
       <DialogContent>
-        <DialogHeader>
-          <DialogTitle>{formTitles[step]}</DialogTitle>
-          <DialogDescription>
-            Provide details for the new bill you want to add.
-          </DialogDescription>
-        </DialogHeader>
+        <form onSubmit={onSubmit}>
+          <DialogHeader>
+            <DialogTitle>{formTitles[step]}</DialogTitle>
+            <DialogDescription>
+              Provide details for the new bill you want to add.
+            </DialogDescription>
+          </DialogHeader>
 
-        <div>{stepDisplay()}</div>
-        <DialogFooter className="justify-between">
-          <Button variant="outline" className={step != 0 ? "hidden" : ""}>
-            Cancel
-          </Button>
-          <Button
-            disabled={step == 0}
-            variant="outline"
-            className={step == 0 ? "hidden" : ""}
-            onClick={() => {
-              setStep((currStep) => currStep - 1);
-            }}
-          >
-            Prev
-          </Button>
-          <div className="flex gap-3">
+          <div>{stepDisplay()}</div>
+          <DialogFooter className="justify-between">
             <Button
-              variant="secondary"
-              className={
-                step == 0 || step == formTitles.length - 1 ? "hidden" : ""
-              }
-              onClick={() => {
-                setStep((currStep) => currStep + 1);
-              }}
+              type="button"
+              variant="outline"
+              className={step != 0 ? "hidden" : ""}
+              onClick={() => setShowAddTransactionDialog(false)}
             >
-              Skip
+              Cancel
             </Button>
             <Button
-              className={step == formTitles.length - 1 ? "hidden" : ""}
+              type="button"
+              disabled={step == 0}
+              variant="outline"
+              className={step == 0 ? "hidden" : ""}
               onClick={() => {
-                setStep((currStep) => currStep + 1);
+                setStep((currStep) => currStep - 1);
               }}
             >
-              Next
+              Prev
             </Button>
-          </div>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            className={step == formTitles.length - 1 ? "" : "hidden"}
-          >
-            {isSubmitting ? (
-              <div>
-                <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
-                <span>Adding</span>
-              </div>
-            ) : (
-              " "
-            )}
-            Add Bill
-          </Button>
-        </DialogFooter>
+            <div className="flex gap-3">
+              <Button
+                type="button"
+                variant="secondary"
+                className={
+                  step == 0 || step == formTitles.length - 1 ? "hidden" : ""
+                }
+                onClick={() => {
+                  setStep((currStep) => currStep + 1);
+                }}
+              >
+                Skip
+              </Button>
+              <Button
+                type="button"
+                className={step == formTitles.length - 1 ? "hidden" : ""}
+                onClick={() => {
+                  setStep((currStep) => currStep + 1);
+                }}
+              >
+                Next
+              </Button>
+            </div>
+            <Button
+              type="submit"
+              // disabled={isSubmitting}
+              className={step == formTitles.length - 1 ? "" : "hidden"}
+            >
+              {/* {isSubmitting ? (
+                <div>
+                  <Icons.spinner className="mr-2 h-4 w-4 animate-spin" />{" "}
+                  <span>Adding</span>
+                </div>
+              ) : (
+                " "
+              )} */}
+              Add Bill
+            </Button>
+          </DialogFooter>
+        </form>
       </DialogContent>
     </Dialog>
   );
