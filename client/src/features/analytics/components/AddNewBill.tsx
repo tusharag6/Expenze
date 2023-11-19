@@ -30,6 +30,7 @@ import { Switch } from "../../../../components/ui/switch";
 import { useState } from "react";
 import { format } from "date-fns";
 import { cn } from "../../../../lib/utils";
+import Toast from "../../../components/Toast";
 
 const billSchema = z.object({
   billName: z.string().min(1, "Bill Name is required"),
@@ -77,9 +78,17 @@ const AddNewBill = () => {
     setIsSubmitting(true);
 
     console.log(formData);
-
+    // Toast.fire({
+    //   icon: "error",
+    //   title: "😟 Oops! Something went wrong.",
+    //   text: "Please double-check your information and try again.",
+    // });
     setTimeout(() => {
-      alert("Bill Added!");
+      Toast.fire({
+        icon: "success",
+        title: "🌟 Hooray! Your bill has been added.",
+        text: "Great job staying on top of your expenses!",
+      });
       setFormData({
         billName: "",
         dueDate: undefined,
