@@ -3,8 +3,15 @@ import { billAndSubscriptionService, userService } from "../services";
 
 export const createNewBill = async (req: Request, res: Response) => {
   try {
-    const { billName, billAmount, dueDate, isRecurring, interval, category } =
-      req.body;
+    const {
+      billName,
+      dueDate,
+      billAmount,
+      isRecurring,
+      interval,
+      category,
+      isPaid,
+    } = req.body;
 
     const token = req.headers.authorization?.split(" ")[1];
     if (!token) {
@@ -20,7 +27,8 @@ export const createNewBill = async (req: Request, res: Response) => {
       isRecurring,
       interval,
       category,
-      userId
+      userId,
+      isPaid
     );
     res.status(201).json(newBill);
   } catch (error) {

@@ -42,7 +42,7 @@ import { Separator } from "../../components/ui/separator";
 import Balance from "../features/analytics/components/Balance";
 import { Progress } from "../../components/ui/progress";
 import Bills from "../features/analytics/components/Bills";
-import AddNewBill from "../features/analytics/components/AddNewBill";
+import AddNewBill from "../features/bills/components/AddNewBill";
 import Savings from "../features/analytics/components/Savings";
 import AddNewSavings from "../features/analytics/components/AddNewSavings";
 import { ChevronRight } from "lucide-react";

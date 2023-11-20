@@ -8,7 +8,6 @@ import {
   DialogTrigger,
 } from "../../../../components/ui/dialog";
 import { Icons } from "../../../components/Icons";
-import { z } from "zod";
 import { Label } from "../../../../components/ui/label";
 import { Input } from "../../../../components/ui/input";
 import {
@@ -28,21 +27,15 @@ import { Calendar } from "../../../../components/ui/calendar";
 import { CalendarIcon } from "@radix-ui/react-icons";
 import { Switch } from "../../../../components/ui/switch";
 import { useState } from "react";
-import { format } from "date-fns";
+import { format, parseISO } from "date-fns";
 import { cn } from "../../../../lib/utils";
 import Toast from "../../../components/Toast";
 
-const billSchema = z.object({
-  billName: z.string().min(1, "Bill Name is required"),
-  dueDate: z.date().optional(),
-  billAmount: z
-    .number()
-    .min(0, "Bill Amount must be greater than or equal to 0"),
-  isRecurring: z.boolean().optional(),
-  interval: z.string().optional(),
-  category: z.string().optional(),
-  isPaid: z.boolean().optional(),
-});
+import { z } from "zod";
+import { billSchema } from "../../../../lib/types";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { billsService } from "..";
+import { useAuth } from "../../../context/AuthContext";
 
 type FormData = z.infer<typeof billSchema>;
 
@@ -50,6 +43,7 @@ const AddNewBill = () => {
   const [step, setStep] = useState(0);
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
     useState(false);
+  const queryClient = useQueryClient();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const formTitles = [
     "Add New Bill",
@@ -73,34 +67,50 @@ const AddNewBill = () => {
   ) => {
     setFormData((prevData) => ({ ...prevData, [name]: value }));
   };
-  const onSubmit = async (event: any) => {
-    event.preventDefault();
-    setIsSubmitting(true);
 
-    console.log(formData);
-    // Toast.fire({
-    //   icon: "error",
-    //   title: "😟 Oops! Something went wrong.",
-    //   text: "Please double-check your information and try again.",
-    // });
-    setTimeout(() => {
+  const { token } = useAuth();
+
+  const addBillMutation = useMutation({
+    mutationFn: async (data: FormData) => {
+      await billsService.addBills(data, token);
+    },
+
+    onSuccess: () => {
+      console.log("Account added successfully");
       Toast.fire({
         icon: "success",
         title: "🌟 Hooray! Your bill has been added.",
         text: "Great job staying on top of your expenses!",
       });
-      setFormData({
-        billName: "",
-        dueDate: undefined,
-        billAmount: 0,
-        isRecurring: false,
-        interval: "",
-        category: "",
-        isPaid: false,
+    },
+    onError: (error) => {
+      console.error(error);
+      Toast.fire({
+        icon: "error",
+        title: "😟 Oops! Something went wrong.",
+        text: "Please double-check your information and try again.",
       });
-      setStep(0);
-      setIsSubmitting(false);
-    }, 5000);
+    },
+  });
+
+  const onSubmit = async (event: React.SyntheticEvent) => {
+    event.preventDefault();
+    setIsSubmitting(true);
+    console.log(formData);
+    await addBillMutation.mutateAsync(formData);
+    setFormData({
+      billName: "",
+      dueDate: undefined,
+      billAmount: 0,
+      isRecurring: false,
+      interval: "",
+      category: "",
+      isPaid: false,
+    });
+    queryClient.invalidateQueries({ queryKey: ["bills"] });
+
+    setStep(0);
+    setIsSubmitting(false);
   };
 
   const stepDisplay = () => {
@@ -123,7 +133,9 @@ const AddNewBill = () => {
               id="billAmount"
               type="number"
               placeholder="Enter amount"
-              onChange={(e) => handleInputChange("billAmount", e.target.value)}
+              onChange={(e) =>
+                handleInputChange("billAmount", parseInt(e.target.value))
+              }
               ref={null}
             />
           </div>
@@ -152,7 +164,10 @@ const AddNewBill = () => {
                   initialFocus
                   selected={formData.dueDate}
                   onSelect={(e) => {
-                    handleInputChange("dueDate", e);
+                    handleInputChange(
+                      "dueDate",
+                      e ? parseISO(e.toISOString()) : undefined
+                    );
                   }}
                 />
               </PopoverContent>

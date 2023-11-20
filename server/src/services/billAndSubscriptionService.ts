@@ -8,14 +8,14 @@ const prisma = new PrismaClient();
 // Create a new bill
 export const newBill = async (
   billName: string,
-  dueDate: string,
   billAmount: number,
+  dueDate: string,
   isRecurring: boolean,
   interval: string,
   category: string,
-  userId: string
+  userId: string,
+  isPaid: boolean
 ) => {
-  const isPaid = false;
   const newBill = await prisma.bill.create({
     data: {
       billName,
