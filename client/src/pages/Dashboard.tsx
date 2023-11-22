@@ -166,19 +166,6 @@ export default function Dashboard() {
               <div className="flex flex-col gap-4 col-span-4">
                 <SummaryCards />
 
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Upcoming Bills</CardTitle>
-                    <Link to="/personal/bills">
-                      <ChevronRight className="cursor-pointer" />
-                    </Link>
-                  </CardHeader>
-                  <CardContent className="flex items-center py-0 gap-2">
-                    <AddNewBill />
-                    <Bills />
-                  </CardContent>
-                </Card>
-
                 <Card className="">
                   <CardHeader className="flex flex-row items-center justify-between">
                     <CardTitle>Spending Trends</CardTitle>
@@ -203,17 +190,45 @@ export default function Dashboard() {
                   </CardContent>
                 </Card>
 
-                <Card className="">
-                  <CardHeader>
-                    <CardTitle>Recent Transactions</CardTitle>
-                    <CardDescription>
-                      {/* You made 265 sales this month. */}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="">
-                    <RecentTransaction />
-                  </CardContent>
-                </Card>
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="col-span-3">
+                    <Card className="mb-4">
+                      <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>Upcoming Bills</CardTitle>
+                        <Link to="/personal/bills">
+                          <ChevronRight className="cursor-pointer" />
+                        </Link>
+                      </CardHeader>
+                      <CardContent className="flex items-center py-0 gap-2">
+                        <AddNewBill />
+                        <Bills />
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>Upcoming Bills</CardTitle>
+                        <Link to="/personal/bills">
+                          <ChevronRight className="cursor-pointer" />
+                        </Link>
+                      </CardHeader>
+                      <CardContent className="flex items-center py-0 gap-2">
+                        <AddNewBill />
+                        <Bills />
+                      </CardContent>
+                    </Card>
+                  </div>
+                  <Card className="">
+                    <CardHeader>
+                      <CardTitle>Recent Transactions</CardTitle>
+                      <CardDescription>
+                        {/* You made 265 sales this month. */}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="">
+                      <RecentTransaction />
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
 
               <div className="flex flex-col gap-4">

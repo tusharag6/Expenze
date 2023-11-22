@@ -6,6 +6,7 @@ import logo from "./assets/logo.png";
 import { Search } from "./components/Search";
 import { ThemeProvider } from "./components/theme-provider";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import Footer from "./layout/Footer";
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
             </div>
             {/* Renders the nested route components */}
             <Outlet />
+            <Footer />
           </div>
         </div>
       </ThemeProvider>
