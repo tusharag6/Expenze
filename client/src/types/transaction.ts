@@ -5,5 +5,5 @@ export interface Transaction {
   type: "Income" | "Expense";
   budgetCategory: string | null;
   description: string | null;
-  account_id: number;
+  account_id: string;
 }

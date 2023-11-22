@@ -28,9 +28,6 @@ import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 
-// import { MainNav } from "./components/MainNav";
-import { Overview } from "../features/analytics/components/Overview";
-// import { Ov2 } from "../components/Ov2";
 import RecentTransaction from "../features/analytics/components/RecentTransaction";
 import { Icons } from "../components/Icons";
 import React from "react";
@@ -51,6 +48,7 @@ import { profileService } from "../features/profile";
 import { dashboardService } from "../features/analytics";
 import Toast from "../components/Toast";
 import { Link } from "react-router-dom";
+import IncomeVsExpenseGraph from "../features/analytics/components/IncomeVsExpenseGraph";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -166,29 +164,7 @@ export default function Dashboard() {
               <div className="flex flex-col gap-4 col-span-4">
                 <SummaryCards />
 
-                <Card className="">
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Spending Trends</CardTitle>
-                    {/* <DatePickerCard /> */}
-                    <div className="space-y-2">
-                      <Select defaultValue="daily">
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select time frame" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="daily">Daily</SelectItem>
-                          <SelectItem value="weekly">Weekly</SelectItem>
-                          <SelectItem value="monthly">Monthly</SelectItem>
-                          <SelectItem value="quarterly">Quarterly</SelectItem>
-                          <SelectItem value="yearly">Yearly</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0 pr-6 pb-4">
-                    <Overview />
-                  </CardContent>
-                </Card>
+                <IncomeVsExpenseGraph />
 
                 <div className="grid grid-cols-4 gap-4">
                   <div className="col-span-3">

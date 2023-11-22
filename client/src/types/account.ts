@@ -3,5 +3,5 @@ export interface Account {
   account_number: string;
   id: number;
   initial_balance: number;
-  user_id: number;
+  user_id: string;
 }

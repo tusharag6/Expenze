@@ -87,7 +87,7 @@ export async function fetchBudgetCategories(token: string | null) {
 }
 
 export async function fetchTransactionData(
-  accountId: number,
+  accountId: string | undefined,
   token: string | null
 ): Promise<transactionTypes.Transaction[]> {
   try {
