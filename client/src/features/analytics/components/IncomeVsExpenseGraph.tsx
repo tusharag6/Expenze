@@ -25,15 +25,13 @@ import { useAuth } from "../../../context/AuthContext";
 import { useSelectedAccount } from "../../../context/AccountContext";
 import { useQuery } from "@tanstack/react-query";
 import { dashboardService } from "..";
-import { subMonths, subWeeks, subYears } from "date-fns";
 
 const IncomeVsExpenseGraph = () => {
   const { token } = useAuth();
   const { selectedAccountData } = useSelectedAccount();
   const accountId = selectedAccountData?.id;
-  const [timeFrame, setTimeFrame] = useState("daily");
 
-  const { data: transactionData, refetch } = useQuery({
+  const { data: transactionData } = useQuery({
     queryKey: ["transactions"],
     queryFn: async () => {
       const transactions = await dashboardService.fetchTransactionData(
@@ -44,35 +42,11 @@ const IncomeVsExpenseGraph = () => {
     },
   });
 
-  const getFilteredData = () => {
-    const now = new Date();
-    switch (timeFrame) {
-      case "daily":
-        return transactionData;
-      case "weekly":
-        return transactionData?.filter(
-          (t) => new Date(t.date) >= subWeeks(now, 1)
-        );
-      case "monthly":
-        return transactionData?.filter(
-          (t) => new Date(t.date) >= subMonths(now, 1)
-        );
-      case "yearly":
-        return transactionData?.filter(
-          (t) => new Date(t.date) >= subYears(now, 1)
-        );
-      default:
-        return transactionData;
-    }
-  };
-
-  const filteredData = getFilteredData();
-
-  const expenseData = filteredData?.filter(
+  const expenseData = transactionData?.filter(
     (transaction) => transaction.type === "Expense"
   );
 
-  const incomeData = filteredData?.filter(
+  const incomeData = transactionData?.filter(
     (transaction) => transaction.type === "Income"
   );
   // console.log(timeFrame, filteredData);
@@ -82,10 +56,7 @@ const IncomeVsExpenseGraph = () => {
       <CardHeader className="flex flex-row items-center justify-between">
         <CardTitle>Spending Trends</CardTitle>
         <div className="space-y-2">
-          <Select
-            defaultValue="daily"
-            onValueChange={(value) => setTimeFrame(value)}
-          >
+          <Select defaultValue="daily">
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="Select time frame" />
             </SelectTrigger>

@@ -12,4 +12,14 @@ const billSchema = z.object({
   isPaid: z.boolean().optional(),
 });
 
-export { billSchema };
+const SubscriptionSchema = z.object({
+  subscriptionName: z.string().min(1, "Subscription Name is required"),
+  startDate: z.date().optional(),
+  endDate: z.date().optional(),
+  monthlyCost: z.number(),
+  renewalDate: z.date().optional(),
+  category: z.string().optional(),
+  isCancelled: z.boolean().optional(),
+});
+
+export { billSchema, SubscriptionSchema };

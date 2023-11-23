@@ -49,6 +49,8 @@ import { dashboardService } from "../features/analytics";
 import Toast from "../components/Toast";
 import { Link } from "react-router-dom";
 import IncomeVsExpenseGraph from "../features/analytics/components/IncomeVsExpenseGraph";
+import AddNewSubscription from "../features/subscription/components/AddNewSubscription";
+import Subscriptions from "../features/analytics/components/Subscriptions";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -188,7 +190,7 @@ export default function Dashboard() {
                         </Link>
                       </CardHeader>
                       <CardContent className="flex items-center py-0 gap-2">
-                        <AddNewBill />
+                        <AddNewSubscription />
                         <Bills />
                       </CardContent>
                     </Card>

@@ -306,6 +306,53 @@ async function seed() {
       ],
     });
 
+    const subscriptions = await prisma.subscription.createMany({
+      data: [
+        {
+          subscriptionName: "Netflix",
+          monthlyCost: 12.99,
+          category: "streaming",
+          startDate: new Date(),
+          endDate: new Date(
+            new Date().getFullYear(),
+            new Date().getMonth() + 6,
+            1
+          ),
+          renewalDate: new Date(),
+          isCancelled: false,
+          userId: user.id,
+        },
+        {
+          subscriptionName: "Spotify",
+          monthlyCost: 9.99,
+          category: "entertainment",
+          startDate: new Date(),
+          endDate: new Date(
+            new Date().getFullYear(),
+            new Date().getMonth() + 3,
+            1
+          ),
+          renewalDate: new Date(),
+          isCancelled: false,
+          userId: user.id,
+        },
+        {
+          subscriptionName: "Amazon Prime",
+          monthlyCost: 12.99,
+          category: "shopping",
+          startDate: new Date(),
+          endDate: new Date(
+            new Date().getFullYear() + 1,
+            new Date().getMonth(),
+            1
+          ),
+          renewalDate: new Date(),
+          isCancelled: false,
+          userId: user.id,
+        },
+      ],
+    });
+
     console.log("Seed data has been created.");
   } catch (error) {
     console.error("Error:", error);
