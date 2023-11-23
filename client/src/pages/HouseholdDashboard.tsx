@@ -11,7 +11,6 @@ import {
   CardHeader,
   CardTitle,
 } from "../../components/ui/card";
-import { Overview } from "../features/analytics/components/Overview";
 import RecentTransaction from "../features/analytics/components/RecentTransaction";
 
 const HouseholdDashboard = () => {
@@ -60,9 +59,7 @@ const HouseholdDashboard = () => {
                 <CardHeader>
                   <CardTitle>Overview</CardTitle>
                 </CardHeader>
-                <CardContent className="pl-2">
-                  <Overview />
-                </CardContent>
+                <CardContent className="pl-2">{/* <Overview /> */}</CardContent>
               </Card>
 
               {/* Recent Transaction */}

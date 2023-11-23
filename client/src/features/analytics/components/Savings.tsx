@@ -5,7 +5,7 @@ import { Separator } from "../../../../components/ui/separator";
 
 const Savings = () => {
   return (
-    <ScrollArea className="h-[30rem]">
+    <ScrollArea className="h-[28rem]">
       <div className="p-0 flex flex-col gap-4">
         <SingeSavingsCard />
         <Separator />

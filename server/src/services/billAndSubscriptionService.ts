@@ -8,14 +8,14 @@ const prisma = new PrismaClient();
 // Create a new bill
 export const newBill = async (
   billName: string,
-  dueDate: string,
   billAmount: number,
+  dueDate: string,
   isRecurring: boolean,
   interval: string,
   category: string,
-  userId: string
+  userId: string,
+  isPaid: boolean
 ) => {
-  const isPaid = false;
   const newBill = await prisma.bill.create({
     data: {
       billName,
@@ -183,13 +183,13 @@ export const cancelSubscription = async (subscriptionId: string) => {
 // Fetch upcoming bills and subscriptions
 export const upcomingBills = async (userId: string) => {
   const today = new Date();
-  const sevenDaysLater = addDays(today, 7);
+  const thirtyDaysLater = addDays(today, 30);
   const upcomingBills = await prisma.bill.findMany({
     where: {
       userId,
       dueDate: {
         gte: today,
-        lte: sevenDaysLater,
+        lte: thirtyDaysLater,
       },
     },
   });

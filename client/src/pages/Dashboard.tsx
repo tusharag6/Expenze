@@ -28,9 +28,6 @@ import { Button } from "../../components/ui/button";
 import { Label } from "../../components/ui/label";
 import { Input } from "../../components/ui/input";
 
-// import { MainNav } from "./components/MainNav";
-import { Overview } from "../features/analytics/components/Overview";
-// import { Ov2 } from "../components/Ov2";
 import RecentTransaction from "../features/analytics/components/RecentTransaction";
 import { Icons } from "../components/Icons";
 import React from "react";
@@ -39,15 +36,21 @@ import SummaryCards from "../features/analytics/components/SummaryCards";
 import EmptyPlaceholder from "../layout/EmptyPlaceholder";
 import { useAuth } from "../context/AuthContext";
 import { Separator } from "../../components/ui/separator";
-import { DatePickerCard } from "../components/DatePickerCard";
 import Balance from "../features/analytics/components/Balance";
 import { Progress } from "../../components/ui/progress";
-import SingleBillsCard from "../features/analytics/components/SingleBillsCard";
 import Bills from "../features/analytics/components/Bills";
-import AddNewBill from "../features/analytics/components/AddNewBill";
+import AddNewBill from "../features/bills/components/AddNewBill";
 import Savings from "../features/analytics/components/Savings";
 import AddNewSavings from "../features/analytics/components/AddNewSavings";
 import { ChevronRight } from "lucide-react";
+import { useMutation, useQuery } from "@tanstack/react-query";
+import { profileService } from "../features/profile";
+import { dashboardService } from "../features/analytics";
+import Toast from "../components/Toast";
+import { Link } from "react-router-dom";
+import IncomeVsExpenseGraph from "../features/analytics/components/IncomeVsExpenseGraph";
+import AddNewSubscription from "../features/subscription/components/AddNewSubscription";
+import Subscriptions from "../features/analytics/components/Subscriptions";
 
 export default function Dashboard() {
   const [showAddTransactionDialog, setShowAddTransactionDialog] =
@@ -64,79 +67,37 @@ export default function Dashboard() {
 
   const { selectedAccountData } = useSelectedAccount();
 
+  const addTransactionMutation = useMutation({
+    mutationFn: async (data: any) => {
+      dashboardService.addTransaction(selectedAccountData?.id, token, data);
+    },
+    onSuccess: () => {
+      Toast.fire({
+        icon: "success",
+        title: "Transaction added successfully",
+      });
+    },
+    onError: () => {
+      Toast.fire({
+        icon: "error",
+        title: "Uh oh! Something went wrong.",
+        text: "There was a problem with creating your transaction.",
+      });
+    },
+  });
+
   async function handleNewTransaction(event: React.SyntheticEvent) {
     event.preventDefault();
     setIsLoading(true);
-
     const data = {
       amount: parseFloat(amount),
       type,
       budgetCategory,
       description,
     };
-
-    console.log(data);
-    let accountId = selectedAccountData?.id;
-
-    try {
-      // Make an API request to add the new transaction
-      const response = await fetch(
-        `http://localhost:8080/api/transactions/accounts/${accountId}`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(data),
-        }
-      );
-
-      if (response.ok) {
-        alert("Transaction added");
-        // Transaction added successfully
-        // Handle success behavior here
-      } else {
-        alert("Error");
-        // Handle error behavior here
-      }
-    } catch (error) {
-      console.error(error);
-    }
-
+    await addTransactionMutation.mutateAsync(data);
     setIsLoading(false);
   }
-  const [customCategories, setCustomCategories] = useState<string[]>([]);
-
-  async function fetchCustomCategories() {
-    try {
-      const response = await fetch("http://localhost:8080/api/budget", {
-        method: "GET",
-        headers: {
-          authorization: `Bearer ${token}`,
-        },
-      });
-      const data = await response.json();
-      const categoryNames = data.map(
-        (category: { category: any }) => category.category
-      );
-
-      return categoryNames;
-
-      return data;
-    } catch (error) {
-      console.error("Error fetching custom categories:", error);
-      return [];
-    }
-  }
-
-  useEffect(() => {
-    async function fetchData() {
-      const fetchedCustomCategoriesData = await fetchCustomCategories();
-      setCustomCategories(fetchedCustomCategoriesData);
-    }
-    fetchData();
-  }, []);
 
   const [progress, setProgress] = React.useState(13);
 
@@ -144,6 +105,27 @@ export default function Dashboard() {
     const timer = setTimeout(() => setProgress(66), 500);
     return () => clearTimeout(timer);
   }, []);
+
+  const { data: customCategories } = useQuery({
+    queryKey: ["customCategories"],
+    queryFn: async () => {
+      const customCategories = await dashboardService.fetchBudgetCategories(
+        token
+      );
+      return customCategories;
+    },
+  });
+
+  const { data: userData } = useQuery({
+    queryKey: ["user"],
+    queryFn: async () => {
+      const user = await profileService.fetchUserData(token);
+      return user;
+    },
+  });
+
+  const userName = userData?.username || "User";
+
   return (
     <Dialog
       open={showAddTransactionDialog}
@@ -160,7 +142,7 @@ export default function Dashboard() {
             <div className="flex items-center justify-between ">
               <div className="space-y-1">
                 <h2 className="text-2xl font-semibold tracking-tight">
-                  Hello, John!
+                  Hello, {userName}!
                 </h2>
                 <p className="text-sm text-muted-foreground">
                   Let's conquer your financial goals today.
@@ -184,52 +166,47 @@ export default function Dashboard() {
               <div className="flex flex-col gap-4 col-span-4">
                 <SummaryCards />
 
-                <Card>
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Upcoming Bills</CardTitle>
-                    <ChevronRight className="cursor-pointer" />
-                  </CardHeader>
-                  <CardContent className="flex items-center py-0 gap-2">
-                    <AddNewBill />
-                    <Bills />
-                  </CardContent>
-                </Card>
+                <IncomeVsExpenseGraph />
 
-                <Card className="">
-                  <CardHeader className="flex flex-row items-center justify-between">
-                    <CardTitle>Spending Trends</CardTitle>
-                    {/* <DatePickerCard /> */}
-                    <div className="space-y-2">
-                      <Select defaultValue="daily">
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select time frame" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectItem value="daily">Daily</SelectItem>
-                          <SelectItem value="weekly">Weekly</SelectItem>
-                          <SelectItem value="monthly">Monthly</SelectItem>
-                          <SelectItem value="quarterly">Quarterly</SelectItem>
-                          <SelectItem value="yearly">Yearly</SelectItem>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </CardHeader>
-                  <CardContent className="p-0 pr-6 pb-4">
-                    <Overview />
-                  </CardContent>
-                </Card>
-
-                <Card className="">
-                  <CardHeader>
-                    <CardTitle>Recent Transactions</CardTitle>
-                    <CardDescription>
-                      {/* You made 265 sales this month. */}
-                    </CardDescription>
-                  </CardHeader>
-                  <CardContent className="">
-                    <RecentTransaction />
-                  </CardContent>
-                </Card>
+                <div className="grid grid-cols-4 gap-4">
+                  <div className="col-span-3">
+                    <Card className="mb-4">
+                      <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>Upcoming Bills</CardTitle>
+                        <Link to="/personal/bills">
+                          <ChevronRight className="cursor-pointer" />
+                        </Link>
+                      </CardHeader>
+                      <CardContent className="flex items-center py-0 gap-2">
+                        <AddNewBill />
+                        <Bills />
+                      </CardContent>
+                    </Card>
+                    <Card>
+                      <CardHeader className="flex flex-row items-center justify-between">
+                        <CardTitle>Upcoming Bills</CardTitle>
+                        <Link to="/personal/bills">
+                          <ChevronRight className="cursor-pointer" />
+                        </Link>
+                      </CardHeader>
+                      <CardContent className="flex items-center py-0 gap-2">
+                        <AddNewSubscription />
+                        <Bills />
+                      </CardContent>
+                    </Card>
+                  </div>
+                  <Card className="">
+                    <CardHeader>
+                      <CardTitle>Recent Transactions</CardTitle>
+                      <CardDescription>
+                        {/* You made 265 sales this month. */}
+                      </CardDescription>
+                    </CardHeader>
+                    <CardContent className="">
+                      <RecentTransaction />
+                    </CardContent>
+                  </Card>
+                </div>
               </div>
 
               <div className="flex flex-col gap-4">

@@ -1,6 +1,8 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
+import { Provider } from "react-redux";
+import store from "./store/store";
 import "./index.css";
 import Dashboard from "./pages/Dashboard";
 import ErrorPage from "./layout/ErrorPage";
@@ -136,16 +138,18 @@ const router = createBrowserRouter([
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <AccountProvider>
-      <AuthProvider>
-        <TransactionProvider>
-          <HouseholdProvider>
-            <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-              <RouterProvider router={router} />
-            </ThemeProvider>
-          </HouseholdProvider>
-        </TransactionProvider>
-      </AuthProvider>
-    </AccountProvider>
+    <Provider store={store}>
+      <AccountProvider>
+        <AuthProvider>
+          <TransactionProvider>
+            <HouseholdProvider>
+              <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+                <RouterProvider router={router} />
+              </ThemeProvider>
+            </HouseholdProvider>
+          </TransactionProvider>
+        </AuthProvider>
+      </AccountProvider>
+    </Provider>
   </React.StrictMode>
 );
